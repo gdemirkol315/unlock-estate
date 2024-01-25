@@ -1,0 +1,17 @@
+/* This styles the container div */
+.logo-container {
+  display: flex;
+  justify-content: center; /* Centers the logo horizontally */
+  align-items: center; /* Centers the logo vertically */
+  background-color: white; /* Ensures the background is white */
+  height: 100px; /* Or any desired height */
+}
+
+/* This styles the logo image */
+.logo-container img {
+  max-width: 100%;
+  max-height: 100%;
+  /* Optional: if you need to maintain aspect ratio */
+  height: auto;
+  width: auto;
+}
