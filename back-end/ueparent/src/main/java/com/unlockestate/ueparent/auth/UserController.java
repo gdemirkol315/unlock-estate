@@ -19,8 +19,11 @@ public class UserController {
         return this.userRepository.findAll();
     }
 
-    @PostMapping("/users")
+    @PostMapping("/createUser")
     public User addOneUser(@RequestBody User user) {
-        return this.userRepository.save(user);
+        if (this.userRepository.findByEmail(user.getEmail()) == null) {
+            return this.userRepository.save(user);
+        }
+        return null;
     }
 }
