@@ -5,11 +5,6 @@ export class User {
   private _password:string;
 
 
-  constructor(email: string, password: string) {
-    this._email = email;
-    this._password = password;
-  }
-
   get name(): string {
     return this._name;
   }

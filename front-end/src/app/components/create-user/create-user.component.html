@@ -1,25 +1,34 @@
-<mat-card class="login-container">
+<div class="logo-container">
+  <img src="assets/logo.png" alt="Logo" class="center">
+</div>
+
+<mat-card class="centered-container">
   <form (ngSubmit)="onCreateUser()">
     <mat-form-field class="example-full-width">
       <mat-label>Name</mat-label>
       <input matInput>
     </mat-form-field>
+    <br>
     <mat-form-field class="example-full-width">
       <mat-label>Last Name</mat-label>
       <input matInput>
     </mat-form-field>
+    <br>
     <mat-form-field class="example-full-width">
       <mat-label>E-Mail</mat-label>
       <input matInput>
     </mat-form-field>
+    <br>
     <mat-form-field class="example-full-width-block">
       <mat-label>Password</mat-label>
       <input matInput>
     </mat-form-field>
+    <br>
     <mat-form-field class="example-full-width-block">
       <mat-label>Repeat password</mat-label>
       <input matInput>
     </mat-form-field>
-    <button mat-raised-button>Login</button>
+    <br>
+    <button mat-raised-button color="primary">Create User</button>
   </form>
 </mat-card>

@@ -1,4 +1,4 @@
-.login-container {
+.centered-container {
   max-width: 300px;
   margin: auto;
   padding: 20px;
@@ -26,4 +26,10 @@ button {
 
 button:hover {
   opacity: 0.8;
+}
+.center {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+
 }
