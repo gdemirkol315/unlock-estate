@@ -13,6 +13,7 @@ import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatIconModule} from '@angular/material/icon';
 import {MatDividerModule} from '@angular/material/divider';
 import {CreateUserComponent} from "./components/create-user/create-user.component";
+import {ToastrModule} from "ngx-toastr";
 
 
 @NgModule({
@@ -31,7 +32,8 @@ import {CreateUserComponent} from "./components/create-user/create-user.componen
     MatFormFieldModule,
     MatIconModule,
     MatDividerModule,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    ToastrModule.forRoot({positionClass: 'toast-bottom-center'}),
   ],
   providers: [
     provideClientHydration()

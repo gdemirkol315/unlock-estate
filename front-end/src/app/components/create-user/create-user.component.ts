@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import {User} from "../../models/user.model";
+import {AuthService} from "../../services/auth/auth.service";
 
 @Component({
   selector: 'create-user',
@@ -8,6 +9,8 @@ import {User} from "../../models/user.model";
 })
 export class CreateUserComponent {
 
+  constructor() {
+  }
   user:User = new User();
 
   onCreateUser() {
