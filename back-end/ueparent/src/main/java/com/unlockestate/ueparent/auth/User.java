@@ -15,6 +15,7 @@ public class User {
     private String email;
     private String name;
     private String lastName;
+    private boolean isApproved;
 
     public User() {
     }
