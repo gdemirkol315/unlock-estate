@@ -14,6 +14,7 @@ import {MatIconModule} from '@angular/material/icon';
 import {MatDividerModule} from '@angular/material/divider';
 import {CreateUserComponent} from "./components/create-user/create-user.component";
 import {ToastrModule} from "ngx-toastr";
+import {HttpClientModule} from "@angular/common/http";
 
 
 @NgModule({
@@ -23,6 +24,7 @@ import {ToastrModule} from "ngx-toastr";
     CreateUserComponent
   ],
   imports: [
+    HttpClientModule,
     BrowserModule,
     AppRoutingModule,
     FormsModule,

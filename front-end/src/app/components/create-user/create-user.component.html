@@ -6,27 +6,32 @@
   <form (ngSubmit)="onCreateUser()">
     <mat-form-field class="example-full-width">
       <mat-label>Name</mat-label>
-      <input matInput >
+      <input matInput type="text" name="userName"
+             [(ngModel)]="user.name">
     </mat-form-field>
     <br>
     <mat-form-field class="example-full-width">
       <mat-label>Last Name</mat-label>
-      <input matInput>
+      <input matInput type="text" name="userLastName"
+             [(ngModel)]="user.lastName">
     </mat-form-field>
     <br>
     <mat-form-field class="example-full-width">
       <mat-label>E-Mail</mat-label>
-      <input matInput>
+      <input matInput type="text" name="userEmail"
+             [(ngModel)]="user.email">
     </mat-form-field>
     <br>
     <mat-form-field class="example-full-width-block">
       <mat-label>Password</mat-label>
-      <input matInput>
+      <input matInput type="text" name="userPassword"
+             [(ngModel)]="user.password">
     </mat-form-field>
     <br>
     <mat-form-field class="example-full-width-block">
       <mat-label>Repeat password</mat-label>
-      <input matInput>
+      <input matInput type="text" name="userPasswordRepeat"
+             [(ngModel)]="repeatedPass">
     </mat-form-field>
     <br>
     <button mat-raised-button color="primary">Create User</button>
