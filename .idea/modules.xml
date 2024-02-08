@@ -2,7 +2,6 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/back-end/ueparent/ueparent.iml" filepath="$PROJECT_DIR$/back-end/ueparent/ueparent.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/unlock-estate.iml" filepath="$PROJECT_DIR$/.idea/unlock-estate.iml" />
     </modules>
   </component>
