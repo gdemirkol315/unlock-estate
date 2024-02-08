@@ -4,7 +4,7 @@ import {BrowserModule, provideClientHydration} from '@angular/platform-browser';
 import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
 import {LoginComponent} from './components/login/login.component';
-import {FormsModule} from "@angular/forms";
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {MatCardModule} from "@angular/material/card";
 import {MatButtonModule} from "@angular/material/button";
@@ -15,13 +15,15 @@ import {MatDividerModule} from '@angular/material/divider';
 import {CreateUserComponent} from "./components/create-user/create-user.component";
 import {ToastrModule} from "ngx-toastr";
 import {HttpClientModule} from "@angular/common/http";
+import {EmailValidatorDirective} from "./validators/email-validator.directive";
 
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
-    CreateUserComponent
+    CreateUserComponent,
+    EmailValidatorDirective
   ],
   imports: [
     HttpClientModule,
@@ -36,6 +38,8 @@ import {HttpClientModule} from "@angular/common/http";
     MatDividerModule,
     BrowserAnimationsModule,
     ToastrModule.forRoot({positionClass: 'toast-bottom-center'}),
+    ReactiveFormsModule,
+
   ],
   providers: [
     provideClientHydration()

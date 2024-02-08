@@ -3,37 +3,41 @@
 </div>
 
 <mat-card class="centered-container">
-  <form (ngSubmit)="onCreateUser()">
+  <form [formGroup]="myForm" (ngSubmit)="onCreateUser()">
     <mat-form-field class="example-full-width">
       <mat-label>Name</mat-label>
-      <input matInput type="text" name="userName"
-             [(ngModel)]="user.name">
+      <input matInput type="text"
+             formControlName="name">
     </mat-form-field>
     <br>
     <mat-form-field class="example-full-width">
       <mat-label>Last Name</mat-label>
-      <input matInput type="text" name="userLastName"
-             [(ngModel)]="user.lastName">
+      <input matInput type="text"
+             formControlName="lastName">
     </mat-form-field>
     <br>
     <mat-form-field class="example-full-width">
       <mat-label>E-Mail</mat-label>
-      <input matInput type="text" name="userEmail"
-             [(ngModel)]="user.email">
+      <input matInput type="text"
+             formControlName="email">
     </mat-form-field>
     <br>
     <mat-form-field class="example-full-width-block">
       <mat-label>Password</mat-label>
-      <input matInput type="text" name="userPassword"
-             [(ngModel)]="user.password">
+      <input matInput type="password"
+             formControlName="password">
     </mat-form-field>
     <br>
     <mat-form-field class="example-full-width-block">
       <mat-label>Repeat password</mat-label>
-      <input matInput type="text" name="userPasswordRepeat"
-             [(ngModel)]="repeatedPass">
+      <input matInput type="password"
+             formControlName="repeatedPassword">
     </mat-form-field>
+    <div *ngIf="myForm.get('password')?.value!=myForm.get('repeatedPassword')?.value">
+      <span>Invalid</span>
+    </div>
     <br>
-    <button mat-raised-button color="primary">Create User</button>
+    <button mat-raised-button color="primary"
+            >Create User</button>
   </form>
 </mat-card>
