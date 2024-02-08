@@ -2,7 +2,7 @@ package com.unlockestate.ueparent.auth;
 
 import org.springframework.web.bind.annotation.*;
 
-@CrossOrigin(origins= "http://localhost:4200")
+
 @RestController
 public class UserController {
 
