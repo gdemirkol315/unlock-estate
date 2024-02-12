@@ -10,10 +10,10 @@ import { FormBuilder, FormGroup } from '@angular/forms';
   styleUrl: './create-user.component.scss'
 })
 export class CreateUserComponent {
-  protected myForm: FormGroup;
+  protected createUserForm: FormGroup;
 
   constructor(private authService:AuthService, private formBuilder: FormBuilder) {
-    this.myForm = this.formBuilder.group({
+    this.createUserForm = this.formBuilder.group({
       name: ['', [Validators.required]],
       lastName: ['', [Validators.required]],
       repeatedPassword: ['', [Validators.required]],
@@ -24,8 +24,11 @@ export class CreateUserComponent {
   user:User = new User();
 
   onCreateUser() {
-    console.log(this.myForm)
-    console.log(this.myForm.invalid);
+    this.user.email = this.createUserForm.get('email')?.value;
+    this.user.name = this.createUserForm.get('name')?.value;
+    this.user.lastName = this.createUserForm.get('lastName')?.value;
+    this.user.password = this.createUserForm.get('password')?.value;
+    console.log(this.user);
     this.authService.createUser(this.user).subscribe({
       next: () => {
         this.authService.toastr.success("User for "+ this.user.email + " has been successfully created.")

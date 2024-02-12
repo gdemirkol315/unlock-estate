@@ -1,8 +1,5 @@
 import {Component} from '@angular/core';
-import {MatFormFieldModule} from "@angular/material/form-field";
-import {MatInputModule} from "@angular/material/input";
-import {MatSelectModule} from "@angular/material/select";
-import { MatCardModule} from "@angular/material/card";
+import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 
 @Component({
   selector: 'login',
@@ -10,12 +7,19 @@ import { MatCardModule} from "@angular/material/card";
   styleUrls: ['./login.component.scss']
 })
 export class LoginComponent {
-  username: string;
-  password: string;
+
+  loginForm: FormGroup;
+
+  constructor(private formBuilder: FormBuilder) {
+    this.loginForm = this.formBuilder.group({
+      password: ['', [Validators.required]],
+      email: ['', [Validators.required, Validators.email]]
+    });
+  }
 
   onLogin(): void {
     // Add your login logic here
-    console.log('Username:', this.username, 'Password:', this.password);
+    console.log('Username:', this.loginForm.get('email')?.value, 'Password:', this.loginForm.get('password')?.value);
     // You might want to authenticate against a backend service
   }
 }

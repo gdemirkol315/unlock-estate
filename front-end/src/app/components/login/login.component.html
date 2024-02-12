@@ -2,16 +2,18 @@
   <img src="assets/logo.png" alt="Logo" class="center">
 </div>
 <mat-card class="centered-container">
-  <form (ngSubmit)="onLogin()">
+  <form [formGroup]="loginForm" (ngSubmit)="onLogin()">
     <mat-form-field class="example-full-width">
-      <mat-label>User Name</mat-label>
-      <input matInput>
+      <mat-label>E-Mail</mat-label>
+      <input matInput type="text"
+             formControlName="email">
     </mat-form-field>
     <mat-form-field class="example-full-width-block">
       <mat-label>Password</mat-label>
-      <input matInput>
+      <input matInput type="password"
+             formControlName="password">
     </mat-form-field>
-    <button mat-raised-button color="accent">Login</button>
+    <button mat-raised-button color="accent" type="submit">Login</button>
     <button mat-raised-button color="primary" routerLink="/create-user" routerLinkActive="mat-accent">
       Register
     </button>

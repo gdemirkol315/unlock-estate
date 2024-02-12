@@ -3,7 +3,7 @@
 </div>
 
 <mat-card class="centered-container">
-  <form [formGroup]="myForm" (ngSubmit)="onCreateUser()">
+  <form [formGroup]="createUserForm" (ngSubmit)="onCreateUser()">
     <mat-form-field class="example-full-width">
       <mat-label>Name</mat-label>
       <input matInput type="text"
@@ -33,7 +33,7 @@
       <input matInput type="password"
              formControlName="repeatedPassword">
     </mat-form-field>
-    <div *ngIf="myForm.get('password')?.value!=myForm.get('repeatedPassword')?.value">
+    <div *ngIf="createUserForm.get('password')?.value!=createUserForm.get('repeatedPassword')?.value">
       <span>Invalid</span>
     </div>
     <br>

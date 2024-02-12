@@ -13,6 +13,6 @@ export class AuthService extends DataService {
       'Content-Type': 'application/json'
       // Add other headers as needed
     });
-    return this.http.post(this.hostname + "createUser", user, {headers});
+    return this.http.post(this.hostname + "register", user, {headers});
   }
 }
