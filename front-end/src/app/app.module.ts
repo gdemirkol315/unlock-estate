@@ -16,6 +16,7 @@ import {CreateUserComponent} from "./components/create-user/create-user.componen
 import {ToastrModule} from "ngx-toastr";
 import {HttpClientModule} from "@angular/common/http";
 import {EmailValidatorDirective} from "./validators/email-validator.directive";
+import {MatOption, MatSelect} from "@angular/material/select";
 
 
 @NgModule({
@@ -36,9 +37,11 @@ import {EmailValidatorDirective} from "./validators/email-validator.directive";
     MatFormFieldModule,
     MatIconModule,
     MatDividerModule,
+    MatSelect,
     BrowserAnimationsModule,
     ToastrModule.forRoot({positionClass: 'toast-bottom-center'}),
     ReactiveFormsModule,
+    MatOption,
 
   ],
   providers: [

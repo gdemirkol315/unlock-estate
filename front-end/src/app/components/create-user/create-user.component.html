@@ -33,6 +33,12 @@
       <input matInput type="password"
              formControlName="repeatedPassword">
     </mat-form-field>
+    <mat-form-field>
+      <mat-label>Role</mat-label>
+      <mat-select formControlName="role">
+        <mat-option *ngFor="let role of roles" [value]="role">{{ role }}</mat-option>
+      </mat-select>
+    </mat-form-field>
     <div *ngIf="createUserForm.get('password')?.value!=createUserForm.get('repeatedPassword')?.value">
       <span>Invalid</span>
     </div>

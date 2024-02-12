@@ -18,16 +18,22 @@ export class CreateUserComponent {
       lastName: ['', [Validators.required]],
       repeatedPassword: ['', [Validators.required]],
       password: ['', [Validators.required]],
-      email: ['', [Validators.required, Validators.email]]
+      email: ['', [Validators.required, Validators.email]],
+      role:['', [Validators.required]]
     });
   }
   user:User = new User();
+  roles: String[] = [
+    'USER',
+    'ADMIN'
+  ];
 
   onCreateUser() {
     this.user.email = this.createUserForm.get('email')?.value;
     this.user.name = this.createUserForm.get('name')?.value;
     this.user.lastName = this.createUserForm.get('lastName')?.value;
     this.user.password = this.createUserForm.get('password')?.value;
+    this.user.role = this.createUserForm.get('role')?.value;
     console.log(this.user);
     this.authService.createUser(this.user).subscribe({
       next: () => {

@@ -3,6 +3,7 @@ export class User {
   private _lastName:string;
   private _email:string;
   private _password:string;
+  private _role:string;
 
 
   get name(): string {
@@ -37,12 +38,22 @@ export class User {
     this._password = value;
   }
 
+
+  get role(): string {
+    return this._role;
+  }
+
+  set role(value: string) {
+    this._role = value;
+  }
+
   toRequestObject(): { [key: string]: string } {
     return {
       name: this._name,
       lastName: this._lastName,
       email: this._email,
-      password: this._password, // Include password only if it's safe to do so
+      password: this._password,
+      role: this._role
     };
   }
 

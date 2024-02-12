@@ -1,13 +1,15 @@
 package com.unlockestate.ueparent.auth.dto;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 @Entity
 @Table(name = "Salt")
 public class Salt {
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Integer id;
+
+    @Column(unique = true)
     private String email;
     private String salt;
 
