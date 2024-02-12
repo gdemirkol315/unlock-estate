@@ -5,7 +5,7 @@
 export const environment = {
   production: false,
   title: 'Generic Environment Heading',
-  apiURL: 'http://localhost:8080/ue-app/'
+  apiURL: 'http://localhost:8080/'
 };
 
 /*

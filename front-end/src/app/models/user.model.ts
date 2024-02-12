@@ -36,4 +36,14 @@ export class User {
   set password(value: string) {
     this._password = value;
   }
+
+  toRequestObject(): { [key: string]: string } {
+    return {
+      name: this._name,
+      lastName: this._lastName,
+      email: this._email,
+      password: this._password, // Include password only if it's safe to do so
+    };
+  }
+
 }
