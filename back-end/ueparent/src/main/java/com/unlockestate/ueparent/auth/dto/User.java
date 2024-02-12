@@ -78,7 +78,7 @@ public class User implements UserDetails {
         return role;
     }
 
-    public void setRoles(Role role) {
+    public void setRole(Role role) {
         this.role = role;
     }
 
