@@ -17,6 +17,13 @@ import {ToastrModule} from "ngx-toastr";
 import {HttpClientModule} from "@angular/common/http";
 import {EmailValidatorDirective} from "./validators/email-validator.directive";
 import {MatOption, MatSelect} from "@angular/material/select";
+import {MatSidenavModule} from "@angular/material/sidenav";
+import {MatToolbar, MatToolbarModule} from "@angular/material/toolbar";
+import { MainNavComponent } from './components/main-nav/main-nav.component';
+import { MatListModule } from '@angular/material/list';
+import { UserManagementComponent } from './components/user-management/user-management.component';
+import { RealEstateManagementComponent } from './components/real-estate-management/real-estate-management.component';
+import { TaskOverviewComponent } from './components/task-overview/task-overview.component';
 
 
 @NgModule({
@@ -24,7 +31,11 @@ import {MatOption, MatSelect} from "@angular/material/select";
     AppComponent,
     LoginComponent,
     CreateUserComponent,
-    EmailValidatorDirective
+    EmailValidatorDirective,
+    MainNavComponent,
+    UserManagementComponent,
+    RealEstateManagementComponent,
+    TaskOverviewComponent
   ],
   imports: [
     HttpClientModule,
@@ -42,7 +53,10 @@ import {MatOption, MatSelect} from "@angular/material/select";
     ToastrModule.forRoot({positionClass: 'toast-bottom-center'}),
     ReactiveFormsModule,
     MatOption,
-
+    MatSidenavModule,
+    MatToolbar,
+    MatToolbarModule,
+    MatListModule
   ],
   providers: [
     provideClientHydration()
