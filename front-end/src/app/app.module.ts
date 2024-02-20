@@ -20,20 +20,25 @@ import {MatOption, MatSelect} from "@angular/material/select";
 import {MatSidenavModule} from "@angular/material/sidenav";
 import {MatToolbar, MatToolbarModule} from "@angular/material/toolbar";
 import { MainNavComponent } from './components/main-nav/main-nav.component';
-import { MatListModule } from '@angular/material/list';
+import {MatActionList, MatListModule} from '@angular/material/list';
 import { UserManagementComponent } from './components/user-management/user-management.component';
 import { RealEstateManagementComponent } from './components/real-estate-management/real-estate-management.component';
 import { TaskOverviewComponent } from './components/task-management/task-overview.component';
-import {MatHeaderCell} from "@angular/material/table";
+import {MatHeaderCell, MatRow, MatTableModule} from "@angular/material/table";
 import { RealEstateCreateComponent } from './components/real-estate-create/real-estate-create.component';
 import { TaskCreateComponent } from './components/task-create/task-create.component';
 import {
   MatAccordion,
   MatExpansionPanel,
-  MatExpansionPanelDescription,
+  MatExpansionPanelDescription, MatExpansionPanelHeader,
   MatExpansionPanelTitle
 } from "@angular/material/expansion";
 import {MatDatepicker, MatDatepickerInput} from "@angular/material/datepicker";
+import { DashboardComponent } from './components/dashboard/dashboard.component';
+import { RealEstateDetailComponent } from './components/real-estate-detail/real-estate-detail.component';
+import { TaskDetailComponent } from './components/task-detail/task-detail.component';
+import { UserDetailComponent } from './components/user-detail/user-detail.component';
+import { ChecklistTemplatesComponent } from './components/checklist-templates/checklist-templates.component';
 
 
 @NgModule({
@@ -47,7 +52,12 @@ import {MatDatepicker, MatDatepickerInput} from "@angular/material/datepicker";
     RealEstateManagementComponent,
     TaskOverviewComponent,
     RealEstateCreateComponent,
-    TaskCreateComponent
+    TaskCreateComponent,
+    DashboardComponent,
+    RealEstateDetailComponent,
+    TaskDetailComponent,
+    UserDetailComponent,
+    ChecklistTemplatesComponent
   ],
   imports: [
     HttpClientModule,
@@ -72,6 +82,8 @@ import {MatDatepicker, MatDatepickerInput} from "@angular/material/datepicker";
     MatHeaderCell,
     MatAccordion,
     MatExpansionPanel,
+    MatExpansionPanelHeader,
+    MatTableModule,
     MatExpansionPanelTitle,
     MatExpansionPanelDescription,
     MatDatepicker,

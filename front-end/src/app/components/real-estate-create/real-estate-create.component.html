@@ -1,1 +1,40 @@
-<p>real-estate-create works!</p>
+<br>
+<mat-card class="centered-container">
+  <mat-card-header>
+    <mat-card-title>Enter Real Estate</mat-card-title>
+  </mat-card-header>
+  <form [formGroup]="createReForm" (ngSubmit)="onCreateRe()">
+    <mat-form-field class="example-full-width">
+      <mat-label>Name</mat-label>
+      <input matInput type="text"
+             formControlName="name">
+    </mat-form-field>
+    <br>
+    <mat-form-field class="example-full-width">
+      <mat-label>Country</mat-label>
+      <input matInput type="text"
+             formControlName="country">
+    </mat-form-field>
+    <br>
+    <mat-form-field class="example-full-width">
+      <mat-label>City</mat-label>
+      <input matInput type="text"
+             formControlName="city">
+    </mat-form-field>
+    <br>
+    <mat-form-field class="example-full-width">
+      <mat-label>Address detail</mat-label>
+      <input matInput type="text"
+             formControlName="addressDetail">
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Type of Real Estate</mat-label>
+      <mat-select formControlName="retype">
+        <mat-option *ngFor="let retype of reTypes" [value]="retype">{{ retype }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <br>
+    <button mat-raised-button color="primary"
+    >Create User</button>
+  </form>
+</mat-card>
