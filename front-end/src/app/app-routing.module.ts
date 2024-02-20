@@ -1,10 +1,10 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import {LoginComponent} from "./components/login/login.component";
-import {CreateUserComponent} from "./components/create-user/create-user.component";
+import {LoginComponent} from "./components/user-login/login.component";
+import {CreateUserComponent} from "./components/user-create/create-user.component";
 import {UserManagementComponent} from "./components/user-management/user-management.component";
 import {RealEstateManagementComponent} from "./components/real-estate-management/real-estate-management.component";
-import {TaskOverviewComponent} from "./components/task-overview/task-overview.component";
+import {TaskOverviewComponent} from "./components/task-management/task-overview.component";
 import {authGuardGuard} from "./guard/auth-guard.guard";
 
 const routes: Routes = [
@@ -17,7 +17,7 @@ const routes: Routes = [
     component: LoginComponent
   },
   {
-    path: 'create-user',
+    path: 'user-create',
     component: CreateUserComponent,
     canMatch: [authGuardGuard]
   },
@@ -30,7 +30,7 @@ const routes: Routes = [
     component: RealEstateManagementComponent
   },
   {
-    path: 'task-overview',
+    path: 'task-management',
     component: TaskOverviewComponent
   }
 ];

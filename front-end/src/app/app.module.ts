@@ -3,7 +3,7 @@ import {BrowserModule, provideClientHydration} from '@angular/platform-browser';
 
 import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
-import {LoginComponent} from './components/login/login.component';
+import {LoginComponent} from './components/user-login/login.component';
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {MatCardModule} from "@angular/material/card";
@@ -12,7 +12,7 @@ import {MatInputModule} from '@angular/material/input';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatIconModule} from '@angular/material/icon';
 import {MatDividerModule} from '@angular/material/divider';
-import {CreateUserComponent} from "./components/create-user/create-user.component";
+import {CreateUserComponent} from "./components/user-create/create-user.component";
 import {ToastrModule} from "ngx-toastr";
 import {HttpClientModule} from "@angular/common/http";
 import {EmailValidatorDirective} from "./validators/email-validator.directive";
@@ -23,8 +23,10 @@ import { MainNavComponent } from './components/main-nav/main-nav.component';
 import { MatListModule } from '@angular/material/list';
 import { UserManagementComponent } from './components/user-management/user-management.component';
 import { RealEstateManagementComponent } from './components/real-estate-management/real-estate-management.component';
-import { TaskOverviewComponent } from './components/task-overview/task-overview.component';
+import { TaskOverviewComponent } from './components/task-management/task-overview.component';
 import {MatHeaderCell} from "@angular/material/table";
+import { RealEstateCreateComponent } from './components/real-estate-create/real-estate-create.component';
+import { TaskCreateComponent } from './components/task-create/task-create.component';
 
 
 @NgModule({
@@ -36,7 +38,9 @@ import {MatHeaderCell} from "@angular/material/table";
     MainNavComponent,
     UserManagementComponent,
     RealEstateManagementComponent,
-    TaskOverviewComponent
+    TaskOverviewComponent,
+    RealEstateCreateComponent,
+    TaskCreateComponent
   ],
   imports: [
     HttpClientModule,

@@ -5,7 +5,7 @@ import {Validators} from "@angular/forms";
 import {FormBuilder, FormGroup} from '@angular/forms';
 
 @Component({
-  selector: 'create-user',
+  selector: 'user-create',
   templateUrl: './create-user.component.html',
   styleUrl: './create-user.component.scss'
 })

@@ -5,7 +5,7 @@ import {User} from "../../models/user.model";
 import {JwtToken} from "../../models/jwt-token.model";
 
 @Component({
-  selector: 'login',
+  selector: 'user-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss']
 })
@@ -21,7 +21,7 @@ export class LoginComponent {
   }
 
   onLogin(): void {
-    // Add your login logic here
+    // Add your user-login logic here
     let user: User = new User();
     user.email = this.loginForm.get('email')?.value;
     user.password = this.loginForm.get('password')?.value;
