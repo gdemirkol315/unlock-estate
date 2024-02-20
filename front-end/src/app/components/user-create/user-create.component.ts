@@ -6,10 +6,10 @@ import {FormBuilder, FormGroup} from '@angular/forms';
 
 @Component({
   selector: 'user-create',
-  templateUrl: './create-user.component.html',
-  styleUrl: './create-user.component.scss'
+  templateUrl: './user-create.component.html',
+  styleUrl: './user-create.component.scss'
 })
-export class CreateUserComponent {
+export class UserCreateComponent {
   protected createUserForm: FormGroup;
 
   constructor(private authService: AuthService, private formBuilder: FormBuilder) {

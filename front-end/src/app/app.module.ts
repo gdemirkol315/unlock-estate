@@ -12,7 +12,7 @@ import {MatInputModule} from '@angular/material/input';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatIconModule} from '@angular/material/icon';
 import {MatDividerModule} from '@angular/material/divider';
-import {CreateUserComponent} from "./components/user-create/create-user.component";
+import {UserCreateComponent} from "./components/user-create/user-create.component";
 import {ToastrModule} from "ngx-toastr";
 import {HttpClientModule, provideHttpClient, withFetch} from "@angular/common/http";
 import {EmailValidatorDirective} from "./validators/email-validator.directive";
@@ -27,13 +27,20 @@ import { TaskOverviewComponent } from './components/task-management/task-overvie
 import {MatHeaderCell} from "@angular/material/table";
 import { RealEstateCreateComponent } from './components/real-estate-create/real-estate-create.component';
 import { TaskCreateComponent } from './components/task-create/task-create.component';
+import {
+  MatAccordion,
+  MatExpansionPanel,
+  MatExpansionPanelDescription,
+  MatExpansionPanelTitle
+} from "@angular/material/expansion";
+import {MatDatepicker, MatDatepickerInput} from "@angular/material/datepicker";
 
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
-    CreateUserComponent,
+    UserCreateComponent,
     EmailValidatorDirective,
     MainNavComponent,
     UserManagementComponent,
@@ -62,7 +69,13 @@ import { TaskCreateComponent } from './components/task-create/task-create.compon
     MatToolbar,
     MatToolbarModule,
     MatListModule,
-    MatHeaderCell
+    MatHeaderCell,
+    MatAccordion,
+    MatExpansionPanel,
+    MatExpansionPanelTitle,
+    MatExpansionPanelDescription,
+    MatDatepicker,
+    MatDatepickerInput
   ],
   providers: [
     provideClientHydration(),
