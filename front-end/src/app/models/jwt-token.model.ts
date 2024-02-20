@@ -4,11 +4,7 @@ import {Injectable} from "@angular/core";
 @Injectable({providedIn: "root"})
 export class JwtToken {
 
-  username: string;
   token: string;
-  id: number;
-  role: string;
-
 
   /**
    * It returns the token from local storage, or null if there is no token

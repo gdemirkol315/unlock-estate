@@ -19,3 +19,13 @@
 .hidden{
   display: none
 }
+
+.container {
+  position: relative;
+  justify-content: center;
+}
+
+.right-align {
+  position: absolute;
+  right: 0;
+}

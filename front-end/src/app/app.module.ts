@@ -24,6 +24,7 @@ import { MatListModule } from '@angular/material/list';
 import { UserManagementComponent } from './components/user-management/user-management.component';
 import { RealEstateManagementComponent } from './components/real-estate-management/real-estate-management.component';
 import { TaskOverviewComponent } from './components/task-overview/task-overview.component';
+import {MatHeaderCell} from "@angular/material/table";
 
 
 @NgModule({
@@ -56,7 +57,8 @@ import { TaskOverviewComponent } from './components/task-overview/task-overview.
     MatSidenavModule,
     MatToolbar,
     MatToolbarModule,
-    MatListModule
+    MatListModule,
+    MatHeaderCell
   ],
   providers: [
     provideClientHydration()

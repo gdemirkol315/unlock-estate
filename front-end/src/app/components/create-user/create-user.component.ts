@@ -1,8 +1,8 @@
-import { Component } from '@angular/core';
+import {Component} from '@angular/core';
 import {User} from "../../models/user.model";
 import {AuthService} from "../../services/auth/auth.service";
-import {ValidationErrors, ValidatorFn, Validators} from "@angular/forms";
-import { FormBuilder, FormGroup } from '@angular/forms';
+import {Validators} from "@angular/forms";
+import {FormBuilder, FormGroup} from '@angular/forms';
 
 @Component({
   selector: 'create-user',
@@ -12,17 +12,18 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 export class CreateUserComponent {
   protected createUserForm: FormGroup;
 
-  constructor(private authService:AuthService, private formBuilder: FormBuilder) {
+  constructor(private authService: AuthService, private formBuilder: FormBuilder) {
     this.createUserForm = this.formBuilder.group({
       name: ['', [Validators.required]],
       lastName: ['', [Validators.required]],
       repeatedPassword: ['', [Validators.required]],
       password: ['', [Validators.required]],
       email: ['', [Validators.required, Validators.email]],
-      role:['', [Validators.required]]
+      role: ['', [Validators.required]]
     });
   }
-  user:User = new User();
+
+  user: User = new User();
   roles: String[] = [
     'USER',
     'ADMIN'
@@ -34,14 +35,13 @@ export class CreateUserComponent {
     this.user.lastName = this.createUserForm.get('lastName')?.value;
     this.user.password = this.createUserForm.get('password')?.value;
     this.user.role = this.createUserForm.get('role')?.value;
-    console.log(this.user);
     this.authService.createUser(this.user).subscribe({
-      next: () => {
-        this.authService.toastr.success("User for "+ this.user.email + " has been successfully created.")
+      next: (user: User) => {
+        this.authService.toastr.success("User for " + this.user.email + " has been successfully created.")
       },
       error: (err) => {
         console.log(err)
-        this.authService.toastr.error("User "+ this.user.email + " could not be created! The user might already exist.")
+        this.authService.toastr.error("User " + this.user.email + " could not be created! The user might already exist.")
       }
     })
   }

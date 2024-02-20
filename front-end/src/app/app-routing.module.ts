@@ -5,6 +5,7 @@ import {CreateUserComponent} from "./components/create-user/create-user.componen
 import {UserManagementComponent} from "./components/user-management/user-management.component";
 import {RealEstateManagementComponent} from "./components/real-estate-management/real-estate-management.component";
 import {TaskOverviewComponent} from "./components/task-overview/task-overview.component";
+import {authGuardGuard} from "./guard/auth-guard.guard";
 
 const routes: Routes = [
   {
@@ -17,7 +18,8 @@ const routes: Routes = [
   },
   {
     path: 'create-user',
-    component: CreateUserComponent
+    component: CreateUserComponent,
+    canMatch: [authGuardGuard]
   },
   {
     path: 'user-management',
