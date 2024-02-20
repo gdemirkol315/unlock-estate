@@ -60,7 +60,8 @@ public class AuthenticationService {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         request.getEmail(),
-                        request.getPassword() + getSalt(request.getEmail())
+                        request.getPassword() + getSalt(request.getEmail()),
+                        request.getAuthorities()
                 )
         );
 
