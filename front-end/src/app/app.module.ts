@@ -14,7 +14,7 @@ import {MatIconModule} from '@angular/material/icon';
 import {MatDividerModule} from '@angular/material/divider';
 import {CreateUserComponent} from "./components/user-create/create-user.component";
 import {ToastrModule} from "ngx-toastr";
-import {HttpClientModule} from "@angular/common/http";
+import {HttpClientModule, provideHttpClient, withFetch} from "@angular/common/http";
 import {EmailValidatorDirective} from "./validators/email-validator.directive";
 import {MatOption, MatSelect} from "@angular/material/select";
 import {MatSidenavModule} from "@angular/material/sidenav";
@@ -65,7 +65,8 @@ import { TaskCreateComponent } from './components/task-create/task-create.compon
     MatHeaderCell
   ],
   providers: [
-    provideClientHydration()
+    provideClientHydration(),
+    provideHttpClient(withFetch())
   ],
   bootstrap: [AppComponent]
 })
