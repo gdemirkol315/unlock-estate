@@ -17,8 +17,8 @@ export class UserManagementComponent implements OnInit{
 
   getUsers() {
     this.authService.getUsers().subscribe({
-      next: (users) => {
-        console.log(users)
+      next: (users: User[]) => {
+        this.dataSource = users;
       },
       error: (err) => {
         console.log(err)

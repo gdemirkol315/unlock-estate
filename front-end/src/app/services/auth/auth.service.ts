@@ -42,7 +42,7 @@ export class AuthService extends DataService {
   }
 
   getUsers(){
-    return this.http.get(this.hostname + "allUsers");
+    return this.http.get<User[]>(this.hostname + "allUsers");
   }
 
 }
