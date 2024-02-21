@@ -3,7 +3,7 @@
   <mat-card-header>
     <mat-card-title>Enter Real Estate</mat-card-title>
   </mat-card-header>
-  <form [formGroup]="createReForm" (ngSubmit)="onCreateRe()">
+  <form [formGroup]="createReForm" (ngSubmit)="onCreateRe()" class="slightly-spaced">
     <mat-form-field class="example-full-width">
       <mat-label>Name</mat-label>
       <input matInput type="text"
@@ -27,10 +27,11 @@
       <input matInput type="text"
              formControlName="addressDetail">
     </mat-form-field>
+    <br>
     <mat-form-field>
       <mat-label>Type of Real Estate</mat-label>
-      <mat-select formControlName="retype">
-        <mat-option *ngFor="let retype of reTypes" [value]="retype">{{ retype }}</mat-option>
+      <mat-select formControlName="reType">
+        <mat-option *ngFor="let reType of reTypes" [value]="reType">{{ reType }}</mat-option>
       </mat-select>
     </mat-form-field>
     <br>

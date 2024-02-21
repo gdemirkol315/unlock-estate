@@ -23,7 +23,7 @@ export class AuthService extends DataService {
         sessionStorage.setItem('token',jwtToken.token);
         this.isLoggedIn = true;
         this.toastr.success("Successfully logged in");
-        this.router.navigate(['/user-create']);
+        this.router.navigate(['/user-management']);
       },
       error: (err) => {
         this.isLoggedIn = false;
@@ -40,4 +40,9 @@ export class AuthService extends DataService {
     });
     return this.http.post<User>(this.hostname + "register", user, {headers});
   }
+
+  getUsers(){
+    return this.http.get(this.hostname + "allUsers");
+  }
+
 }

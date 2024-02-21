@@ -1,5 +1,5 @@
-import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
+import {NgModule} from '@angular/core';
+import {RouterModule, Routes} from '@angular/router';
 import {LoginComponent} from "./components/user-login/login.component";
 import {UserCreateComponent} from "./components/user-create/user-create.component";
 import {UserManagementComponent} from "./components/user-management/user-management.component";
@@ -8,10 +8,6 @@ import {TaskOverviewComponent} from "./components/task-management/task-overview.
 import {authGuardGuard} from "./guard/auth-guard.guard";
 
 const routes: Routes = [
-  {
-    path: '',
-    component: LoginComponent
-  },
   {
     path: 'login',
     component: LoginComponent
@@ -35,11 +31,16 @@ const routes: Routes = [
     path: 'task-management',
     component: TaskOverviewComponent,
     canMatch: [authGuardGuard]
-  }
+  },
+  {
+    path: '',
+    component: LoginComponent
+  },
 ];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule]
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {
+}

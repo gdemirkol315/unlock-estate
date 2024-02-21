@@ -2,7 +2,6 @@ import {Component} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {AuthService} from "../../services/auth/auth.service";
 import {User} from "../../models/user.model";
-import {JwtToken} from "../../models/jwt-token.model";
 
 @Component({
   selector: 'user-login',

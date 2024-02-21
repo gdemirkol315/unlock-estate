@@ -16,7 +16,7 @@ public class User implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Integer id;
+    private Integer userId;
     @Column(unique = true)
     private String email;
     private String name;
@@ -25,25 +25,25 @@ public class User implements UserDetails {
     private String password;
     @Enumerated(EnumType.STRING)
     private Role role;
-    @Column(name="is_approved")
-    private boolean isApproved;
+    @Column(name="is_active")
+    private boolean isActive;
 
     public User() {
     }
 
-    public User(Integer id, String email, String name, String lastName) {
-        this.id = id;
+    public User(Integer userId, String email, String name, String lastName) {
+        this.userId = userId;
         this.email = email;
         this.name = name;
         this.lastName = lastName;
     }
 
-    public Integer getId() {
-        return id;
+    public Integer getUserId() {
+        return userId;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    public void setUserId(Integer userId) {
+        this.userId = userId;
     }
 
     public String getEmail() {
@@ -82,12 +82,12 @@ public class User implements UserDetails {
         this.role = role;
     }
 
-    public boolean isApproved() {
-        return isApproved;
+    public boolean isActive() {
+        return isActive;
     }
 
-    public void setApproved(boolean approved) {
-        isApproved = approved;
+    public void setActive(boolean active) {
+        isActive = active;
     }
 
     @Override

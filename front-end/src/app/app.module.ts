@@ -14,7 +14,7 @@ import {MatIconModule} from '@angular/material/icon';
 import {MatDividerModule} from '@angular/material/divider';
 import {UserCreateComponent} from "./components/user-create/user-create.component";
 import {ToastrModule} from "ngx-toastr";
-import {HttpClientModule, provideHttpClient, withFetch} from "@angular/common/http";
+import {HTTP_INTERCEPTORS, HttpClientModule, provideHttpClient, withFetch} from "@angular/common/http";
 import {EmailValidatorDirective} from "./validators/email-validator.directive";
 import {MatOption, MatSelect} from "@angular/material/select";
 import {MatSidenavModule} from "@angular/material/sidenav";
@@ -39,6 +39,7 @@ import { RealEstateDetailComponent } from './components/real-estate-detail/real-
 import { TaskDetailComponent } from './components/task-detail/task-detail.component';
 import { UserDetailComponent } from './components/user-detail/user-detail.component';
 import { ChecklistTemplatesComponent } from './components/checklist-templates/checklist-templates.component';
+import {AuthInterceptorService} from "./services/interceptor/auth-interceptor.service";
 
 
 @NgModule({
@@ -91,7 +92,12 @@ import { ChecklistTemplatesComponent } from './components/checklist-templates/ch
   ],
   providers: [
     provideClientHydration(),
-    provideHttpClient(withFetch())
+    provideHttpClient(withFetch()),
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptorService,
+      multi: true
+    }
   ],
   bootstrap: [AppComponent]
 })
