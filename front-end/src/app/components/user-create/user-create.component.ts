@@ -1,8 +1,9 @@
-import {Component} from '@angular/core';
+import {Component, OnDestroy} from '@angular/core';
 import {User} from "../../models/user.model";
 import {AuthService} from "../../services/auth/auth.service";
 import {Validators} from "@angular/forms";
 import {FormBuilder, FormGroup} from '@angular/forms';
+import {MatDialogRef} from "@angular/material/dialog";
 
 @Component({
   selector: 'user-create',
@@ -12,7 +13,9 @@ import {FormBuilder, FormGroup} from '@angular/forms';
 export class UserCreateComponent {
   protected createUserForm: FormGroup;
 
-  constructor(private authService: AuthService, private formBuilder: FormBuilder) {
+  constructor(private authService: AuthService,
+              private formBuilder: FormBuilder,
+              private dialogRef: MatDialogRef<UserCreateComponent>) {
     this.createUserForm = this.formBuilder.group({
       name: ['', [Validators.required]],
       lastName: ['', [Validators.required]],
@@ -29,6 +32,8 @@ export class UserCreateComponent {
     'ADMIN'
   ];
 
+
+
   onCreateUser() {
     this.user.email = this.createUserForm.get('email')?.value;
     this.user.name = this.createUserForm.get('name')?.value;
@@ -38,11 +43,19 @@ export class UserCreateComponent {
     this.authService.createUser(this.user).subscribe({
       next: (user: User) => {
         this.authService.toastr.success("User for " + this.user.email + " has been successfully created.")
+        this.dialogRef.close(user);
       },
       error: (err) => {
         console.log(err)
         this.authService.toastr.error("User " + this.user.email + " could not be created! The user might already exist.")
+        this.dialogRef.close();
       }
-    })
+    });
+
   }
+
+  onCancel(){
+    this.dialogRef.close();
+  }
+
 }

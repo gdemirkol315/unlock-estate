@@ -1,6 +1,9 @@
 import {Component, OnInit} from '@angular/core';
 import {User} from "../../models/user.model";
 import {AuthService} from "../../services/auth/auth.service";
+import {MatDialog, MatDialogConfig, MatDialogRef} from "@angular/material/dialog";
+import {UserCreateComponent} from "../user-create/user-create.component";
+import {DialogRef} from "@angular/cdk/dialog";
 
 @Component({
   selector: 'user-management',
@@ -10,9 +13,15 @@ import {AuthService} from "../../services/auth/auth.service";
 export class UserManagementComponent implements OnInit{
   dataSource: User[];
   displayedColumns: string[] = ['userId', 'name', 'lastName', 'role'];
+  private dialogRef: MatDialogRef<UserCreateComponent>;
 
 
-  constructor(private authService: AuthService) {
+  ngOnInit(): void {
+    this.getUsers();
+  }
+
+  constructor(private authService: AuthService,
+              private matDialog: MatDialog) {
   }
 
   getUsers() {
@@ -27,10 +36,11 @@ export class UserManagementComponent implements OnInit{
   }
 
   addUser() {
-
+    const dialogConfig = new MatDialogConfig();
+       this.dialogRef = this.matDialog.open(UserCreateComponent,dialogConfig);
+       this.dialogRef.afterClosed().subscribe(() =>{
+         this.getUsers();
+       })
   }
 
-  ngOnInit(): void {
-    this.getUsers();
-  }
 }
