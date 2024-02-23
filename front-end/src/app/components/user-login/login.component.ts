@@ -20,7 +20,7 @@ export class LoginComponent {
   }
 
   onLogin(): void {
-    // Add your user-login logic here
+    sessionStorage.clear();
     let user: User = new User();
     user.email = this.loginForm.get('email')?.value;
     user.password = this.loginForm.get('password')?.value;
