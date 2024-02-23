@@ -74,7 +74,7 @@ import {AuthInterceptorService} from "./services/interceptor/auth-interceptor.se
     MatSelect,
     BrowserAnimationsModule,
     ToastrModule.forRoot({positionClass: 'toast-bottom-center'}),
-    ReactiveFormsModule,
+    ReactiveFormsModule.withConfig({warnOnNgModelWithFormControl: 'never'}),
     MatOption,
     MatSidenavModule,
     MatToolbar,

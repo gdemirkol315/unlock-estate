@@ -1,15 +1,13 @@
 package com.unlockestate.ueparent.auth.controller;
 
 import com.unlockestate.ueparent.auth.dto.AuthenticationResponse;
+import com.unlockestate.ueparent.auth.dto.Role;
 import com.unlockestate.ueparent.auth.dto.User;
 import com.unlockestate.ueparent.auth.service.AuthenticationService;
 import com.unlockestate.ueparent.auth.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -42,13 +40,18 @@ public class AuthenticationController {
 
     @GetMapping("/user")
     public ResponseEntity<User> getUserDetails(
-            @RequestBody User user
+            @RequestParam String email
     ) {
-        return ResponseEntity.ok(userService.getUser(user.getEmail()));
+        return ResponseEntity.ok(userService.getUser(email));
     }
 
     @GetMapping("/allUsers")
     public ResponseEntity<List<User>> getAllUsers() {
         return ResponseEntity.ok(userService.getAllUsers());
+    }
+
+    @GetMapping("/roles")
+    public ResponseEntity<List<String>> getRoles() {
+        return ResponseEntity.ok(userService.getAllRoles());
     }
 }

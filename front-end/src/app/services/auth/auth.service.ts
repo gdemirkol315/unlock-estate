@@ -1,8 +1,7 @@
 import {Injectable} from '@angular/core';
 import {DataService} from "../data/data.service";
 import {User} from "../../models/user.model";
-import {HttpHeaders} from "@angular/common/http";
-import {Observable, of} from "rxjs";
+import {HttpHeaders, HttpParams} from "@angular/common/http";
 import {JwtToken} from "../../models/jwt-token.model";
 
 @Injectable({
@@ -45,4 +44,18 @@ export class AuthService extends DataService {
     return this.http.get<User[]>(this.hostname + "allUsers");
   }
 
+  getUser(email: string) {
+
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json'
+      // Add other headers as needed
+    });
+    let params = new HttpParams().set('email', email);
+
+    return this.http.get<User>(this.hostname + 'user',{headers,params});
+  }
+
+  getRoles() {
+    return this.http.get<string[]>(this.hostname + "roles");
+  }
 }

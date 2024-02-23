@@ -1,1 +1,48 @@
-<p>user-detail works!</p>
+<br>
+<mat-card class="centered-container">
+  <mat-card-header>
+    <mat-card-title>User Details</mat-card-title>
+  </mat-card-header>
+  <form [formGroup]="userDetailForm">
+    <mat-form-field class="example-full-width">
+      <mat-label>Name</mat-label>
+      <input matInput type="text"
+             formControlName="name"
+             readonly
+      >
+    </mat-form-field>
+    <br>
+    <mat-form-field class="example-full-width">
+      <mat-label>Last Name</mat-label>
+      <input matInput type="text"
+             formControlName="lastName"
+             [readonly]="!isEditMode">
+    </mat-form-field>
+    <br>
+    <mat-form-field class="example-full-width">
+      <mat-label>E-Mail</mat-label>
+      <input matInput type="text"
+             formControlName="email"
+             readonly>
+    </mat-form-field>
+    <br>
+    <mat-form-field >
+      <mat-label>Role</mat-label>
+      <mat-select formControlName="role" [disabled]="true">
+        <mat-option *ngFor="let role of roles" [value]="role">{{ role }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <br>
+    <div *ngIf="!isEditMode">
+      <button
+        type="button"
+        aria-label="Edit"
+        mat-icon-button
+        (click)="onEditMode()">
+        <mat-icon aria-label="edit icon">edit</mat-icon>
+      </button>
+    </div>
+    <button mat-raised-button (click)="onClose()"
+    >Close</button>
+  </form>
+</mat-card>
