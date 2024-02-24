@@ -1,11 +1,19 @@
-<div class="slightly-spaced">
-  <button mat-raised-button (click)="addUser()">
-    Add user
-  </button>
-  <button mat-icon-button (click)="getUsers()">
-    <mat-icon>refresh</mat-icon>
-  </button>
-</div>
+<mat-card class="table-header-card">
+  <mat-card-header>
+    <mat-card-title>User Management</mat-card-title>
+    <mat-icon>supervisor_account</mat-icon>
+  </mat-card-header>
+  <mat-card-content>
+    <div class="slightly-spaced">
+      <button mat-raised-button (click)="addUser()">
+        Add user
+      </button>
+      <button mat-icon-button (click)="getUsers()">
+        <mat-icon>refresh</mat-icon>
+      </button>
+    </div>
+  </mat-card-content>
+</mat-card>
 
 <table mat-table [dataSource]="dataSource" class="mat-elevation-z8 full-width slightly-spaced">
   <ng-container matColumnDef="userId">
