@@ -21,6 +21,7 @@ export class UserDetailComponent implements OnInit {
 
   ngOnInit() {
     this.user = this.data.user;
+    this.roles = this.data.roles
     this.initializeForm();
   }
 
@@ -31,27 +32,13 @@ export class UserDetailComponent implements OnInit {
   }
 
   onSave() {
-    let updatedUser = new User();
-    updatedUser.email = this.userDetailForm.get('email')?.value;
-    updatedUser.lastName = this.userDetailForm.get('lastName')?.value;
-    updatedUser.phoneNumber = this.userDetailForm.get('phoneNumber')?.value;
-    updatedUser.preferredArea = this.userDetailForm.get('preferredArea')?.value;
-    updatedUser.role = this.userDetailForm.get('role')?.value;
-    console.log('user-detail:' + JSON.stringify(updatedUser));
-    this.authService.updateUser(updatedUser).subscribe({
-      next: (user: User) => {
-        if (user) {
-          this.isEdited = true;
-          this.user = user;
-          this.authService.toastr.success("User with id:" + user.userId + " has been updated.");
-          this.isEditMode = false;
-        }
-      },
-      error: (err) => {
-        console.log(err);
-        this.authService.toastr.error("There was an unexpected error while updating the user details!");
-      }
-    });
+    let updatedUser = this.getUpdatedUser();
+    if (this.isUserDetailsChanged(updatedUser)) {
+      this.save(updatedUser);
+    } else {
+      this.authService.toastr.info("No user detail has been changed!")
+    }
+    this.isEditMode = false;
   }
 
   onClose() {
@@ -69,11 +56,48 @@ export class UserDetailComponent implements OnInit {
       phoneNumber: new FormControl({value: this.data.user.phoneNumber, disabled: !this.isEditMode}),
       preferredArea: new FormControl({value: this.data.user.preferredArea, disabled: !this.isEditMode})
     });
-    this.roles = this.data.roles
   }
 
   onEditMode() {
     this.isEditMode = true;
     this.initializeForm();
   }
+
+  private getUpdatedUser(): User {
+    let updatedUser = new User();
+    updatedUser.email = this.userDetailForm.get('email')?.value;
+    updatedUser.lastName = this.userDetailForm.get('lastName')?.value;
+    updatedUser.phoneNumber = this.userDetailForm.get('phoneNumber')?.value;
+    updatedUser.preferredArea = this.userDetailForm.get('preferredArea')?.value;
+    updatedUser.role = this.userDetailForm.get('role')?.value;
+    return updatedUser;
+  }
+
+  private isUserDetailsChanged(updatedUser: User): boolean {
+    return !(updatedUser.role === this.user.role
+      && updatedUser.preferredArea === this.user.preferredArea
+      && updatedUser.phoneNumber === this.user.phoneNumber
+      && updatedUser.lastName === this.user.lastName);
+  }
+
+  private save(updatedUser: User) {
+
+    this.authService.updateUser(updatedUser).pipe(first())
+      .subscribe({
+      next: (user: User) => {
+        if (user) {
+          this.isEdited = true;
+          this.user = user;
+          this.authService.toastr.success("User with id:" + user.userId + " has been updated.");
+        }
+      },
+      error: (err) => {
+        console.log(err);
+        this.authService.toastr.error("There was an unexpected error while updating the user details! No changes has been applied!");
+      }
+    });
+
+  }
+
+
 }
