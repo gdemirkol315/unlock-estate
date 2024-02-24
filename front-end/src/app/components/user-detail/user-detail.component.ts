@@ -39,6 +39,7 @@ export class UserDetailComponent implements OnInit {
       this.authService.toastr.info("No user detail has been changed!")
     }
     this.isEditMode = false;
+    this.initializeForm();
   }
 
   onClose() {
