@@ -3,7 +3,8 @@ import {AuthService} from "../../services/auth/auth.service";
 import {User} from "../../models/user.model";
 import {first, Subject} from "rxjs";
 import {FormControl, FormGroup} from "@angular/forms";
-import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
+import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from "@angular/material/dialog";
+import {LastWarningComponent} from "../last-warning/last-warning.component";
 
 @Component({
   selector: 'user-detail',
@@ -27,14 +28,29 @@ export class UserDetailComponent implements OnInit {
 
   constructor(private authService: AuthService,
               private dialogRefUserDetail: MatDialogRef<UserDetailComponent>,
+              private dialogRefLastWarn: MatDialogRef<LastWarningComponent>,
+              private matDialog: MatDialog,
               @Inject(MAT_DIALOG_DATA) public data: any) {
 
   }
 
   onSave() {
+    this.dialogRefLastWarn.afterClosed().pipe(first()).subscribe({
+      next: (answer)=>{
+        if (answer){
+          this.save(updatedUser);
+        }
+      }, error: (err)=>{
+        console.log(err)
+      }
+    })
     let updatedUser = this.getUpdatedUser();
     if (this.isUserDetailsChanged(updatedUser)) {
-      this.save(updatedUser);
+      this.dialogRefLastWarn = this.matDialog.open(LastWarningComponent, {
+        data: {
+          message:"Are you sure to save changes for user:" + this.user.name + " " + this.user.lastName
+        }
+      });
     } else {
       this.authService.toastr.info("No user detail has been changed!")
     }

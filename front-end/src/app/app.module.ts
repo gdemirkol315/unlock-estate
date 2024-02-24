@@ -40,6 +40,7 @@ import { TaskDetailComponent } from './components/task-detail/task-detail.compon
 import { UserDetailComponent } from './components/user-detail/user-detail.component';
 import { ChecklistTemplatesComponent } from './components/checklist-templates/checklist-templates.component';
 import {AuthInterceptorService} from "./services/interceptor/auth-interceptor.service";
+import { LastWarningComponent } from './components/last-warning/last-warning.component';
 
 
 @NgModule({
@@ -58,7 +59,8 @@ import {AuthInterceptorService} from "./services/interceptor/auth-interceptor.se
     RealEstateDetailComponent,
     TaskDetailComponent,
     UserDetailComponent,
-    ChecklistTemplatesComponent
+    ChecklistTemplatesComponent,
+    LastWarningComponent
   ],
   imports: [
     HttpClientModule,
