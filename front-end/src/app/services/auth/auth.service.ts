@@ -58,4 +58,12 @@ export class AuthService extends DataService {
   getRoles() {
     return this.http.get<string[]>(this.hostname + "roles");
   }
+
+  updateUser(user: User) {
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json'
+      // Add other headers as needed
+    });
+    return this.http.post<User>(this.hostname + 'updateUser',user);
+  }
 }

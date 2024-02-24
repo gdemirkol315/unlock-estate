@@ -1,7 +1,6 @@
 package com.unlockestate.ueparent.auth.controller;
 
 import com.unlockestate.ueparent.auth.dto.AuthenticationResponse;
-import com.unlockestate.ueparent.auth.dto.Role;
 import com.unlockestate.ueparent.auth.dto.User;
 import com.unlockestate.ueparent.auth.service.AuthenticationService;
 import com.unlockestate.ueparent.auth.service.UserService;
@@ -15,12 +14,12 @@ import java.util.List;
 public class AuthenticationController {
 
     private final AuthenticationService authenticationService;
+    private final UserService userService;
 
     @Autowired
-    private UserService userService;
-
-    public AuthenticationController(AuthenticationService authenticationService) {
+    public AuthenticationController(AuthenticationService authenticationService, UserService userService) {
         this.authenticationService = authenticationService;
+        this.userService = userService;
     }
 
     @PostMapping("/register")

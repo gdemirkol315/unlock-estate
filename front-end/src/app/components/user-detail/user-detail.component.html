@@ -5,13 +5,19 @@
   </mat-card-header>
   <form [formGroup]="userDetailForm">
     <mat-form-field class="example-full-width">
+      <mat-label>User Id</mat-label>
+      <input matInput type="text"
+             formControlName="userId"
+             readonly
+      >
+    </mat-form-field>
+    <mat-form-field class="example-full-width">
       <mat-label>Name</mat-label>
       <input matInput type="text"
              formControlName="name"
              readonly
       >
     </mat-form-field>
-    <br>
     <mat-form-field class="example-full-width">
       <mat-label>Last Name</mat-label>
       <input matInput type="text"
@@ -25,14 +31,35 @@
              formControlName="email"
              readonly>
     </mat-form-field>
-    <br>
-    <mat-form-field >
+    <mat-form-field>
       <mat-label>Role</mat-label>
-      <mat-select formControlName="role" [disabled]="true">
+      <mat-select formControlName="role">
         <mat-option *ngFor="let role of roles" [value]="role">{{ role }}</mat-option>
       </mat-select>
     </mat-form-field>
     <br>
+    <mat-form-field class="example-full-width">
+      <mat-label>Phone Number</mat-label>
+      <input matInput type="text"
+             formControlName="phoneNumber"
+             [readonly]="!isEditMode">
+    </mat-form-field>
+    <mat-form-field class="example-full-width">
+      <mat-label>Preferred Area</mat-label>
+      <input matInput type="text"
+             formControlName="preferredArea"
+             [readonly]="!isEditMode">
+    </mat-form-field>
+    <br>
+    <div *ngIf="isEditMode">
+      <button
+        type="button"
+        aria-label="save"
+        mat-icon-button
+        (click)="onSave()">
+        <mat-icon aria-label="save icon">save</mat-icon>
+      </button>
+    </div>
     <div *ngIf="!isEditMode">
       <button
         type="button"
@@ -43,6 +70,7 @@
       </button>
     </div>
     <button mat-raised-button (click)="onClose()"
-    >Close</button>
+    >Close
+    </button>
   </form>
 </mat-card>

@@ -42,6 +42,8 @@ public class AuthenticationService {
         user.setLastName(request.getLastName());
         user.setEmail(request.getEmail());
         user.setRole(request.getRole());
+        user.setPhoneNumber(request.getPhoneNumber());
+        user.setPreferredArea(request.getPreferredArea());
 
         Salt salt = new Salt();
         salt.setSalt(createSalt());

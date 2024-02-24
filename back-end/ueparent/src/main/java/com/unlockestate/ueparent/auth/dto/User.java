@@ -28,14 +28,24 @@ public class User implements UserDetails {
     @Column(name="is_active")
     private boolean isActive;
 
+    @Column(name="phone_number")
+    private String phoneNumber;
+
+    @Column(name="preferred_area")
+    private String preferredArea;
+
     public User() {
     }
 
-    public User(Integer userId, String email, String name, String lastName) {
-        this.userId = userId;
+    public User(String email, String name, String lastName, String password, Role role, boolean isActive, String phoneNumber, String preferredArea) {
         this.email = email;
         this.name = name;
         this.lastName = lastName;
+        this.password = password;
+        this.role = role;
+        this.isActive = isActive;
+        this.phoneNumber = phoneNumber;
+        this.preferredArea = preferredArea;
     }
 
     public Integer getUserId() {
@@ -123,5 +133,21 @@ public class User implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    public String getPreferredArea() {
+        return preferredArea;
+    }
+
+    public void setPreferredArea(String preferredArea) {
+        this.preferredArea = preferredArea;
     }
 }

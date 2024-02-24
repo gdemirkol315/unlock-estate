@@ -12,13 +12,15 @@ import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
 })
 export class UserDetailComponent implements OnInit {
 
-  user: User;
+  user: User = new User();
   private isLoading: boolean = true;
   userDetailForm: FormGroup;
   isEditMode: boolean = false;
+  private isEdited: boolean = false;
   roles: string[];
 
   ngOnInit() {
+    this.user = this.data.user;
     this.initializeForm();
   }
 
@@ -29,25 +31,49 @@ export class UserDetailComponent implements OnInit {
   }
 
   onSave() {
-
+    let updatedUser = new User();
+    updatedUser.email = this.userDetailForm.get('email')?.value;
+    updatedUser.lastName = this.userDetailForm.get('lastName')?.value;
+    updatedUser.phoneNumber = this.userDetailForm.get('phoneNumber')?.value;
+    updatedUser.preferredArea = this.userDetailForm.get('preferredArea')?.value;
+    updatedUser.role = this.userDetailForm.get('role')?.value;
+    console.log('user-detail:' + JSON.stringify(updatedUser));
+    this.authService.updateUser(updatedUser).subscribe({
+      next: (user: User) => {
+        if (user) {
+          this.isEdited = true;
+          this.user = user;
+          this.authService.toastr.success("User with id:" + user.userId + " has been updated.");
+          this.isEditMode = false;
+        }
+      },
+      error: (err) => {
+        console.log(err);
+        this.authService.toastr.error("There was an unexpected error while updating the user details!");
+      }
+    });
   }
 
   onClose() {
-    this.dialogRefUserDetail.close();
+    this.dialogRefUserDetail.close(this.isEdited);
   }
 
 
   private initializeForm(): void {
     this.userDetailForm = new FormGroup({
+      userId: new FormControl({value: this.data.user.userId, disabled: true}),
       name: new FormControl({value: this.data.user.name, disabled: true}),
-      lastName: new FormControl({value: this.data.user.lastName, disabled: true}),
-      email: new FormControl({value: this.data.user.email, disabled: true}),
-      role: new FormControl({value: this.data.user.role, disabled: true})
+      lastName: new FormControl({value: this.data.user.lastName, disabled: !this.isEditMode}),
+      email: new FormControl({value: this.data.user.email, disabled: !this.isEditMode}),
+      role: new FormControl({value: this.data.user.role, disabled: !this.isEditMode}),
+      phoneNumber: new FormControl({value: this.data.user.phoneNumber, disabled: !this.isEditMode}),
+      preferredArea: new FormControl({value: this.data.user.preferredArea, disabled: !this.isEditMode})
     });
     this.roles = this.data.roles
   }
 
   onEditMode() {
-
+    this.isEditMode = true;
+    this.initializeForm();
   }
 }

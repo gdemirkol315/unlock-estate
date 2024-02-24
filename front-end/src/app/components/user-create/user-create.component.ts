@@ -22,6 +22,8 @@ export class UserCreateComponent {
       repeatedPassword: ['', [Validators.required]],
       password: ['', [Validators.required]],
       email: ['', [Validators.required, Validators.email]],
+      phoneNumber: [''],
+      preferredArea: [''],
       role: ['', [Validators.required]]
     });
   }
@@ -40,6 +42,9 @@ export class UserCreateComponent {
     this.user.lastName = this.createUserForm.get('lastName')?.value;
     this.user.password = this.createUserForm.get('password')?.value;
     this.user.role = this.createUserForm.get('role')?.value;
+    this.user.preferredArea = this.createUserForm.get('preferredArea')?.value;
+    this.user.phoneNumber = this.createUserForm.get('phoneNumber')?.value;
+    console.log("user-create:" + JSON.stringify(this.user));
     this.authService.createUser(this.user).subscribe({
       next: (user: User) => {
         this.authService.toastr.success("User for " + this.user.email + " has been successfully created.")

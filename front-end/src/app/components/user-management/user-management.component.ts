@@ -15,6 +15,7 @@ export class UserManagementComponent implements OnInit {
   dataSource: User[];
   displayedColumns: string[] = ['userId', 'name', 'lastName', 'role', 'actions'];
   private dialogRefUserCreate: MatDialogRef<UserCreateComponent>;
+  private dialogRefUserDetails: MatDialogRef<UserDetailComponent>;
   private roles: string [];
 
   ngOnInit(): void {
@@ -51,13 +52,20 @@ export class UserManagementComponent implements OnInit {
   openUserDetail(email: string) {
     this.authService.getUser(email).subscribe({
       next: (user: User) => {
-        console.log(user)
-        let dialogRefUserDetail: MatDialogRef<UserDetailComponent> = this.matDialog.open(UserDetailComponent, {
+        console.log('user-management:' + user)
+        this.dialogRefUserDetails = this.matDialog.open(UserDetailComponent, {
           data: {
             user: user,
             roles: this.roles
           }
         });
+        this.dialogRefUserDetails.afterClosed().subscribe({
+          next: (isChanged) => {
+            if (isChanged){
+              this.getUsers();
+            }
+          }
+        })
       }, error: err => {
         console.log(err)
         this.authService.toastr.error("There was an unexpected error getting customer details!", "Error")
