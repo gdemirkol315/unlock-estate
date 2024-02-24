@@ -8,12 +8,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
-
-
-import java.util.Optional;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
 
 
 @RestController
@@ -34,7 +30,7 @@ public class UserController {
 
         try {
             if (user != null) {
-                resultUser = userService.updateUser(user.getEmail(),user).orElseThrow();
+                resultUser = userService.updateUser(user.getEmail(), user).orElseThrow();
             }
         } catch (InternalServerRuntimeException e) {
             logger.error("Could not find user!");
@@ -42,5 +38,22 @@ public class UserController {
 
         return ResponseEntity.ok(resultUser);
 
+    }
+
+    @PreAuthorize("hasAuthority('ADMIN')")
+    @DeleteMapping("/deleteUser/{userEmail}")
+    public ResponseEntity<MessageEntity> deleteUser(@PathVariable("userEmail") String userEmail) {
+        String responseMessage = "";
+        try {
+            if (userEmail != null) {
+                userService.deleteUserByEmail(userEmail);
+                responseMessage = " User deleted successfully!";
+            }
+        } catch (InternalServerRuntimeException e) {
+            logger.error("Could not find user!");
+            responseMessage = " User could not be deleted!";
+        }
+
+        return ResponseEntity.ok(new MessageEntity(responseMessage));
     }
 }

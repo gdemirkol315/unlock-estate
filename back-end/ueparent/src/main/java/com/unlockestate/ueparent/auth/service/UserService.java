@@ -44,7 +44,7 @@ public class UserService {
     /**
      * Updates a user's details.
      *
-     * @param email the ID of the user to update
+     * @param email       the ID of the user to update
      * @param updatedUser contains the data to update the user with
      * @return the updated user, or Optional.empty() if the user was not found
      */
@@ -72,5 +72,11 @@ public class UserService {
             // Return Optional.empty() if the user was not found
             return Optional.empty();
         }
+    }
+
+    @Transactional
+    public void deleteUserByEmail(String email) {
+        User user = userRepository.findByEmail(email).orElseThrow();
+        userRepository.deleteById(user.getUserId());
     }
 }

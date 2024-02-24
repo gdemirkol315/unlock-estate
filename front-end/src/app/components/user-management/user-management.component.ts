@@ -5,6 +5,7 @@ import {MatDialog, MatDialogConfig, MatDialogRef} from "@angular/material/dialog
 import {UserCreateComponent} from "../user-create/user-create.component";
 import {UserDetailComponent} from "../user-detail/user-detail.component";
 import {first} from "rxjs";
+import {LastWarningComponent} from "../last-warning/last-warning.component";
 
 @Component({
   selector: 'user-management',
@@ -24,7 +25,7 @@ export class UserManagementComponent implements OnInit {
   }
 
   constructor(private authService: AuthService,
-              public matDialog: MatDialog,
+              public matDialog: MatDialog
   ) {
   }
 
@@ -52,7 +53,6 @@ export class UserManagementComponent implements OnInit {
   openUserDetail(email: string) {
     this.authService.getUser(email).subscribe({
       next: (user: User) => {
-        console.log('user-management:' + user)
         this.dialogRefUserDetails = this.matDialog.open(UserDetailComponent, {
           data: {
             user: user,
@@ -79,5 +79,35 @@ export class UserManagementComponent implements OnInit {
         this.roles = roles;
       }
     });
+  }
+
+  onDeleteUser(user: User) {
+    let dialogRefLastWarn: MatDialogRef<LastWarningComponent> = this.matDialog.open(LastWarningComponent, {
+      data: {
+        message: "Do you really want to delete this user: " +
+          "\n\t " + user.email
+      }
+    });
+    dialogRefLastWarn.afterClosed().subscribe({
+      next: (deleteRequested) => {
+        if (deleteRequested) {
+          this.deleteUser(user);
+          this.getUsers();
+        }
+      }, error: (err) => {
+        console.log(err)
+      }
+    });
+  }
+
+  private deleteUser(user:User) {
+    this.authService.deleteUser(user).subscribe({
+      next: () => {
+        this.authService.toastr.success("User " + user.email + " was deleted successfully!")
+      },
+      error: () => {
+        this.authService.toastr.error("An unexpected error occurred while deleting user " + user.email + "!!!")
+      }
+    })
   }
 }

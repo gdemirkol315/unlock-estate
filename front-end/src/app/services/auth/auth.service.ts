@@ -66,4 +66,8 @@ export class AuthService extends DataService {
     });
     return this.http.post<User>(this.hostname + 'updateUser',user);
   }
+
+  deleteUser(user: User) {
+    return this.http.delete(`${this.hostname}deleteUser/${user.email}`);
+  }
 }
