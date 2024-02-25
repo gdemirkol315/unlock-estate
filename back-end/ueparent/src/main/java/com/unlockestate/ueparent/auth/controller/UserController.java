@@ -3,7 +3,7 @@ package com.unlockestate.ueparent.auth.controller;
 import com.unlockestate.ueparent.auth.dto.User;
 import com.unlockestate.ueparent.auth.service.UserService;
 import com.unlockestate.ueparent.exception.InternalServerRuntimeException;
-import com.unlockestate.ueparent.utils.dto.MessageEntity;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,11 +18,13 @@ public class UserController {
     private final UserService userService;
 
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
+
     @Autowired
     public UserController(UserService userService) {
         this.userService = userService;
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping("/updateUser")
     public ResponseEntity<User> updateUser(@RequestBody User user) {
 
@@ -40,20 +42,20 @@ public class UserController {
 
     }
 
-    @PreAuthorize("hasAuthority('ADMIN')")
-    @DeleteMapping("/deleteUser/{userEmail}")
-    public ResponseEntity<MessageEntity> deleteUser(@PathVariable("userEmail") String userEmail) {
-        String responseMessage = "";
-        try {
-            if (userEmail != null) {
-                userService.deleteUserByEmail(userEmail);
-                responseMessage = " User deleted successfully!";
-            }
-        } catch (InternalServerRuntimeException e) {
-            logger.error("Could not find user!");
-            responseMessage = " User could not be deleted!";
-        }
-
-        return ResponseEntity.ok(new MessageEntity(responseMessage));
-    }
+//    @PreAuthorize("hasAuthority('ADMIN')")
+//    @DeleteMapping("/deleteUser/{userEmail}")
+//    public ResponseEntity<MessageEntity> deleteUser(@PathVariable("userEmail") String userEmail) {
+//        String responseMessage = "";
+//        try {
+//            if (userEmail != null) {
+//                userService.deleteUserByEmail(userEmail);
+//                responseMessage = " User deleted successfully!";
+//            }
+//        } catch (InternalServerRuntimeException e) {
+//            logger.error("Could not find user!");
+//            responseMessage = " User could not be deleted!";
+//        }
+//
+//        return ResponseEntity.ok(new MessageEntity(responseMessage));
+//    }
 }

@@ -7,5 +7,6 @@ export class User {
   role:string;
   phoneNumber:string;
   preferredArea: string;
+  isActive:boolean;
 
 }

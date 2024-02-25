@@ -41,6 +41,7 @@ import { UserDetailComponent } from './components/user-detail/user-detail.compon
 import { ChecklistTemplatesComponent } from './components/checklist-templates/checklist-templates.component';
 import {AuthInterceptorService} from "./services/interceptor/auth-interceptor.service";
 import { LastWarningComponent } from './components/last-warning/last-warning.component';
+import {MatTooltip} from "@angular/material/tooltip";
 
 
 @NgModule({
@@ -81,6 +82,7 @@ import { LastWarningComponent } from './components/last-warning/last-warning.com
     MatSidenavModule,
     MatToolbar,
     MatToolbarModule,
+    MatTooltip,
     MatListModule,
     MatHeaderCell,
     MatAccordion,

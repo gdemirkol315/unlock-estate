@@ -61,7 +61,7 @@ export class UserManagementComponent implements OnInit {
         });
         this.dialogRefUserDetails.afterClosed().subscribe({
           next: (isChanged) => {
-            if (isChanged){
+            if (isChanged) {
               this.getUsers();
             }
           }
@@ -81,17 +81,23 @@ export class UserManagementComponent implements OnInit {
     });
   }
 
-  onDeleteUser(user: User) {
+  onChangeUserStatus(user: User, isActive: boolean) {
+    let messagePart: string;
+    if (isActive) {
+      messagePart = "activate"
+    } else {
+      messagePart = "deactivate"
+    }
     let dialogRefLastWarn: MatDialogRef<LastWarningComponent> = this.matDialog.open(LastWarningComponent, {
       data: {
-        message: "Do you really want to delete this user: " +
+        message: "Do you really want to " + messagePart + " this user: " +
           "\n\t " + user.email
       }
     });
     dialogRefLastWarn.afterClosed().subscribe({
-      next: (deleteRequested) => {
-        if (deleteRequested) {
-          this.deleteUser(user);
+      next: (changeRequested:boolean) => {
+        if (changeRequested) {
+          this.setUserStatus(user, isActive);
           this.getUsers();
         }
       }, error: (err) => {
@@ -100,14 +106,22 @@ export class UserManagementComponent implements OnInit {
     });
   }
 
-  private deleteUser(user:User) {
-    this.authService.deleteUser(user).subscribe({
-      next: () => {
-        this.authService.toastr.success("User " + user.email + " was deleted successfully!")
-      },
-      error: () => {
-        this.authService.toastr.error("An unexpected error occurred while deleting user " + user.email + "!!!")
-      }
-    })
+  private setUserStatus(user: User, isActive: boolean) {
+    if (isActive != null) {
+      user.isActive = isActive;
+      this.authService.updateUser(user).subscribe({
+        next: (user:User) => {
+          if(user.isActive == isActive){
+            this.authService.toastr.success("User status for " + user.email + " was changed successfully!")
+          } else {
+            this.authService.toastr.error("An unexpected error occurred while changing status of the user " + user.email + "!!!")
+          }
+
+        },
+        error: () => {
+          this.authService.toastr.error("An unexpected error occurred while changing status of the user " + user.email + "!!!")
+        }
+      });
+    }
   }
 }
