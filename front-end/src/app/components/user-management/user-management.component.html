@@ -4,20 +4,18 @@
     <mat-icon>supervisor_account</mat-icon>
   </mat-card-header>
   <mat-card-content>
-    <div class="slightly-spaced">
-      <button mat-raised-button (click)="addUser()">
-        Add user
+    <button mat-raised-button class="slightly-spaced" (click)="addUser()">
+      Add user
+    </button>
+    <mat-form-field class="search-form-field slightly-spaced">
+      <input matInput [(ngModel)]="searchKey" placeholder="Search" autocomplete="off" (keyup)="applyFilter()">
+      <button mat-button matSuffix aria-label="Clear" *ngIf="searchKey" (click)="onSearchClear()">
+        <mat-icon>close</mat-icon>
       </button>
-      <button mat-icon-button (click)="getUsers()">
-        <mat-icon>refresh</mat-icon>
-      </button>
-      <mat-form-field class="search-form-field">
-        <input matInput [(ngModel)]="searchKey" placeholder="Search" autocomplete="off" (keyup)="applyFilter()">
-        <button mat-button matSuffix aria-label="Clear" *ngIf="searchKey"  (click)="onSearchClear()">
-          <mat-icon>close</mat-icon>
-        </button>
-      </mat-form-field>
-    </div>
+    </mat-form-field>
+    <button mat-icon-button (click)="getUsers()" matTooltip="Refresh Users" class="slightly-spaced">
+      <mat-icon>refresh</mat-icon>
+    </button>
   </mat-card-content>
 </mat-card>
 <mat-accordion>
