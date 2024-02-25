@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Service
@@ -37,8 +36,7 @@ public class UserService {
 
     public List<String> getAllRoles() {
         return Stream.of(Role.values())
-                .map(Enum::name)
-                .collect(Collectors.toList());
+                .map(Enum::name).toList();
     }
 
     /**
@@ -61,6 +59,7 @@ public class UserService {
             existingUser.setPreferredArea(updatedUser.getPreferredArea());
             existingUser.setPhoneNumber(updatedUser.getPhoneNumber());
             existingUser.setRole(updatedUser.getRole());
+            existingUser.setActive(updatedUser.isActive());
             // Add more fields to update as needed
 
             // Save the updated user back to the database

@@ -22,6 +22,8 @@ public class AuthenticationService {
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
 
+    private final Random random = new Random();
+
     public AuthenticationService(UserRepository repository,
                                  SaltRepository saltRepository,
                                  PasswordEncoder passwordEncoder,
@@ -44,6 +46,7 @@ public class AuthenticationService {
         user.setRole(request.getRole());
         user.setPhoneNumber(request.getPhoneNumber());
         user.setPreferredArea(request.getPreferredArea());
+        user.setActive(request.isActive());
 
         Salt salt = new Salt();
         salt.setSalt(createSalt());
@@ -84,8 +87,8 @@ public class AuthenticationService {
     }
 
     private char generateRandomChar() {
-        Random r = new Random();
-        return (char) (r.nextInt(26) + 'a');
+
+        return (char) (random.nextInt(26) + 'a');
     }
 
     public String getSalt(String email) {

@@ -6,6 +6,7 @@ import com.unlockestate.ueparent.auth.service.AuthenticationService;
 import com.unlockestate.ueparent.auth.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -21,11 +22,12 @@ public class AuthenticationController {
         this.authenticationService = authenticationService;
         this.userService = userService;
     }
-
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping("/register")
     public ResponseEntity<AuthenticationResponse> register(
             @RequestBody User request
     ) {
+        request.setActive(true);
         return ResponseEntity.ok(authenticationService.register(request));
 
     }
