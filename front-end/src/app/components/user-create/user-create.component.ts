@@ -1,4 +1,4 @@
-import {Component, OnDestroy} from '@angular/core';
+import {Component} from '@angular/core';
 import {User} from "../../models/user.model";
 import {AuthService} from "../../services/auth/auth.service";
 import {Validators} from "@angular/forms";
@@ -44,7 +44,6 @@ export class UserCreateComponent {
     this.user.role = this.createUserForm.get('role')?.value;
     this.user.preferredArea = this.createUserForm.get('preferredArea')?.value;
     this.user.phoneNumber = this.createUserForm.get('phoneNumber')?.value;
-    console.log("user-create:" + JSON.stringify(this.user));
     this.authService.createUser(this.user).subscribe({
       next: (user: User) => {
         this.authService.toastr.success("User for " + this.user.email + " has been successfully created.")

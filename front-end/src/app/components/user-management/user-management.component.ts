@@ -13,7 +13,8 @@ import {LastWarningComponent} from "../last-warning/last-warning.component";
   styleUrl: './user-management.component.scss'
 })
 export class UserManagementComponent implements OnInit {
-  dataSource: User[];
+  activeUsers: User[];
+  deActivatedUsers: User[];
   displayedColumns: string[] = ['userId', 'name', 'lastName', 'role', 'actions'];
   private dialogRefUserCreate: MatDialogRef<UserCreateComponent>;
   private dialogRefUserDetails: MatDialogRef<UserDetailComponent>;
@@ -32,7 +33,18 @@ export class UserManagementComponent implements OnInit {
   getUsers() {
     this.authService.getUsers().subscribe({
       next: (users: User[]) => {
-        this.dataSource = users;
+        let activeUsers: User[] = [];
+        let deActivatedUsers: User[] = [];
+        for (const user of users) {
+
+          if (user.active) {
+            activeUsers.push(user);
+          } else {
+            deActivatedUsers.push(user);
+          }
+          this.activeUsers = activeUsers;
+          this.deActivatedUsers = deActivatedUsers;
+        }
       },
       error: (err) => {
         console.log(err)
@@ -95,10 +107,9 @@ export class UserManagementComponent implements OnInit {
       }
     });
     dialogRefLastWarn.afterClosed().subscribe({
-      next: (changeRequested:boolean) => {
+      next: (changeRequested: boolean) => {
         if (changeRequested) {
           this.setUserStatus(user, isActive);
-          this.getUsers();
         }
       }, error: (err) => {
         console.log(err)
@@ -107,12 +118,18 @@ export class UserManagementComponent implements OnInit {
   }
 
   private setUserStatus(user: User, isActive: boolean) {
+
     if (isActive != null) {
-      user.isActive = isActive;
-      this.authService.updateUser(user).subscribe({
-        next: (user:User) => {
-          if(user.isActive == isActive){
-            this.authService.toastr.success("User status for " + user.email + " was changed successfully!")
+
+      let updatedUser: User = new User();
+      updatedUser.cloneUser(user);
+      updatedUser.setActiveStatus(isActive);
+
+      this.authService.updateUser(updatedUser).subscribe({
+        next: (user: User) => {
+          if (user.active == isActive) {
+            this.getUsers();
+            this.authService.toastr.success("User status for " + user.email + " was changed successfully!");
           } else {
             this.authService.toastr.error("An unexpected error occurred while changing status of the user " + user.email + "!!!")
           }

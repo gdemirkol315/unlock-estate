@@ -1,7 +1,7 @@
 import {Component, Inject, OnInit} from '@angular/core';
 import {AuthService} from "../../services/auth/auth.service";
 import {User} from "../../models/user.model";
-import {first, Subject} from "rxjs";
+import {first} from "rxjs";
 import {FormControl, FormGroup} from "@angular/forms";
 import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from "@angular/material/dialog";
 import {LastWarningComponent} from "../last-warning/last-warning.component";
@@ -28,27 +28,28 @@ export class UserDetailComponent implements OnInit {
 
   constructor(private authService: AuthService,
               private dialogRefUserDetail: MatDialogRef<UserDetailComponent>,
-              private dialogRefLastWarn: MatDialogRef<LastWarningComponent>,
               private matDialog: MatDialog,
               @Inject(MAT_DIALOG_DATA) public data: any) {
 
   }
 
   onSave() {
-    this.dialogRefLastWarn.afterClosed().pipe(first()).subscribe({
-      next: (answer)=>{
-        if (answer){
-          this.save(updatedUser);
-        }
-      }, error: (err)=>{
-        console.log(err)
-      }
-    })
     let updatedUser = this.getUpdatedUser();
+
     if (this.isUserDetailsChanged(updatedUser)) {
-      this.dialogRefLastWarn = this.matDialog.open(LastWarningComponent, {
+      let dialogRefLastWarn: MatDialogRef<LastWarningComponent> = this.matDialog.open(LastWarningComponent, {
         data: {
-          message:"Are you sure to save changes for user:" + this.user.name + " " + this.user.lastName
+          message:"Are you sure to save changes for user:"
+            +"\n\t" + this.user.name + " " + this.user.lastName
+        }
+      });
+      dialogRefLastWarn.afterClosed().pipe(first()).subscribe({
+        next: (answer)=>{
+          if (answer){
+            this.save(updatedUser);
+          }
+        }, error: (err)=>{
+          console.log(err)
         }
       });
     } else {
@@ -87,6 +88,7 @@ export class UserDetailComponent implements OnInit {
     updatedUser.phoneNumber = this.userDetailForm.get('phoneNumber')?.value;
     updatedUser.preferredArea = this.userDetailForm.get('preferredArea')?.value;
     updatedUser.role = this.userDetailForm.get('role')?.value;
+    updatedUser.setActiveStatus(this.user.active);
     return updatedUser;
   }
 

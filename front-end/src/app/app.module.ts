@@ -28,7 +28,7 @@ import {MatHeaderCell, MatRow, MatTableModule} from "@angular/material/table";
 import { RealEstateCreateComponent } from './components/real-estate-create/real-estate-create.component';
 import { TaskCreateComponent } from './components/task-create/task-create.component';
 import {
-  MatAccordion,
+  MatAccordion, MatExpansionModule,
   MatExpansionPanel,
   MatExpansionPanelDescription, MatExpansionPanelHeader,
   MatExpansionPanelTitle
@@ -82,6 +82,7 @@ import {MatTooltip} from "@angular/material/tooltip";
     MatSidenavModule,
     MatToolbar,
     MatToolbarModule,
+    MatExpansionModule,
     MatTooltip,
     MatListModule,
     MatHeaderCell,
