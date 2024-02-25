@@ -6,6 +6,8 @@ import {UserCreateComponent} from "../user-create/user-create.component";
 import {UserDetailComponent} from "../user-detail/user-detail.component";
 import {first} from "rxjs";
 import {LastWarningComponent} from "../last-warning/last-warning.component";
+import {MatTableDataSource} from "@angular/material/table";
+import {type} from "node:os";
 
 @Component({
   selector: 'user-management',
@@ -13,16 +15,29 @@ import {LastWarningComponent} from "../last-warning/last-warning.component";
   styleUrl: './user-management.component.scss'
 })
 export class UserManagementComponent implements OnInit {
-  activeUsers: User[];
-  deActivatedUsers: User[];
+  activeUsers: MatTableDataSource<User> = new MatTableDataSource<User>();
+  deActivatedUsers: MatTableDataSource<User> = new MatTableDataSource<User>();
   displayedColumns: string[] = ['userId', 'name', 'lastName', 'role', 'actions'];
   private dialogRefUserCreate: MatDialogRef<UserCreateComponent>;
   private dialogRefUserDetails: MatDialogRef<UserDetailComponent>;
   private roles: string [];
+  searchKey: string;
 
   ngOnInit(): void {
     this.getRoles();
     this.getUsers();
+    this.activeUsers.filterPredicate = (data:User, filter:string) => {
+      return this.displayedColumns.some(ele => {
+        return ele != 'actions' && typeof data[ele]==="string" &&
+          data[ele]?.toLowerCase().indexOf(filter) != -1;
+      });
+    }
+    this.deActivatedUsers.filterPredicate = (data, filter) => {
+      return this.displayedColumns.some(name => {
+        return name != 'actions' && typeof data[name]==="string" &&
+          data[name]?.toLowerCase().indexOf(filter) != -1;
+      });
+    }
   }
 
   constructor(private authService: AuthService,
@@ -42,8 +57,8 @@ export class UserManagementComponent implements OnInit {
           } else {
             deActivatedUsers.push(user);
           }
-          this.activeUsers = activeUsers;
-          this.deActivatedUsers = deActivatedUsers;
+          this.activeUsers.data = activeUsers;
+          this.deActivatedUsers.data = deActivatedUsers;
         }
       },
       error: (err) => {
@@ -140,5 +155,15 @@ export class UserManagementComponent implements OnInit {
         }
       });
     }
+  }
+
+  onSearchClear() {
+    this.searchKey = "";
+    this.applyFilter();
+  }
+
+  applyFilter() {
+    this.activeUsers.filter = this.searchKey.trim().toLowerCase();
+    this.deActivatedUsers.filter = this.searchKey.trim().toLowerCase();
   }
 }

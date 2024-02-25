@@ -10,6 +10,7 @@ export class User {
   isActive:boolean;
   active:boolean;
 
+  [key: string]: any;
 
   cloneUser(user:User) {
     this.userId = user.userId
