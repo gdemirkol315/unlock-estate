@@ -37,16 +37,6 @@ public class User implements UserDetails {
     public User() {
     }
 
-    public User(String email, String name, String lastName, String password, Role role, boolean isActive, String phoneNumber, String preferredArea) {
-        this.email = email;
-        this.name = name;
-        this.lastName = lastName;
-        this.password = password;
-        this.role = role;
-        this.isActive = isActive;
-        this.phoneNumber = phoneNumber;
-        this.preferredArea = preferredArea;
-    }
 
     public Integer getUserId() {
         return userId;

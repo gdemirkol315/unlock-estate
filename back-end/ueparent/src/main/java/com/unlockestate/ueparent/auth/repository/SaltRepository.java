@@ -1,7 +1,6 @@
 package com.unlockestate.ueparent.auth.repository;
 
 import com.unlockestate.ueparent.auth.dto.Salt;
-import com.unlockestate.ueparent.auth.dto.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 

@@ -82,20 +82,4 @@ public class UserController {
         return ResponseEntity.ok(userService.getAllRoles());
     }
 
-//    @PreAuthorize("hasAuthority('ADMIN')")
-//    @DeleteMapping("/deleteUser/{userEmail}")
-//    public ResponseEntity<MessageEntity> deleteUser(@PathVariable("userEmail") String userEmail) {
-//        String responseMessage = "";
-//        try {
-//            if (userEmail != null) {
-//                userService.deleteUserByEmail(userEmail);
-//                responseMessage = " User deleted successfully!";
-//            }
-//        } catch (InternalServerRuntimeException e) {
-//            logger.error("Could not find user!");
-//            responseMessage = " User could not be deleted!";
-//        }
-//
-//        return ResponseEntity.ok(new MessageEntity(responseMessage));
-//    }
 }
