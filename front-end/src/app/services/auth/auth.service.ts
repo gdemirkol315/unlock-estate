@@ -23,7 +23,7 @@ export class AuthService extends DataService {
           this.jwtToken.token = jwtTokenObj.token
           this.isLoggedIn = true;
           this.toastr.success("Successfully logged in");
-          this.router.navigate(['admin/user-management']);
+          this.router.navigate(['task-management']);
         } else {
           this.toastr.error("Provided credentials are wrong!","Wrong Credentials")
         }

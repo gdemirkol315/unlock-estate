@@ -66,7 +66,7 @@ export class UserProfileComponent implements OnInit {
 
   private save(updatedUser: User) {
 
-    this.authService.updateUser(updatedUser).pipe(first())
+    this.authService.updateProfile(updatedUser).pipe(first())
       .subscribe({
         next: (user: User) => {
           if (user) {
@@ -74,7 +74,7 @@ export class UserProfileComponent implements OnInit {
             this.user = userInstance;
             this.isEditMode = false;
             this.userDetailForm = Utils.initializeUserDetailForm(this.user,this.isEditMode);
-            this.authService.toastr.success("User with id:" + userInstance.userId + " has been updated.");
+            this.authService.toastr.success("User profile has been updated.");
           }
         },
         error: (err) => {

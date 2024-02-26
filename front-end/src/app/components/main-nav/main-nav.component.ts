@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { map, shareReplay } from 'rxjs/operators';
 import {LoginComponent} from "../user-login/login.component";
 import {AuthService} from "../../services/auth/auth.service";
+import {JwtToken} from "../../models/jwt-token.model";
 
 @Component({
   selector: 'main-nav',
@@ -13,7 +14,8 @@ import {AuthService} from "../../services/auth/auth.service";
 export class MainNavComponent {
   private breakpointObserver = inject(BreakpointObserver);
 
-  constructor(protected authService:AuthService) {
+  constructor(protected authService:AuthService,
+              protected jwtToken:JwtToken) {
   }
 
   isHandset$: Observable<boolean> = this.breakpointObserver.observe(Breakpoints.Handset)

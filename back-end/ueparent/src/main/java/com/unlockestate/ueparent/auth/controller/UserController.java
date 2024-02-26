@@ -33,6 +33,25 @@ public class UserController {
         try {
             if (user != null) {
                 resultUser = userService.updateUser(user.getEmail(), user).orElseThrow();
+                resultUser.setPassword(null);
+            }
+        } catch (InternalServerRuntimeException e) {
+            logger.error("Could not find user!");
+        }
+
+        return ResponseEntity.ok(resultUser);
+
+    }
+
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('USER')")
+    @PostMapping("/updateProfile")
+    public ResponseEntity<User> updateProfile(@RequestBody User user) {
+
+        User resultUser = new User();
+
+        try {
+            if (user != null) {
+                resultUser = userService.updateProfile(user.getEmail(), user).orElseThrow();
             }
         } catch (InternalServerRuntimeException e) {
             logger.error("Could not find user!");
