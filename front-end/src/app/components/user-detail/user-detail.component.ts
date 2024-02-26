@@ -1,4 +1,4 @@
-import {Component, Inject, OnInit} from '@angular/core';
+import {Component, Inject, Input, OnInit} from '@angular/core';
 import {AuthService} from "../../services/auth/auth.service";
 import {User} from "../../models/user.model";
 import {first} from "rxjs";
@@ -34,8 +34,8 @@ export class UserDetailComponent implements OnInit {
   }
 
   onSave() {
-    let updatedUser = this.getUpdatedUser();
-
+    let updatedUser = this.getUserFromObject(this.userDetailForm);
+    updatedUser.setActiveStatus(this.user.active);
     if (this.isUserDetailsChanged(updatedUser)) {
       let dialogRefLastWarn: MatDialogRef<LastWarningComponent> = this.matDialog.open(LastWarningComponent, {
         data: {
@@ -50,13 +50,14 @@ export class UserDetailComponent implements OnInit {
           }
         }, error: (err)=>{
           console.log(err)
+          this.authService.toastr.error("An unexpected error occurred while trying to save user details!")
         }
       });
     } else {
+      this.isEditMode = false;
+      this.initializeForm();
       this.authService.toastr.info("No user detail has been changed!")
     }
-    this.isEditMode = false;
-    this.initializeForm();
   }
 
   onClose() {
@@ -66,13 +67,13 @@ export class UserDetailComponent implements OnInit {
 
   private initializeForm(): void {
     this.userDetailForm = new FormGroup({
-      userId: new FormControl({value: this.data.user.userId, disabled: true}),
-      name: new FormControl({value: this.data.user.name, disabled: true}),
-      lastName: new FormControl({value: this.data.user.lastName, disabled: !this.isEditMode}),
-      email: new FormControl({value: this.data.user.email, disabled: !this.isEditMode}),
-      role: new FormControl({value: this.data.user.role, disabled: !this.isEditMode}),
-      phoneNumber: new FormControl({value: this.data.user.phoneNumber, disabled: !this.isEditMode}),
-      preferredArea: new FormControl({value: this.data.user.preferredArea, disabled: !this.isEditMode})
+      userId: new FormControl({value: this.user.userId, disabled: true}),
+      name: new FormControl({value: this.user.name, disabled: true}),
+      lastName: new FormControl({value: this.user.lastName, disabled: !this.isEditMode}),
+      email: new FormControl({value: this.user.email, disabled: !this.isEditMode}),
+      role: new FormControl({value: this.user.role, disabled: !this.isEditMode}),
+      phoneNumber: new FormControl({value: this.user.phoneNumber, disabled: !this.isEditMode}),
+      preferredArea: new FormControl({value: this.user.preferredArea, disabled: !this.isEditMode})
     });
   }
 
@@ -81,14 +82,26 @@ export class UserDetailComponent implements OnInit {
     this.initializeForm();
   }
 
-  private getUpdatedUser(): User {
+  private getUserFromObject(obj:any): User {
     let updatedUser = new User();
-    updatedUser.email = this.userDetailForm.get('email')?.value;
-    updatedUser.lastName = this.userDetailForm.get('lastName')?.value;
-    updatedUser.phoneNumber = this.userDetailForm.get('phoneNumber')?.value;
-    updatedUser.preferredArea = this.userDetailForm.get('preferredArea')?.value;
-    updatedUser.role = this.userDetailForm.get('role')?.value;
-    updatedUser.setActiveStatus(this.user.active);
+    if (obj instanceof FormGroup){
+      updatedUser.email = this.userDetailForm.get('email')?.value;
+      updatedUser.lastName = this.userDetailForm.get('lastName')?.value;
+      updatedUser.phoneNumber = this.userDetailForm.get('phoneNumber')?.value;
+      updatedUser.preferredArea = this.userDetailForm.get('preferredArea')?.value;
+      updatedUser.role = this.userDetailForm.get('role')?.value;
+      updatedUser.active = this.userDetailForm.get('active')?.value;
+      updatedUser.isActive = this.userDetailForm.get('isActive')?.value;
+    } else {
+      updatedUser.email = obj['email'];
+      updatedUser.lastName = obj['lastName'];
+      updatedUser.phoneNumber = obj['phoneNumber'];
+      updatedUser.preferredArea = obj['preferredArea'];
+      updatedUser.role = obj['role'];
+      updatedUser.active = obj['active'];
+      updatedUser.isActive = obj['isActive'];
+    }
+
     return updatedUser;
   }
 
@@ -105,8 +118,13 @@ export class UserDetailComponent implements OnInit {
       .subscribe({
       next: (user: User) => {
         if (user) {
+          let userInstance: User = this.getUserFromObject(user);
+          this.user = userInstance;
+          console.log(user)
+          console.log(userInstance)
+          this.isEditMode = false;
           this.isEdited = true;
-          this.user = user;
+          this.initializeForm();
           this.authService.toastr.success("User with id:" + user.userId + " has been updated.");
         }
       },

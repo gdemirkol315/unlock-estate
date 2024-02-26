@@ -46,7 +46,6 @@ public class UserService {
      * @param updatedUser contains the data to update the user with
      * @return the updated user, or Optional.empty() if the user was not found
      */
-    @Transactional
     public Optional<User> updateUser(String email, User updatedUser) {
         // First, check if the user with the specified ID exists
         Optional<User> existingUserOpt = userRepository.findByEmail(email);
@@ -54,15 +53,12 @@ public class UserService {
         if (existingUserOpt.isPresent()) {
             User existingUser = existingUserOpt.get();
 
-            // Update the existing user's properties with the values from the updated user
             existingUser.setLastName(updatedUser.getLastName());
             existingUser.setPreferredArea(updatedUser.getPreferredArea());
             existingUser.setPhoneNumber(updatedUser.getPhoneNumber());
             existingUser.setRole(updatedUser.getRole());
             existingUser.setActive(updatedUser.isActive());
-            // Add more fields to update as needed
 
-            // Save the updated user back to the database
             userRepository.save(existingUser);
             existingUser.setPassword(null);
             // Return the updated user
