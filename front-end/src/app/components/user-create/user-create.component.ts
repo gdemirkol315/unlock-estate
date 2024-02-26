@@ -37,25 +37,37 @@ export class UserCreateComponent {
 
 
   onCreateUser() {
-    this.user.email = this.createUserForm.get('email')?.value;
-    this.user.name = this.createUserForm.get('name')?.value;
-    this.user.lastName = this.createUserForm.get('lastName')?.value;
-    this.user.password = this.createUserForm.get('password')?.value;
-    this.user.role = this.createUserForm.get('role')?.value;
-    this.user.preferredArea = this.createUserForm.get('preferredArea')?.value;
-    this.user.phoneNumber = this.createUserForm.get('phoneNumber')?.value;
-    this.authService.createUser(this.user).subscribe({
-      next: (user: User) => {
-        this.authService.toastr.success("User for " + this.user.email + " has been successfully created.")
-        this.dialogRef.close(user);
-      },
-      error: (err) => {
-        console.log(err)
-        this.authService.toastr.error("User " + this.user.email + " could not be created! The user might already exist.")
-        this.dialogRef.close();
-      }
-    });
+    if (this.validateForm()) {
+      this.user.email = this.createUserForm.get('email')?.value;
+      this.user.name = this.createUserForm.get('name')?.value;
+      this.user.lastName = this.createUserForm.get('lastName')?.value;
+      this.user.password = this.createUserForm.get('password')?.value;
+      this.user.role = this.createUserForm.get('role')?.value;
+      this.user.preferredArea = this.createUserForm.get('preferredArea')?.value;
+      this.user.phoneNumber = this.createUserForm.get('phoneNumber')?.value;
+      this.authService.createUser(this.user).subscribe({
+        next: (user: User) => {
+          this.authService.toastr.success("User for " + this.user.email + " has been successfully created.")
+          this.dialogRef.close(user);
+        },
+        error: (err) => {
+          console.log(err)
+          this.authService.toastr.error("User " + this.user.email + " could not be created! The user might already exist.")
+          this.dialogRef.close();
+        }
+      });
+    }
+  }
 
+  private validateForm(): boolean {
+    if (this.createUserForm.get('password')?.value != this.createUserForm.get('repeatedPassword')?.value) {
+      this.authService.toastr.error("Passwords do not match!");
+      return false;
+    } else if (this.createUserForm.invalid) {
+      this.authService.toastr.error("Necessary entries should be done!");
+      return false;
+    }
+    return true;
   }
 
   onCancel(){

@@ -28,10 +28,15 @@ export class ChangePasswordComponent implements OnInit {
   }
 
   onChangePassword() {
-    this.changePassword.newPassword = this.passwordChangeForm.get('newPassword')?.value;
-    this.changePassword.user.password = this.passwordChangeForm.get('oldPassword')?.value;
-    this.authService.changePassword(this.changePassword)
-    this.matDialogRef.close();
+    let newPassword:string = this.passwordChangeForm.get('newPassword')?.value;
+    if (newPassword == this.passwordChangeForm.get('newPasswordRepeat')?.value) {
+      this.changePassword.newPassword = newPassword;
+      this.changePassword.user.password = this.passwordChangeForm.get('oldPassword')?.value;
+      this.authService.changePassword(this.changePassword)
+      this.matDialogRef.close();
+    } else {
+      this.authService.toastr.error("Passwords do not match!")
+    }
   }
 
   onCancel() {
