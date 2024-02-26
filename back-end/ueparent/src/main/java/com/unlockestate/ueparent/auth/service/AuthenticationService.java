@@ -67,15 +67,20 @@ public class AuthenticationService {
         return new AuthenticationResponse(token);
     }
 
-    public AuthenticationResponse authenticate(User request) {
+    public void authenticate(User request) throws BadCredentialsException {
+
+        authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(
+                        request.getEmail(),
+                        request.getPassword() + getSalt(request.getEmail()),
+                        request.getAuthorities()
+                )
+        );
+    }
+
+    public AuthenticationResponse login(User request) {
         try {
-            authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(
-                            request.getEmail(),
-                            request.getPassword() + getSalt(request.getEmail()),
-                            request.getAuthorities()
-                    )
-            );
+            authenticate(request);
         } catch (BadCredentialsException e) {
             logger.error("Credentials provided are wrong!");
             return new AuthenticationResponse("");

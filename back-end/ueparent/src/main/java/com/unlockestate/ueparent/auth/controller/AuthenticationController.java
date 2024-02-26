@@ -36,7 +36,7 @@ public class AuthenticationController {
     public ResponseEntity<AuthenticationResponse> login(
             @RequestBody User request
     ) {
-        return ResponseEntity.ok(authenticationService.authenticate(request));
+        return ResponseEntity.ok(authenticationService.login(request));
     }
 
     @GetMapping("/user")
@@ -46,11 +46,13 @@ public class AuthenticationController {
         return ResponseEntity.ok(userService.getUser(email));
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/allUsers")
     public ResponseEntity<List<User>> getAllUsers() {
         return ResponseEntity.ok(userService.getAllUsers());
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/roles")
     public ResponseEntity<List<String>> getRoles() {
         return ResponseEntity.ok(userService.getAllRoles());
