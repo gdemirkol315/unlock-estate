@@ -1,5 +1,6 @@
 package com.unlockestate.ueparent.auth.service;
-
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.GrantedAuthority;
 import com.unlockestate.ueparent.auth.dto.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -10,11 +11,16 @@ import org.springframework.stereotype.Service;
 
 import javax.crypto.SecretKey;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.function.Function;
 
 @Service
 public class JwtService {
-    private static final  String SECRET_KEY = "f75423ec808b9fe40fc06f42ae5dee75ee8da2672150aa2cd9dd7b364d393762";
+
+    @Value("${jwt.secret}")
+    private String secretKey;
 
     public String extractEmail(String token){
         return extractClaim(token, Claims::getSubject);
@@ -49,16 +55,23 @@ public class JwtService {
     }
 
     public String generateToken(User user){
+        Map<String, Object> claims = new HashMap<>();
+        // Convert authorities to a list of role names
+        List<String> roles = user.getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority).toList();
+
+        claims.put("roles", roles); // Add roles to claims
         return Jwts.builder()
                 .subject(user.getEmail())
                 .issuedAt(new Date(System.currentTimeMillis()))
                 .expiration(new Date(System.currentTimeMillis()+60*60*1000))
+                .claims(claims)
                 .signWith(getSigninKey())
                 .compact();
     }
 
     private SecretKey getSigninKey() {
-        byte[] keyBytes = Decoders.BASE64.decode(SECRET_KEY);
+        byte[] keyBytes = Decoders.BASE64.decode(secretKey);
         return Keys.hmacShaKeyFor(keyBytes);
     }
 }
