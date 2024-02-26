@@ -24,8 +24,6 @@ export class MainNavComponent {
   protected readonly LoginComponent = LoginComponent;
 
   logout() {
-    sessionStorage.clear()
-    this.authService.isLoggedIn = false;
-    this.authService.router.navigate(['/']);
+    this.authService.logout()
   }
 }

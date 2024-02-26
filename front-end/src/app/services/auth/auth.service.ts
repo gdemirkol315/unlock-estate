@@ -12,14 +12,14 @@ export class AuthService extends DataService {
   isLoggedIn: boolean = false;
   redirectUrl: string | null = null;
 
-  login(user: User){
+  login(user: User) {
     const headers = new HttpHeaders({
       'Content-Type': 'application/json'
       // Add other headers as needed
     });
     return this.http.post<JwtToken>(this.hostname + "login", user, {headers}).subscribe({
       next: (jwtToken: JwtToken) => {
-        sessionStorage.setItem('token',jwtToken.token);
+        sessionStorage.setItem('token', jwtToken.token);
         this.isLoggedIn = true;
         this.toastr.success("Successfully logged in");
         this.router.navigate(['/user-management']);
@@ -40,7 +40,7 @@ export class AuthService extends DataService {
     return this.http.post<User>(this.hostname + "register", user, {headers});
   }
 
-  getUsers(){
+  getUsers() {
     return this.http.get<User[]>(this.hostname + "allUsers");
   }
 
@@ -52,7 +52,7 @@ export class AuthService extends DataService {
     });
     let params = new HttpParams().set('email', email);
 
-    return this.http.get<User>(this.hostname + 'user',{headers,params});
+    return this.http.get<User>(this.hostname + 'user', {headers, params});
   }
 
   getRoles() {
@@ -64,10 +64,16 @@ export class AuthService extends DataService {
       'Content-Type': 'application/json'
       // Add other headers as needed
     });
-    return this.http.post<User>(this.hostname + 'updateUser',user);
+    return this.http.post<User>(this.hostname + 'updateUser', user);
   }
 
   deleteUser(user: User) {
     return this.http.delete(`${this.hostname}deleteUser/${user.email}`);
+  }
+
+  logout() {
+    this.isLoggedIn = false;
+    sessionStorage.clear();
+    this.router.navigate(['/']);
   }
 }
