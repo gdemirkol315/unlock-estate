@@ -30,10 +30,11 @@
       </div>
       <span>CheckOutNow</span>
       <div class="container right-align" *ngIf="authService.isLoggedIn">
-        <span>Logout</span>
-        <button
-          type="button"
-          mat-icon-button
+        <button mat-icon-button matTooltip="User Profile" style="color: white;"
+                routerLink="user-profile" routerLinkActive="active-link">
+          <mat-icon>account_circle</mat-icon>
+        </button>
+        <button type="button" mat-icon-button matTooltip="Logout"
           (click)="logout()">
           <mat-icon>logout</mat-icon>
         </button>

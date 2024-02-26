@@ -6,11 +6,17 @@ import {UserManagementComponent} from "./components/user-management/user-managem
 import {RealEstateManagementComponent} from "./components/real-estate-management/real-estate-management.component";
 import {TaskOverviewComponent} from "./components/task-management/task-overview.component";
 import {authGuardGuard} from "./guard/auth-guard.guard";
+import {UserProfileComponent} from "./components/user-profile/user-profile.component";
 
 const routes: Routes = [
   {
     path: 'login',
     component: LoginComponent
+  },
+  {
+    path:'user-profile',
+    component:UserProfileComponent,
+    canMatch:[authGuardGuard]
   },
   {
     path: 'admin/user-create',

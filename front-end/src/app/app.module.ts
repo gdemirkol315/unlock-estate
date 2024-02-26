@@ -42,6 +42,7 @@ import { ChecklistTemplatesComponent } from './components/checklist-templates/ch
 import {AuthInterceptorService} from "./services/interceptor/auth-interceptor.service";
 import { LastWarningComponent } from './components/last-warning/last-warning.component';
 import {MatTooltip} from "@angular/material/tooltip";
+import { UserProfileComponent } from './components/user-profile/user-profile.component';
 
 
 @NgModule({
@@ -61,7 +62,8 @@ import {MatTooltip} from "@angular/material/tooltip";
     TaskDetailComponent,
     UserDetailComponent,
     ChecklistTemplatesComponent,
-    LastWarningComponent
+    LastWarningComponent,
+    UserProfileComponent
   ],
   imports: [
     HttpClientModule,
