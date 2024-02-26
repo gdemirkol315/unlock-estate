@@ -11,6 +11,7 @@ import {User} from "../../models/user.model";
 export class LoginComponent {
 
   loginForm: FormGroup;
+  hide: boolean = true;
 
   constructor(private formBuilder: FormBuilder, private authService: AuthService) {
     this.loginForm = this.formBuilder.group({
@@ -26,5 +27,9 @@ export class LoginComponent {
     user.role = 'NONE';
     this.authService.login(user);
     // You might want to authenticate against a backend service
+  }
+
+  toggleHide() {
+    this.hide = !this.hide;
   }
 }

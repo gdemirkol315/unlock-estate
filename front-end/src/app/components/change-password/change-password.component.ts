@@ -13,6 +13,10 @@ export class ChangePasswordComponent implements OnInit {
   passwordChangeForm: FormGroup;
   changePassword: ChangePassword = new ChangePassword();
 
+  hidePass = true
+  hidePassNew: boolean = true
+  hidePassRepeat: boolean = true
+
   ngOnInit(): void {
     this.changePassword.user = this.data.user
     this.passwordChangeForm = new FormGroup({
@@ -44,4 +48,7 @@ export class ChangePasswordComponent implements OnInit {
   }
 
 
+  toggleHide(hideParamName:string) {
+    (this as any)[hideParamName] = !(this as any)[hideParamName]
+  }
 }
