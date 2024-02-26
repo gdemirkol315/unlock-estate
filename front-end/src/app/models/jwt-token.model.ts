@@ -1,25 +1,26 @@
-import {Router} from "@angular/router";
 import {Injectable} from "@angular/core";
+import {jwtDecode} from "jwt-decode";
 
 @Injectable({providedIn: "root"})
 export class JwtToken {
 
   token: string;
+  roles: string[]
 
-  /**
-   * It returns the token from local storage, or null if there is no token
-   * String has to be parsed like this as sessionStorage can only hold key value pairs, no objects
-   *
-   * @return The token from local storage.
-   */
-  getTokenFromSessionStorage() {
-    let token: string | null = sessionStorage.getItem('token');
-    if (token) {
-      return JSON.parse(token)
-    }
+  constructor() {
+  }
+
+  getRole() {
+    const decoded: JwtToken = jwtDecode(this.token);
+    this.roles = decoded.roles
+    return this.roles;
   }
 
 
+  clear() {
+    this.token = ""
+    this.roles = []
+  }
 }
 
 

@@ -13,17 +13,17 @@ const routes: Routes = [
     component: LoginComponent
   },
   {
-    path: 'user-create',
+    path: 'admin/user-create',
     component: UserCreateComponent,
     canMatch: [authGuardGuard]
   },
   {
-    path: 'user-management',
+    path: 'admin/user-management',
     component: UserManagementComponent,
     canMatch: [authGuardGuard]
   },
   {
-    path: 'real-estate-management',
+    path: 'admin/real-estate-management',
     component: RealEstateManagementComponent,
     canMatch: [authGuardGuard]
   },

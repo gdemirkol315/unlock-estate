@@ -20,7 +20,6 @@ export class LoginComponent {
   }
 
   onLogin(): void {
-    sessionStorage.clear();
     let user: User = new User();
     user.email = this.loginForm.get('email')?.value;
     user.password = this.loginForm.get('password')?.value;

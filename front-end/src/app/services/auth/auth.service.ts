@@ -18,11 +18,11 @@ export class AuthService extends DataService {
       // Add other headers as needed
     });
     return this.http.post<JwtToken>(this.hostname + "login", user, {headers}).subscribe({
-      next: (jwtToken: JwtToken) => {
-        sessionStorage.setItem('token', jwtToken.token);
+      next: (jwtTokenObj: JwtToken) => {
+        this.jwtToken.token = jwtTokenObj.token
         this.isLoggedIn = true;
         this.toastr.success("Successfully logged in");
-        this.router.navigate(['/user-management']);
+        this.router.navigate(['admin/user-management']);
       },
       error: (err) => {
         this.isLoggedIn = false;
@@ -73,7 +73,7 @@ export class AuthService extends DataService {
 
   logout() {
     this.isLoggedIn = false;
-    sessionStorage.clear();
+    this.jwtToken.clear()
     this.router.navigate(['/']);
   }
 }
