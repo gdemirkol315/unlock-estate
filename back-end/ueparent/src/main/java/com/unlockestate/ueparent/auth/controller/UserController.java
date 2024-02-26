@@ -11,6 +11,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 
 @RestController
 public class UserController {
@@ -59,6 +61,25 @@ public class UserController {
 
         return ResponseEntity.ok(resultUser);
 
+    }
+
+    @GetMapping("/user")
+    public ResponseEntity<User> getUserDetails(
+            @RequestParam String email
+    ) {
+        return ResponseEntity.ok(userService.getUser(email));
+    }
+
+    @PreAuthorize("hasAuthority('ADMIN')")
+    @GetMapping("/allUsers")
+    public ResponseEntity<List<User>> getAllUsers() {
+        return ResponseEntity.ok(userService.getAllUsers());
+    }
+
+    @PreAuthorize("hasAuthority('ADMIN')")
+    @GetMapping("/roles")
+    public ResponseEntity<List<String>> getRoles() {
+        return ResponseEntity.ok(userService.getAllRoles());
     }
 
 //    @PreAuthorize("hasAuthority('ADMIN')")
