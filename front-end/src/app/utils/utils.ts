@@ -1,5 +1,5 @@
 import {User} from "../models/user.model";
-import {FormControl, FormGroup} from "@angular/forms";
+import {AbstractControl, FormControl, FormGroup, ValidationErrors, ValidatorFn} from "@angular/forms";
 
 export class Utils {
   public static getUserFromObject(obj:any): User {

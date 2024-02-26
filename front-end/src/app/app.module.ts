@@ -43,6 +43,7 @@ import {AuthInterceptorService} from "./services/interceptor/auth-interceptor.se
 import { LastWarningComponent } from './components/last-warning/last-warning.component';
 import {MatTooltip} from "@angular/material/tooltip";
 import { UserProfileComponent } from './components/user-profile/user-profile.component';
+import { ChangePasswordComponent } from './components/change-password/change-password.component';
 
 
 @NgModule({
@@ -63,7 +64,8 @@ import { UserProfileComponent } from './components/user-profile/user-profile.com
     UserDetailComponent,
     ChecklistTemplatesComponent,
     LastWarningComponent,
-    UserProfileComponent
+    UserProfileComponent,
+    ChangePasswordComponent
   ],
   imports: [
     HttpClientModule,

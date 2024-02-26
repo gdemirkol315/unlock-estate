@@ -1,6 +1,7 @@
 package com.unlockestate.ueparent.auth.controller;
 
 import com.unlockestate.ueparent.auth.dto.AuthenticationResponse;
+import com.unlockestate.ueparent.auth.dto.ChangePassword;
 import com.unlockestate.ueparent.auth.dto.User;
 import com.unlockestate.ueparent.auth.service.AuthenticationService;
 import com.unlockestate.ueparent.auth.service.UserService;
@@ -36,6 +37,13 @@ public class AuthenticationController {
             @RequestBody User request
     ) {
         return ResponseEntity.ok(authenticationService.login(request));
+    }
+
+    @PostMapping("/changePassword")
+    public ResponseEntity<AuthenticationResponse> changePassword(
+            @RequestBody ChangePassword changePassword
+    ) {
+        return ResponseEntity.ok(authenticationService.changePassword(changePassword));
     }
 
 }

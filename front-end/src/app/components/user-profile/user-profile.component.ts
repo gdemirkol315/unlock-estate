@@ -7,6 +7,7 @@ import {LastWarningComponent} from "../last-warning/last-warning.component";
 import {first, firstValueFrom} from "rxjs";
 import {Utils} from "../../utils/utils";
 import {JwtToken} from "../../models/jwt-token.model";
+import {ChangePasswordComponent} from "../change-password/change-password.component";
 
 @Component({
   selector: 'app-user-profile',
@@ -33,7 +34,11 @@ export class UserProfileComponent implements OnInit {
 
 
   changePassword() {
-
+    this.matDialog.open(ChangePasswordComponent,{
+      data:{
+        user: this.user
+      }
+    })
   }
 
   onSave() {

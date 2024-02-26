@@ -1,6 +1,7 @@
 package com.unlockestate.ueparent.auth.service;
 
 import com.unlockestate.ueparent.auth.dto.AuthenticationResponse;
+import com.unlockestate.ueparent.auth.dto.ChangePassword;
 import com.unlockestate.ueparent.auth.dto.Salt;
 import com.unlockestate.ueparent.auth.dto.User;
 import com.unlockestate.ueparent.auth.repository.SaltRepository;
@@ -90,6 +91,23 @@ public class AuthenticationService {
 
         return new AuthenticationResponse(token);
 
+    }
+
+    public AuthenticationResponse changePassword(ChangePassword changePassword){
+        try {
+            authenticate(changePassword.getUser());
+        } catch (BadCredentialsException e) {
+            logger.error("Credentials provided are wrong!");
+            return new AuthenticationResponse("");
+        }
+
+        User user = userRepository.findByEmail(changePassword.getUser().getEmail()).orElseThrow();
+        user.setPassword(passwordEncoder.encode(changePassword.getNewPassword()+ getSalt(user.getEmail())));
+        userRepository.save(user);
+
+        String token = jwtService.generateToken(user);
+
+        return new AuthenticationResponse(token);
     }
 
 

@@ -3,6 +3,8 @@ import {DataService} from "../data/data.service";
 import {User} from "../../models/user.model";
 import {HttpHeaders, HttpParams} from "@angular/common/http";
 import {JwtToken} from "../../models/jwt-token.model";
+import {ChangePasswordComponent} from "../../components/change-password/change-password.component";
+import {ChangePassword} from "../../models/password-change.model";
 
 @Injectable({
   providedIn: 'root'
@@ -72,14 +74,25 @@ export class AuthService extends DataService {
     return this.http.post<User>(this.hostname + 'updateUser', user);
   }
 
-  deleteUser(user: User) {
-    return this.http.delete(`${this.hostname}deleteUser/${user.email}`);
-  }
-
   updateProfile(user: User) {
     return this.http.post<User>(this.hostname + 'updateProfile', user);
   }
 
+  changePassword(changePassword:ChangePassword){
+    this.http.post<JwtToken>(this.hostname + "changePassword", changePassword).subscribe({
+      next:(jwtTokenObj: JwtToken) => {
+        if (jwtTokenObj.token != "") {
+          this.jwtToken.token = jwtTokenObj.token
+          this.toastr.success("Successfully change password");
+        } else {
+          this.toastr.error("Password entered wrong!");
+        }
+      }, error: (err) => {
+        console.log(err);
+        this.toastr.error("There was an unexpected error during password change!","Connection Problem")
+      }
+    })
+  }
 
   logout() {
     this.isLoggedIn = false;
