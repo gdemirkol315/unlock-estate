@@ -46,6 +46,7 @@ public class UserService {
      * @param updatedUser contains the data to update the user with
      * @return the updated user, or Optional.empty() if the user was not found
      */
+    @Transactional
     public Optional<User> updateUser(String email, User updatedUser) {
         // First, check if the user with the specified ID exists
         Optional<User> existingUserOpt = userRepository.findByEmail(email);
@@ -60,7 +61,6 @@ public class UserService {
             existingUser.setActive(updatedUser.isActive());
 
             userRepository.save(existingUser);
-            existingUser.setPassword(null);
             // Return the updated user
             return Optional.of(existingUser);
         } else {
@@ -73,5 +73,24 @@ public class UserService {
     public void deleteUserByEmail(String email) {
         User user = userRepository.findByEmail(email).orElseThrow();
         userRepository.deleteById(user.getUserId());
+    }
+    @Transactional
+    public Optional<User>  updateProfile(String email, User user) {
+        Optional<User> existingUserOpt = userRepository.findByEmail(email);
+
+        if (existingUserOpt.isPresent()) {
+            User existingUser = existingUserOpt.get();
+
+            existingUser.setLastName(user.getLastName());
+            existingUser.setPreferredArea(user.getPreferredArea());
+            existingUser.setPhoneNumber(user.getPhoneNumber());
+
+            userRepository.save(existingUser);
+            // Return the updated user
+            return Optional.of(existingUser);
+        } else {
+            // Return Optional.empty() if the user was not found
+            return Optional.empty();
+        }
     }
 }

@@ -76,6 +76,11 @@ export class AuthService extends DataService {
     return this.http.delete(`${this.hostname}deleteUser/${user.email}`);
   }
 
+  updateProfile(user: User) {
+    return this.http.post<User>(this.hostname + 'updateProfile', user);
+  }
+
+
   logout() {
     this.isLoggedIn = false;
     this.jwtToken.clear()

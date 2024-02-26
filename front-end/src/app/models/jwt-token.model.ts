@@ -6,6 +6,7 @@ export class JwtToken {
 
   token: string;
   roles: string[]
+  sub: string;
 
   constructor() {
   }
@@ -20,6 +21,12 @@ export class JwtToken {
   clear() {
     this.token = ""
     this.roles = []
+  }
+
+  getUserEmail() {
+    const decoded: JwtToken = jwtDecode(this.token);
+    this.sub = decoded.sub
+    return this.sub;
   }
 }
 
