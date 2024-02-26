@@ -5,11 +5,15 @@ import com.unlockestate.ueparent.auth.dto.Salt;
 import com.unlockestate.ueparent.auth.dto.User;
 import com.unlockestate.ueparent.auth.repository.SaltRepository;
 import com.unlockestate.ueparent.auth.repository.UserRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.NoSuchElementException;
 import java.util.Random;
 
 
@@ -21,6 +25,8 @@ public class AuthenticationService {
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
+
+    private static final Logger logger = LoggerFactory.getLogger(AuthenticationService.class);
 
     private final Random random = new Random();
 
@@ -62,14 +68,18 @@ public class AuthenticationService {
     }
 
     public AuthenticationResponse authenticate(User request) {
-        authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        request.getEmail(),
-                        request.getPassword() + getSalt(request.getEmail()),
-                        request.getAuthorities()
-                )
-        );
-
+        try {
+            authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(
+                            request.getEmail(),
+                            request.getPassword() + getSalt(request.getEmail()),
+                            request.getAuthorities()
+                    )
+            );
+        } catch (BadCredentialsException e) {
+            logger.error("Credentials provided are wrong!");
+            return new AuthenticationResponse("");
+        }
         User user = userRepository.findByEmail(request.getEmail()).orElseThrow();
         String token = jwtService.generateToken(user);
 
@@ -92,7 +102,13 @@ public class AuthenticationService {
     }
 
     public String getSalt(String email) {
-        return saltRepository.findByEmail(email).orElseThrow().getSalt();
+        Salt salt = new Salt();
+        try{
+            salt = saltRepository.findByEmail(email).orElseThrow();
+        } catch (NoSuchElementException e) {
+            logger.error("Salt not found for user {}", email);
+        }
+        return salt.getSalt();
     }
 
 }

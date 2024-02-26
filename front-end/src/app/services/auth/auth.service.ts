@@ -19,14 +19,19 @@ export class AuthService extends DataService {
     });
     return this.http.post<JwtToken>(this.hostname + "login", user, {headers}).subscribe({
       next: (jwtTokenObj: JwtToken) => {
-        this.jwtToken.token = jwtTokenObj.token
-        this.isLoggedIn = true;
-        this.toastr.success("Successfully logged in");
-        this.router.navigate(['admin/user-management']);
+        if (jwtTokenObj.token != "") {
+          this.jwtToken.token = jwtTokenObj.token
+          this.isLoggedIn = true;
+          this.toastr.success("Successfully logged in");
+          this.router.navigate(['admin/user-management']);
+        } else {
+          this.toastr.error("Provided credentials are wrong!","Wrong Credentials")
+        }
       },
       error: (err) => {
         this.isLoggedIn = false;
         console.log(err);
+        this.toastr.error("There was an unexpected error during login!","Connection Problem")
       }
     });
 
