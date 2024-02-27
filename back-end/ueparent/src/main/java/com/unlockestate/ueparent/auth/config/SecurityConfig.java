@@ -2,6 +2,7 @@ package com.unlockestate.ueparent.auth.config;
 
 import com.unlockestate.ueparent.auth.filter.JwtAuthenticationFilter;
 import com.unlockestate.ueparent.auth.service.UserDetailsServiceImpl;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
@@ -29,6 +30,9 @@ public class SecurityConfig {
 
     private final UserDetailsServiceImpl userDetailsServiceImp;
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
+
+    @Value("${app.allowed-origin}")
+    private String allowedOrigin;
 
     public SecurityConfig(UserDetailsServiceImpl userDetailsServiceImp, JwtAuthenticationFilter jwtAuthenticationFilter) {
         this.userDetailsServiceImp = userDetailsServiceImp;
@@ -71,7 +75,7 @@ public class SecurityConfig {
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/**")
                         .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
-                        .allowedOrigins("http://localhost:4200");
+                        .allowedOrigins(allowedOrigin);
             }
         };
     }
