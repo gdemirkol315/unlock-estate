@@ -21,19 +21,23 @@ export class AuthService extends DataService {
     });
     return this.http.post<JwtToken>(this.hostname + "login", user, {headers}).subscribe({
       next: (jwtTokenObj: JwtToken) => {
-        if (jwtTokenObj.token != "") {
+        if (jwtTokenObj.token != "" && jwtTokenObj.token != "deactivated") {
           this.jwtToken.token = jwtTokenObj.token
           this.isLoggedIn = true;
           this.toastr.success("Successfully logged in");
           this.router.navigate(['task-management']);
-        } else {
+        } else if (jwtTokenObj.token == "") {
           this.toastr.error("Provided credentials are wrong!","Wrong Credentials")
+        } else if (jwtTokenObj.token == "deactivated") {
+          this.toastr.error("User account is deactivated! Contact system administrator!","Deactivated Account")
+        } else {
+          this.toastr.error("There was an unexpected error during login!","Unexpected Problem")
         }
       },
       error: (err) => {
         this.isLoggedIn = false;
         console.log(err);
-        this.toastr.error("There was an unexpected error during login!","Connection Problem")
+        this.toastr.error("There was an unexpected error on the server during login!","Connection Problem")
       }
     });
 

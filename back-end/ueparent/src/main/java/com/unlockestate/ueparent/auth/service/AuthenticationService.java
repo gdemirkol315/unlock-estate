@@ -87,6 +87,9 @@ public class AuthenticationService {
             return new AuthenticationResponse("");
         }
         User user = userRepository.findByEmail(request.getEmail()).orElseThrow();
+        if (!user.isActive()) {
+            return new AuthenticationResponse("deactivated");
+        }
         String token = jwtService.generateToken(user);
 
         return new AuthenticationResponse(token);
