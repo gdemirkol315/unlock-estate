@@ -20,21 +20,18 @@ public class User implements UserDetails {
     @Column(unique = true)
     private String email;
     private String name;
-    @Column(name="last_name")
     private String lastName;
     private String password;
     @Enumerated(EnumType.STRING)
     private Role role;
-    @Column(name="is_active")
     private boolean isActive;
 
-    @Column(name="phone_number")
     private String phoneNumber;
 
-    @Column(name="preferred_area")
     private String preferredArea;
 
     public User() {
+        //spring boot needs empty constructor
     }
 
 
