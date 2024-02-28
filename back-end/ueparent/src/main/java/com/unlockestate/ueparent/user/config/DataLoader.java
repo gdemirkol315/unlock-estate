@@ -1,9 +1,9 @@
-package com.unlockestate.ueparent.auth.config;
+package com.unlockestate.ueparent.user.config;
 
-import com.unlockestate.ueparent.auth.dto.Role;
-import com.unlockestate.ueparent.auth.dto.User;
-import com.unlockestate.ueparent.auth.repository.UserRepository;
-import com.unlockestate.ueparent.auth.service.AuthenticationService;
+import com.unlockestate.ueparent.user.dto.Role;
+import com.unlockestate.ueparent.user.dto.User;
+import com.unlockestate.ueparent.user.repository.UserRepository;
+import com.unlockestate.ueparent.user.service.AuthenticationService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;

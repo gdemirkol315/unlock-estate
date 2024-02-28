@@ -1,4 +1,4 @@
-package com.unlockestate.ueparent.auth.dto;
+package com.unlockestate.ueparent.user.dto;
 
 public class ChangePassword {
     private User user;

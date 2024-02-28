@@ -1,6 +1,6 @@
-package com.unlockestate.ueparent.auth.repository;
+package com.unlockestate.ueparent.user.repository;
 
-import com.unlockestate.ueparent.auth.dto.User;
+import com.unlockestate.ueparent.user.dto.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 

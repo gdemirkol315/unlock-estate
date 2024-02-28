@@ -1,7 +1,7 @@
-package com.unlockestate.ueparent.auth.config;
+package com.unlockestate.ueparent.user.config;
 
-import com.unlockestate.ueparent.auth.filter.JwtAuthenticationFilter;
-import com.unlockestate.ueparent.auth.service.UserDetailsServiceImpl;
+import com.unlockestate.ueparent.user.filter.JwtAuthenticationFilter;
+import com.unlockestate.ueparent.user.service.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

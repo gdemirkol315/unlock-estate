@@ -1,8 +1,8 @@
-package com.unlockestate.ueparent.auth.service;
+package com.unlockestate.ueparent.user.service;
 
-import com.unlockestate.ueparent.auth.dto.Role;
-import com.unlockestate.ueparent.auth.dto.User;
-import com.unlockestate.ueparent.auth.repository.UserRepository;
+import com.unlockestate.ueparent.user.dto.Role;
+import com.unlockestate.ueparent.user.dto.User;
+import com.unlockestate.ueparent.user.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

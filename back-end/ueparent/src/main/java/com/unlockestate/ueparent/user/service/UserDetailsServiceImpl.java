@@ -1,6 +1,6 @@
-package com.unlockestate.ueparent.auth.service;
+package com.unlockestate.ueparent.user.service;
 
-import com.unlockestate.ueparent.auth.repository.UserRepository;
+import com.unlockestate.ueparent.user.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

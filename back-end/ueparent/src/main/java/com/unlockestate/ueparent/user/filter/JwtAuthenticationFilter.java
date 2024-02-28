@@ -1,7 +1,7 @@
-package com.unlockestate.ueparent.auth.filter;
+package com.unlockestate.ueparent.user.filter;
 
-import com.unlockestate.ueparent.auth.service.JwtService;
-import com.unlockestate.ueparent.auth.service.UserDetailsServiceImpl;
+import com.unlockestate.ueparent.user.service.JwtService;
+import com.unlockestate.ueparent.user.service.UserDetailsServiceImpl;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

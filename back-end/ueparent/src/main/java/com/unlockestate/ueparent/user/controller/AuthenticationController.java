@@ -1,10 +1,10 @@
-package com.unlockestate.ueparent.auth.controller;
+package com.unlockestate.ueparent.user.controller;
 
-import com.unlockestate.ueparent.auth.dto.AuthenticationResponse;
-import com.unlockestate.ueparent.auth.dto.ChangePassword;
-import com.unlockestate.ueparent.auth.dto.User;
-import com.unlockestate.ueparent.auth.service.AuthenticationService;
-import com.unlockestate.ueparent.auth.service.UserService;
+import com.unlockestate.ueparent.user.dto.AuthenticationResponse;
+import com.unlockestate.ueparent.user.dto.ChangePassword;
+import com.unlockestate.ueparent.user.dto.User;
+import com.unlockestate.ueparent.user.service.AuthenticationService;
+import com.unlockestate.ueparent.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;

@@ -1,7 +1,7 @@
-package com.unlockestate.ueparent.auth.controller;
+package com.unlockestate.ueparent.user.controller;
 
-import com.unlockestate.ueparent.auth.dto.User;
-import com.unlockestate.ueparent.auth.service.UserService;
+import com.unlockestate.ueparent.user.dto.User;
+import com.unlockestate.ueparent.user.service.UserService;
 import com.unlockestate.ueparent.exception.InternalServerRuntimeException;
 
 import org.slf4j.Logger;

@@ -1,7 +1,7 @@
-package com.unlockestate.ueparent.auth.service;
+package com.unlockestate.ueparent.user.service;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.GrantedAuthority;
-import com.unlockestate.ueparent.auth.dto.User;
+import com.unlockestate.ueparent.user.dto.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;

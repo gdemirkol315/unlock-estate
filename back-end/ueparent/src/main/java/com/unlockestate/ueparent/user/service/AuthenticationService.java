@@ -1,11 +1,11 @@
-package com.unlockestate.ueparent.auth.service;
+package com.unlockestate.ueparent.user.service;
 
-import com.unlockestate.ueparent.auth.dto.AuthenticationResponse;
-import com.unlockestate.ueparent.auth.dto.ChangePassword;
-import com.unlockestate.ueparent.auth.dto.Salt;
-import com.unlockestate.ueparent.auth.dto.User;
-import com.unlockestate.ueparent.auth.repository.SaltRepository;
-import com.unlockestate.ueparent.auth.repository.UserRepository;
+import com.unlockestate.ueparent.user.dto.AuthenticationResponse;
+import com.unlockestate.ueparent.user.dto.ChangePassword;
+import com.unlockestate.ueparent.user.dto.Salt;
+import com.unlockestate.ueparent.user.dto.User;
+import com.unlockestate.ueparent.user.repository.SaltRepository;
+import com.unlockestate.ueparent.user.repository.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.AuthenticationManager;

@@ -1,4 +1,4 @@
-package com.unlockestate.ueparent.auth.dto;
+package com.unlockestate.ueparent.user.dto;
 
 import jakarta.persistence.*;
 
