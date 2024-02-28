@@ -13,9 +13,8 @@
   <key attr.name="description" attr.type="string" for="edge" id="d9"/>
   <key for="edge" id="d10" yfiles.type="edgegraphics"/>
   <graph edgedefault="directed" id="G">
-    <data key="d0"/>
+    <data key="d0" xml:space="preserve"/>
     <node id="n0">
-      <data key="d5"/>
       <data key="d6">
         <y:GenericNode configuration="com.yworks.entityRelationship.big_entity">
           <y:Geometry height="162.0" width="206.0" x="632.0" y="23.0"/>
@@ -38,15 +37,14 @@ is_active: boolean
       </data>
     </node>
     <node id="n1">
-      <data key="d5"/>
       <data key="d6">
         <y:GenericNode configuration="com.yworks.entityRelationship.big_entity">
           <y:Geometry height="142.0" width="164.0" x="659.0" y="282.0"/>
           <y:Fill color="#E8EEF7" color2="#B7C9E3" transparent="false"/>
           <y:BorderStyle color="#000000" type="line" width="1.0"/>
           <y:NodeLabel alignment="center" autoSizePolicy="content" backgroundColor="#B7C9E3" configuration="com.yworks.entityRelationship.label.name" fontFamily="Dialog" fontSize="12" fontStyle="plain" hasLineColor="false" height="17.96875" horizontalTextPosition="center" iconTextGap="4" modelName="internal" modelPosition="t" textColor="#000000" verticalTextPosition="bottom" visible="true" width="29.259765625" x="67.3701171875" xml:space="preserve" y="4.0">task</y:NodeLabel>
-          <y:NodeLabel alignment="left" autoSizePolicy="content" configuration="com.yworks.entityRelationship.label.attributes" fontFamily="Dialog" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="101.78125" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="top" visible="true" width="153.1328125" x="2.0" xml:space="preserve" y="29.96875">id: integer (pk)
-property_id: integer (fk)
+          <y:NodeLabel alignment="left" autoSizePolicy="content" configuration="com.yworks.entityRelationship.label.attributes" fontFamily="Dialog" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="101.78125" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="top" visible="true" width="162.90625" x="2.0" xml:space="preserve" y="29.96875">id: integer (pk)
+real_estate_id: integer (fk)
 assignee_id: integer (fk)
 creator_id:integer (fk)
 comment_id: integer (fk)
@@ -59,13 +57,12 @@ created_date: date<y:LabelModel><y:ErdAttributesNodeLabelModel/></y:LabelModel><
       </data>
     </node>
     <node id="n2">
-      <data key="d5"/>
       <data key="d6">
         <y:GenericNode configuration="com.yworks.entityRelationship.big_entity">
           <y:Geometry height="142.0" width="164.0" x="387.5" y="282.0"/>
           <y:Fill color="#E8EEF7" color2="#B7C9E3" transparent="false"/>
           <y:BorderStyle color="#000000" type="line" width="1.0"/>
-          <y:NodeLabel alignment="center" autoSizePolicy="content" backgroundColor="#B7C9E3" configuration="com.yworks.entityRelationship.label.name" fontFamily="Dialog" fontSize="12" fontStyle="plain" hasLineColor="false" height="17.96875" horizontalTextPosition="center" iconTextGap="4" modelName="internal" modelPosition="t" textColor="#000000" verticalTextPosition="bottom" visible="true" width="55.6328125" x="54.18359375" xml:space="preserve" y="4.0">property</y:NodeLabel>
+          <y:NodeLabel alignment="center" autoSizePolicy="content" backgroundColor="#B7C9E3" configuration="com.yworks.entityRelationship.label.name" fontFamily="Dialog" fontSize="12" fontStyle="plain" hasLineColor="false" height="17.96875" horizontalTextPosition="center" iconTextGap="4" modelName="internal" modelPosition="t" textColor="#000000" verticalTextPosition="bottom" visible="true" width="70.78515625" x="46.607421875" xml:space="preserve" y="4.0">real_estate</y:NodeLabel>
           <y:NodeLabel alignment="left" autoSizePolicy="content" configuration="com.yworks.entityRelationship.label.attributes" fontFamily="Dialog" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="45.90625" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="top" visible="true" width="131.787109375" x="2.0" xml:space="preserve" y="29.96875">id: integer (pk)
 address: varchar
 calendar_url: varchar<y:LabelModel><y:ErdAttributesNodeLabelModel/></y:LabelModel><y:ModelParameter><y:ErdAttributesNodeLabelModelParameter/></y:ModelParameter></y:NodeLabel>
@@ -76,7 +73,6 @@ calendar_url: varchar<y:LabelModel><y:ErdAttributesNodeLabelModel/></y:LabelMode
       </data>
     </node>
     <node id="n3">
-      <data key="d5"/>
       <data key="d6">
         <y:GenericNode configuration="com.yworks.entityRelationship.big_entity">
           <y:Geometry height="142.0" width="164.0" x="653.0" y="-168.49999999999977"/>
@@ -95,7 +91,6 @@ status: varchar
       </data>
     </node>
     <node id="n4">
-      <data key="d5"/>
       <data key="d6">
         <y:GenericNode configuration="com.yworks.entityRelationship.big_entity">
           <y:Geometry height="142.0" width="198.0" x="1044.0" y="-109.99999999999997"/>
@@ -111,15 +106,14 @@ parameter_value: varchar<y:LabelModel><y:ErdAttributesNodeLabelModel/></y:LabelM
       </data>
     </node>
     <node id="n5">
-      <data key="d5"/>
       <data key="d6">
         <y:GenericNode configuration="com.yworks.entityRelationship.big_entity">
           <y:Geometry height="142.0" width="164.0" x="387.5" y="471.0"/>
           <y:Fill color="#E8EEF7" color2="#B7C9E3" transparent="false"/>
           <y:BorderStyle color="#000000" type="line" width="1.0"/>
           <y:NodeLabel alignment="center" autoSizePolicy="content" backgroundColor="#B7C9E3" configuration="com.yworks.entityRelationship.label.name" fontFamily="Dialog" fontSize="12" fontStyle="plain" hasLineColor="false" height="17.96875" horizontalTextPosition="center" iconTextGap="4" modelName="internal" modelPosition="t" textColor="#000000" verticalTextPosition="bottom" visible="true" width="56.7578125" x="53.62109375" xml:space="preserve" y="4.0">checklist</y:NodeLabel>
-          <y:NodeLabel alignment="left" autoSizePolicy="content" configuration="com.yworks.entityRelationship.label.attributes" fontFamily="Dialog" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="45.90625" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="top" visible="true" width="147.75390625" x="2.0" xml:space="preserve" y="29.96875">id: integer (pk)
-property_id: integer (fk)
+          <y:NodeLabel alignment="left" autoSizePolicy="content" configuration="com.yworks.entityRelationship.label.attributes" fontFamily="Dialog" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="45.90625" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="top" visible="true" width="162.90625" x="2.0" xml:space="preserve" y="29.96875">id: integer (pk)
+real_estate_id: integer (fk)
 name: varchar<y:LabelModel><y:ErdAttributesNodeLabelModel/></y:LabelModel><y:ModelParameter><y:ErdAttributesNodeLabelModelParameter/></y:ModelParameter></y:NodeLabel>
           <y:StyleProperties>
             <y:Property class="java.lang.Boolean" name="y.view.ShadowNodePainter.SHADOW_PAINTING" value="true"/>
@@ -128,7 +122,6 @@ name: varchar<y:LabelModel><y:ErdAttributesNodeLabelModel/></y:LabelModel><y:Mod
       </data>
     </node>
     <node id="n6">
-      <data key="d5"/>
       <data key="d6">
         <y:GenericNode configuration="com.yworks.entityRelationship.big_entity">
           <y:Geometry height="133.41145833333314" width="179.0" x="900.4999999999999" y="286.2942708333334"/>
@@ -146,7 +139,6 @@ image_id: integer (fk)<y:LabelModel><y:ErdAttributesNodeLabelModel/></y:LabelMod
       </data>
     </node>
     <node id="n7">
-      <data key="d5"/>
       <data key="d6">
         <y:GenericNode configuration="com.yworks.entityRelationship.big_entity">
           <y:Geometry height="128.0" width="154.0" x="1138.9731445312495" y="289.0"/>
@@ -162,7 +154,6 @@ link: varchar<y:LabelModel><y:ErdAttributesNodeLabelModel/></y:LabelModel><y:Mod
       </data>
     </node>
     <node id="n8">
-      <data key="d5"/>
       <data key="d6">
         <y:GenericNode configuration="com.yworks.entityRelationship.big_entity">
           <y:Geometry height="133.41145833333314" width="192.80000000000007" x="644.5999999999999" y="475.2942708333334"/>
@@ -181,7 +172,6 @@ last_status_change_date : date<y:LabelModel><y:ErdAttributesNodeLabelModel/></y:
       </data>
     </node>
     <node id="n9">
-      <data key="d5"/>
       <data key="d6">
         <y:GenericNode configuration="com.yworks.entityRelationship.big_entity">
           <y:Geometry height="142.0" width="164.0" x="387.5" y="667.2"/>
@@ -198,7 +188,6 @@ description: varchar<y:LabelModel><y:ErdAttributesNodeLabelModel/></y:LabelModel
       </data>
     </node>
     <edge id="e0" source="n3" target="n0">
-      <data key="d9"/>
       <data key="d10">
         <y:PolyLineEdge>
           <y:Path sx="0.0" sy="0.0" tx="0.0" ty="0.0"/>
@@ -209,7 +198,6 @@ description: varchar<y:LabelModel><y:ErdAttributesNodeLabelModel/></y:LabelModel
       </data>
     </edge>
     <edge id="e1" source="n1" target="n2">
-      <data key="d9"/>
       <data key="d10">
         <y:PolyLineEdge>
           <y:Path sx="0.0" sy="0.0" tx="0.0" ty="0.0"/>
@@ -220,7 +208,6 @@ description: varchar<y:LabelModel><y:ErdAttributesNodeLabelModel/></y:LabelModel
       </data>
     </edge>
     <edge id="e2" source="n6" target="n1">
-      <data key="d9"/>
       <data key="d10">
         <y:PolyLineEdge>
           <y:Path sx="0.0" sy="0.0" tx="0.0" ty="0.0"/>
@@ -231,7 +218,6 @@ description: varchar<y:LabelModel><y:ErdAttributesNodeLabelModel/></y:LabelModel
       </data>
     </edge>
     <edge id="e3" source="n1" target="n0">
-      <data key="d9"/>
       <data key="d10">
         <y:PolyLineEdge>
           <y:Path sx="0.0" sy="0.0" tx="6.0" ty="0.8854166666666856"/>
@@ -242,7 +228,6 @@ description: varchar<y:LabelModel><y:ErdAttributesNodeLabelModel/></y:LabelModel
       </data>
     </edge>
     <edge id="e4" source="n6" target="n7">
-      <data key="d9"/>
       <data key="d10">
         <y:PolyLineEdge>
           <y:Path sx="0.0" sy="0.0" tx="0.0" ty="0.0"/>
@@ -253,7 +238,6 @@ description: varchar<y:LabelModel><y:ErdAttributesNodeLabelModel/></y:LabelModel
       </data>
     </edge>
     <edge id="e5" source="n9" target="n5">
-      <data key="d9"/>
       <data key="d10">
         <y:PolyLineEdge>
           <y:Path sx="0.0" sy="-70.99365234375" tx="0.0" ty="0.0"/>
@@ -264,7 +248,6 @@ description: varchar<y:LabelModel><y:ErdAttributesNodeLabelModel/></y:LabelModel
       </data>
     </edge>
     <edge id="e6" source="n8" target="n1">
-      <data key="d9"/>
       <data key="d10">
         <y:PolyLineEdge>
           <y:Path sx="0.0" sy="0.0" tx="0.0" ty="0.0"/>
@@ -275,7 +258,6 @@ description: varchar<y:LabelModel><y:ErdAttributesNodeLabelModel/></y:LabelModel
       </data>
     </edge>
     <edge id="e7" source="n8" target="n9">
-      <data key="d9"/>
       <data key="d10">
         <y:PolyLineEdge>
           <y:Path sx="0.0" sy="0.0" tx="0.0" ty="0.0">
@@ -288,7 +270,6 @@ description: varchar<y:LabelModel><y:ErdAttributesNodeLabelModel/></y:LabelModel
       </data>
     </edge>
     <edge id="e8" source="n5" target="n2">
-      <data key="d9"/>
       <data key="d10">
         <y:PolyLineEdge>
           <y:Path sx="0.0" sy="0.0" tx="0.0" ty="0.0"/>
