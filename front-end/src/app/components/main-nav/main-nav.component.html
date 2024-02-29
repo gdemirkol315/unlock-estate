@@ -13,6 +13,9 @@
       <a *ngIf="jwtToken.getRole().includes('ADMIN')" mat-list-item routerLink="admin/real-estate-management" routerLinkActive="active-link">Real Estates
         <mat-icon>business</mat-icon>
       </a>
+      <a *ngIf="jwtToken.getRole().includes('ADMIN')" mat-list-item routerLink="admin/real-estate-create" routerLinkActive="active-link">Real Estate Create
+        <mat-icon>business</mat-icon>
+      </a>
       <a mat-list-item routerLink="admin/task-overview" routerLinkActive="active-link">Task Overview
         <mat-icon>rowing</mat-icon>
       </a>

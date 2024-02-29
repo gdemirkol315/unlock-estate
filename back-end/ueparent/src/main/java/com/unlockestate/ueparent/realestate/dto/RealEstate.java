@@ -13,8 +13,14 @@ public class RealEstate {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    private String name;
+
+    private String country;
+    private String city;
     private String address;
     private String calendarUrl;
+
+    private String type;
 
     @OneToMany(mappedBy = "realEstate", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<CheckList> checklists;
@@ -56,5 +62,13 @@ public class RealEstate {
 
     public void setChecklists(List<CheckList> checklists) {
         this.checklists = checklists;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }

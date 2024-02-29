@@ -1,13 +1,14 @@
 import {User} from "./user.model";
 import {RealEstate} from "./real-estate.model";
 import {TaskCheckListItem} from "./task-check-list-item.model";
+import {Comment} from "./comment.model"
 
 export class Task {
   id: number;
   realEstate: RealEstate;
   assignee: User;
-  comments: Comment[];
-  taskCheckListItems: TaskCheckListItem[];
+  comments: Comment[] = new Array();
+  taskCheckListItems: TaskCheckListItem[] = new Array();
   taskDate: Date;
   createdDate: Date;
 }

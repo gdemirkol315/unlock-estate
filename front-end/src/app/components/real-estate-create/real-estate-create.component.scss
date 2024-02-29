@@ -1,0 +1,35 @@
+.centered-container {
+  max-width: 800px; /* or whatever maximum width you prefer */
+  margin: auto;
+}
+
+.slightly-spaced {
+
+}
+
+.form-row {
+  display: flex;
+  flex-wrap: wrap;
+  margin-right: -15px;
+  margin-left: -15px;
+}
+
+.form-column {
+  max-width: 300px;
+  display: flex;
+  flex-direction: column;
+  flex-basis: 100%;
+  flex: 1;
+}
+
+/* Optional: Add some padding between form fields */
+.mat-form-field {
+  padding: 8px;
+}
+
+/* For screens that are 600px wide or less, go from two columns to one column */
+@media screen and (max-width: 600px) {
+  .form-row {
+    flex-direction: column;
+  }
+}

@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from "@angular/forms";
+import {CheckList} from "../../models/check-list.model";
+import {RealEstate} from "../../models/real-estate.model";
+import {CheckListItem} from "../../models/check-list-item.model";
 
 @Component({
   selector: 'real-estate-create',
@@ -7,20 +9,34 @@ import {FormBuilder, FormGroup, Validators} from "@angular/forms";
   styleUrl: './real-estate-create.component.scss'
 })
 export class RealEstateCreateComponent {
-  createReForm: FormGroup;
   reTypes: string[] = ['apartment','villa','room'];
+  realEstate: RealEstate = new RealEstate();
+  newCheckListName: string;
 
-  constructor(private formBuilder: FormBuilder) {
-    this.createReForm = this.formBuilder.group({
-      name: ['', [Validators.required]],
-      addressDetail: ['', [Validators.required]],
-      country: ['', [Validators.required]],
-      city: ['', [Validators.required]],
-      reType: ['', [Validators.required]]
-    });
+  constructor() {
   }
 
   onCreateRe() {
 
+  }
+
+  addChecklist() {
+    let newChecklist = new CheckList(this.newCheckListName,this.realEstate);
+    this.realEstate.checkLists.push(newChecklist);
+  }
+
+  addChecklistItem(checkListIndex: number) {
+
+    this.realEstate.checkLists[checkListIndex].checkListItems.push(new CheckListItem())
+  }
+
+  updateCheckListName() {
+    this.newCheckListName = "CheckList " + this.realEstate.name
+  }
+
+  deleteCheckListItem(checkListIndex: number, checkListItemIndex: number) {
+    let itemDesc: string = this.realEstate.checkLists[checkListIndex].checkListItems[checkListItemIndex].description
+    this.realEstate.checkLists[checkListIndex].checkListItems = this.realEstate.checkLists[checkListIndex].checkListItems
+      .filter(item => item.description != itemDesc)
   }
 }

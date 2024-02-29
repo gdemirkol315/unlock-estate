@@ -7,6 +7,7 @@ import {RealEstateManagementComponent} from "./components/real-estate-management
 import {TaskOverviewComponent} from "./components/task-management/task-overview.component";
 import {authGuardGuard} from "./guard/auth-guard.guard";
 import {UserProfileComponent} from "./components/user-profile/user-profile.component";
+import {RealEstateCreateComponent} from "./components/real-estate-create/real-estate-create.component";
 
 const routes: Routes = [
   {
@@ -31,6 +32,11 @@ const routes: Routes = [
   {
     path: 'admin/real-estate-management',
     component: RealEstateManagementComponent,
+    canMatch: [authGuardGuard]
+  },
+  {
+    path: 'admin/real-estate-create',
+    component: RealEstateCreateComponent,
     canMatch: [authGuardGuard]
   },
   {
