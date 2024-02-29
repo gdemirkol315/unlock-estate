@@ -1,4 +1,4 @@
-package com.unlockestate.ueparent.realestates.controller;
+package com.unlockestate.ueparent.realestate.controller;
 
 import com.unlockestate.ueparent.utils.dto.MessageEntity;
 import org.springframework.http.ResponseEntity;

@@ -1,6 +1,7 @@
 package com.unlockestate.ueparent.user.dto;
 
 
+import com.unlockestate.ueparent.task.dto.Task;
 import jakarta.persistence.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -29,6 +30,9 @@ public class User implements UserDetails {
     private String phoneNumber;
 
     private String preferredArea;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Task> tasks;
 
     public User() {
         //spring boot needs empty constructor
