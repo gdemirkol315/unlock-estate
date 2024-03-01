@@ -1,5 +1,6 @@
 package com.unlockestate.ueparent.task.dto;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 
 @Entity
@@ -12,6 +13,7 @@ public class CheckListItem {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "checklist_id", foreignKey = @ForeignKey(name = "FK_CHECKLIST"))
+    @JsonBackReference
     private CheckList checkList;
 
     // Standard getters and setters

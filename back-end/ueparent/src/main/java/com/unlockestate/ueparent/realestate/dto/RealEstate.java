@@ -1,5 +1,6 @@
 package com.unlockestate.ueparent.realestate.dto;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.unlockestate.ueparent.task.dto.CheckList;
 import com.unlockestate.ueparent.task.dto.Task;
 import jakarta.persistence.*;
@@ -18,12 +19,14 @@ public class RealEstate {
     private String country;
     private String city;
     private String address;
+    private String zipCode;
     private String calendarUrl;
 
     private String type;
 
     @OneToMany(mappedBy = "realEstate", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<CheckList> checklists;
+    @JsonManagedReference
+    private List<CheckList> checkLists;
 
 
     @OneToMany(mappedBy = "realEstate", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -56,12 +59,52 @@ public class RealEstate {
         this.calendarUrl = calendarUrl;
     }
 
-    public List<CheckList> getChecklists() {
-        return checklists;
+    public List<CheckList> getCheckLists() {
+        return checkLists;
     }
 
-    public void setChecklists(List<CheckList> checklists) {
-        this.checklists = checklists;
+    public void setCheckLists(List<CheckList> checkLists) {
+        this.checkLists = checkLists;
+    }
+
+    public String getCountry() {
+        return country;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public String getZipCode() {
+        return zipCode;
+    }
+
+    public void setZipCode(String zipCode) {
+        this.zipCode = zipCode;
+    }
+
+    public List<Task> getTasks() {
+        return tasks;
+    }
+
+    public void setTasks(List<Task> tasks) {
+        this.tasks = tasks;
     }
 
     public String getName() {

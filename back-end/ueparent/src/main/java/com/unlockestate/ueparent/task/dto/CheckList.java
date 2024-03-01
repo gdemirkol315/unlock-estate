@@ -1,5 +1,7 @@
 package com.unlockestate.ueparent.task.dto;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.unlockestate.ueparent.realestate.dto.RealEstate;
 import jakarta.persistence.*;
 
@@ -15,9 +17,11 @@ public class CheckList {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "real_estate_id", foreignKey = @ForeignKey(name = "FK_REAL_ESTATE"))
+    @JsonBackReference
     private RealEstate realEstate;
 
     @OneToMany(fetch = FetchType.EAGER,mappedBy = "checkList", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
     private List<CheckListItem> checkListItems;
 
     public CheckList() {
