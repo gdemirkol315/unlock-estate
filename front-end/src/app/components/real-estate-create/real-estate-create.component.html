@@ -44,7 +44,7 @@
     <input matInput [(ngModel)]="newCheckListName" placeholder="Please enter the name of the checklist">
   </mat-form-field>
   <!-- Button to add a new checklist to the array -->
-  <button mat-fab color="primary" aria-label="Add" (click)="addChecklist()"
+  <button mat-fab color="primary" aria-label="Add" (click)="realEstate.addChecklist(newCheckListName)"
           matTooltip="Add Checklist" class="slightly-spaced">
     <mat-icon>add</mat-icon>
   </button>
@@ -62,20 +62,20 @@
         <mat-form-field class="slightly-spaced">
           <input matInput [(ngModel)]="item.description" name="item-{{iList}}-{{iListItem}}">
         </mat-form-field>
-        <button mat-fab color="warn" aria-label="Add" (click)="deleteCheckListItem(iList,iListItem)"
+        <button mat-fab color="warn" aria-label="Add" (click)="realEstate.deleteCheckListItem(iList,iListItem)"
                 matTooltip="Delete Checklist Item" class="slightly-spaced">
           <mat-icon>delete</mat-icon>
         </button>
       </div>
 
-      <button mat-fab color="primary" aria-label="Add" (click)="addChecklistItem(iList)"
+      <button mat-fab color="primary" aria-label="Add" (click)="realEstate.addChecklistItem(iList)"
               matTooltip="Add Checklist Item" class="slightly-spaced">
         <mat-icon>add</mat-icon>
       </button>
     </mat-expansion-panel>
   </mat-accordion>
   <br>
-  <button mat-raised-button color="primary" class="slightly-spaced">
+  <button mat-raised-button color="primary" class="slightly-spaced" (click)="onSaveRealEstate()">
     Create Real Estate Entry
   </button>
 </mat-card>

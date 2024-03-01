@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import {CheckList} from "../../models/check-list.model";
 import {RealEstate} from "../../models/real-estate.model";
 import {CheckListItem} from "../../models/check-list-item.model";
+import {RealEstateService} from "../../services/real-estate/real-estate.service";
 
 @Component({
   selector: 'real-estate-create',
@@ -13,7 +14,7 @@ export class RealEstateCreateComponent {
   realEstate: RealEstate = new RealEstate();
   newCheckListName: string;
 
-  constructor() {
+  constructor(private realEstateService:RealEstateService) {
   }
 
   onCreateRe() {
@@ -38,5 +39,9 @@ export class RealEstateCreateComponent {
     let itemDesc: string = this.realEstate.checkLists[checkListIndex].checkListItems[checkListItemIndex].description
     this.realEstate.checkLists[checkListIndex].checkListItems = this.realEstate.checkLists[checkListIndex].checkListItems
       .filter(item => item.description != itemDesc)
+  }
+
+  onSaveRealEstate() {
+    this.realEstateService.save(this.realEstate);
   }
 }
