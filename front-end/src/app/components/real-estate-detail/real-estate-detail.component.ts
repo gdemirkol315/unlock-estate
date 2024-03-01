@@ -15,7 +15,7 @@ export class RealEstateDetailComponent {
 
 
   addChecklist() {
-    let newChecklist = new CheckList(this.newCheckListName,this.realEstate);
+    let newChecklist = new CheckList(this.newCheckListName);
     this.realEstate.checkLists.push(newChecklist);
   }
 

@@ -17,31 +17,21 @@ export class RealEstateCreateComponent {
   constructor(private realEstateService:RealEstateService) {
   }
 
-  onCreateRe() {
-
-  }
-
-  addChecklist() {
-    let newChecklist = new CheckList(this.newCheckListName,this.realEstate);
-    this.realEstate.checkLists.push(newChecklist);
-  }
-
-  addChecklistItem(checkListIndex: number) {
-
-    this.realEstate.checkLists[checkListIndex].checkListItems.push(new CheckListItem())
-  }
-
   updateCheckListName() {
     this.newCheckListName = "CheckList " + this.realEstate.name
   }
 
-  deleteCheckListItem(checkListIndex: number, checkListItemIndex: number) {
-    let itemDesc: string = this.realEstate.checkLists[checkListIndex].checkListItems[checkListItemIndex].description
-    this.realEstate.checkLists[checkListIndex].checkListItems = this.realEstate.checkLists[checkListIndex].checkListItems
-      .filter(item => item.description != itemDesc)
-  }
-
   onSaveRealEstate() {
-    this.realEstateService.save(this.realEstate);
+    this.realEstateService.save(this.realEstate)
+      .subscribe({
+        next: () => {
+
+          this.realEstateService.toastr.success("Successfully saved!");
+        },
+        error: (err) =>{
+            this.realEstateService.toastr.error("Error!");
+          console.log(err);
+        }
+      });
   }
 }

@@ -8,13 +8,14 @@ export class RealEstate {
   country: string;
   city: string;
   address: string;
+  zipCode: string
   calendarUrl: string;
   tasks: Task[] = new Array();
   checkLists: CheckList[] = new Array();
   type: string;
 
   addChecklist(newCheckListName: string) {
-    let newChecklist = new CheckList(newCheckListName, this);
+    let newChecklist = new CheckList(newCheckListName);
     this.checkLists.push(newChecklist);
   }
 

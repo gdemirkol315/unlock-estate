@@ -1,6 +1,7 @@
 import {Injectable} from '@angular/core';
 import {DataService} from "../data/data.service";
 import {RealEstate} from "../../models/real-estate.model";
+import {CheckList} from "../../models/check-list.model";
 
 @Injectable({
   providedIn: 'root'
@@ -8,10 +9,10 @@ import {RealEstate} from "../../models/real-estate.model";
 
 export class RealEstateService extends DataService {
 
+  private serviceUrlSuffix: string = "realEstate"
 
   save(realEstate: RealEstate) {
-    this.http.post(this.hostname + "realEstate/register", realEstate).subscribe({
-
-    });
+    return this.http.post(this.hostname + this.serviceUrlSuffix + "/save", realEstate)
   }
+
 }
