@@ -3,15 +3,13 @@ package com.unlockestate.ueparent.realestate.controller;
 import com.unlockestate.ueparent.exception.InternalServerRuntimeException;
 import com.unlockestate.ueparent.realestate.dto.RealEstate;
 import com.unlockestate.ueparent.realestate.service.RealEstateService;
-import com.unlockestate.ueparent.user.controller.UserController;
-import com.unlockestate.ueparent.utils.dto.MessageEntity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RequestMapping("/realEstate")
 @RestController
@@ -19,7 +17,7 @@ public class RealEstateController {
 
     private RealEstateService realEstateService;
 
-    private static final Logger logger = LoggerFactory.getLogger(UserController.class);
+    private static final Logger logger = LoggerFactory.getLogger(RealEstateController.class);
 
 
     @Autowired
@@ -38,8 +36,13 @@ public class RealEstateController {
     }
 
     @GetMapping("/getAll")
-    public ResponseEntity<MessageEntity> allRealEstate() {
-        return ResponseEntity.ok(new MessageEntity("Real Estate 1,2,3,4"));
+    public ResponseEntity<List<RealEstate>> allRealEstate() {
+        try {
+            return ResponseEntity.ok(realEstateService.getAllRealEstates());
+        } catch (InternalServerRuntimeException e) {
+            logger.error("Could not get real estates");
+            return ResponseEntity.internalServerError().build();
+        }
     }
 
 }

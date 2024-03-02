@@ -4,6 +4,8 @@ import com.unlockestate.ueparent.realestate.dto.RealEstate;
 import com.unlockestate.ueparent.realestate.repository.RealEstateRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class RealEstateService {
 
@@ -21,8 +23,11 @@ public class RealEstateService {
     public RealEstate updateRealEstate(RealEstate realEstate){
 
 
-        return this.realEstateRepository.save(realEstate);
+        return realEstateRepository.save(realEstate);
     }
 
 
+    public List<RealEstate> getAllRealEstates() {
+        return realEstateRepository.findAll();
+    }
 }

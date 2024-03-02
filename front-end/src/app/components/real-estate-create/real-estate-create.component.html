@@ -5,26 +5,26 @@
   </mat-card-header>
     <mat-form-field class="slightly-spaced">
       <mat-label>Name</mat-label>
-      <input matInput type="text" [(ngModel)]="realEstate.name" (keydown)="updateCheckListName()">
+      <input matInput type="text" [(ngModel)]="realEstate.name" (keydown)="updateCheckListName()" required>
     </mat-form-field>
 
     <mat-form-field class="slightly-spaced">
       <mat-label>Country</mat-label>
-      <input matInput type="text" [(ngModel)]="realEstate.country">
+      <input matInput type="text" [(ngModel)]="realEstate.country" required>
     </mat-form-field>
 
     <mat-form-field class="slightly-spaced">
       <mat-label>City</mat-label>
-      <input matInput type="text" [(ngModel)]="realEstate.city">
+      <input matInput type="text" [(ngModel)]="realEstate.city" required>
     </mat-form-field>
     <mat-form-field class="slightly-spaced">
       <mat-label>Address detail</mat-label>
-      <input matInput type="text" [(ngModel)]="realEstate.address">
+      <input matInput type="text" [(ngModel)]="realEstate.address" required>
     </mat-form-field>
 
   <mat-form-field class="slightly-spaced">
     <mat-label>Zip Code</mat-label>
-    <input matInput type="text" [(ngModel)]="realEstate.zipCode">
+    <input matInput type="text" [(ngModel)]="realEstate.zipCode" required>
   </mat-form-field>
 
     <mat-form-field class="slightly-spaced">
@@ -56,7 +56,7 @@
 
   <!-- Iterate over each checklist in the array -->
   <mat-accordion multi="true">
-    <mat-expansion-panel *ngFor="let checkList of realEstate.checkLists; let iList = index">
+    <mat-expansion-panel *ngFor="let checkList of realEstate.checkLists; let iList = index" [expanded]="true">
       <mat-expansion-panel-header>
         <mat-panel-title>
           {{ checkList.name }}

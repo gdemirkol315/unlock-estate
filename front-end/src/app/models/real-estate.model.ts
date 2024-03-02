@@ -13,6 +13,9 @@ export class RealEstate {
   tasks: Task[] = new Array();
   checkLists: CheckList[] = new Array();
   type: string;
+  active:boolean;
+
+  [key: string]: any;
 
   addChecklist(newCheckListName: string) {
     let newChecklist = new CheckList(newCheckListName);

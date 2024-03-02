@@ -12,7 +12,10 @@ export class RealEstateService extends DataService {
   private serviceUrlSuffix: string = "realEstate"
 
   save(realEstate: RealEstate) {
-    return this.http.post(this.hostname + this.serviceUrlSuffix + "/save", realEstate)
+    return this.http.post<RealEstate>(this.hostname + this.serviceUrlSuffix + "/save", realEstate)
   }
 
+  getAllRealEstates() {
+    return this.http.get<RealEstate[]>(this.hostname + this.serviceUrlSuffix + "/getAll")
+  }
 }

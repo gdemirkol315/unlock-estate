@@ -13,6 +13,7 @@ export const authGuardGuard: CanMatchFn = (route, segments) => {
       return true;
     } else {
       return false;
+      authService.toastr.error("Unauthorized! Access denied!")
     }
   }
 

@@ -23,6 +23,8 @@ public class RealEstate {
     private String calendarUrl;
 
     private String type;
+    @Column(name = "is_active", nullable = false, columnDefinition = "boolean default true")
+    private boolean isActive = true;
 
     @OneToMany(mappedBy = "realEstate", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
@@ -32,8 +34,6 @@ public class RealEstate {
     @OneToMany(mappedBy = "realEstate", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Task> tasks;
 
-    public RealEstate() {
-    }
 
     public Integer getId() {
         return id;
@@ -113,5 +113,13 @@ public class RealEstate {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public boolean isActive() {
+        return isActive;
+    }
+
+    public void setActive(boolean active) {
+        isActive = active;
     }
 }
