@@ -66,9 +66,11 @@ export class RealEstateManagementComponent implements OnInit {
     realEstate.active = status;
     this.realEstateService.save(realEstate).subscribe({
       next: (realEstateUpdated: RealEstate) => {
+        let activatedRealEstate:  RealEstate [] = new Array();
+        let deactivatedRealEstate:  RealEstate [] = new Array();
+
         //this approach implemented to avoid unnecessary get server request
         if (realEstateUpdated.active) {
-          let deactivatedRealEstate:  RealEstate [] = new Array();
             this.deActivatedRealEstate.data.forEach((realEstateDeactived: RealEstate) => {
               if (realEstateDeactived.id != realEstateUpdated.id){
                 deactivatedRealEstate.push(realEstateDeactived);
@@ -77,9 +79,7 @@ export class RealEstateManagementComponent implements OnInit {
           this.deActivatedRealEstate.data = deactivatedRealEstate;
           let activatedRealEstate:RealEstate[] = this.deActivatedRealEstate.data
           activatedRealEstate.push(realEstateUpdated)
-          this.activeRealEstate.data = activatedRealEstate
         } else {
-          let activatedRealEstate:  RealEstate [] = new Array();
           this.activeRealEstate.data.forEach((realEstateActivated: RealEstate) => {
             if (realEstateActivated.id != realEstateUpdated.id){
               activatedRealEstate.push(realEstateActivated);
@@ -88,11 +88,10 @@ export class RealEstateManagementComponent implements OnInit {
           this.activeRealEstate.data = activatedRealEstate;
           let deactivatedRealEstate:RealEstate[] = this.deActivatedRealEstate.data
           deactivatedRealEstate.push(realEstateUpdated)
-          this.deActivatedRealEstate.data = deactivatedRealEstate
         }
 
-        // this.activeRealEstate = new MatTableDataSource<RealEstate>(this.activeRealEstate.data);
-        // this.deActivatedRealEstate = new MatTableDataSource<RealEstate>(this.deActivatedRealEstate.data);
+        this.deActivatedRealEstate.data = deactivatedRealEstate
+        this.activeRealEstate.data = activatedRealEstate
 
         this.realEstateService.toastr.success("Real estate " + realEstateUpdated.name + " successfully updated!");
       },

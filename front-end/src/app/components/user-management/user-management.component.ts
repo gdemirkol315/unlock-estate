@@ -26,15 +26,15 @@ export class UserManagementComponent implements OnInit {
   ngOnInit(): void {
     this.getRoles();
     this.getUsers();
-    this.activeUsers.filterPredicate = (data:User, filter:string) => {
+    this.activeUsers.filterPredicate = (data: User, filter: string) => {
       return this.displayedColumns.some(ele => {
-        return ele != 'actions' && typeof data[ele]==="string" &&
+        return ele != 'actions' && typeof data[ele] === "string" &&
           data[ele]?.toLowerCase().indexOf(filter) != -1;
       });
     }
     this.deActivatedUsers.filterPredicate = (data, filter) => {
       return this.displayedColumns.some(name => {
-        return name != 'actions' && typeof data[name]==="string" &&
+        return name != 'actions' && typeof data[name] === "string" &&
           data[name]?.toLowerCase().indexOf(filter) != -1;
       });
     }
@@ -143,7 +143,7 @@ export class UserManagementComponent implements OnInit {
       this.authService.updateUser(updatedUser).subscribe({
         next: (user: User) => {
           if (user.active == isActive) {
-            this.getUsers();
+            this.clientSideUpdateUserList(user)
             this.authService.toastr.success("User status for " + user.email + " was changed successfully!");
           } else {
             this.authService.toastr.error("An unexpected error occurred while changing status of the user " + user.email + "!!!")
@@ -166,4 +166,34 @@ export class UserManagementComponent implements OnInit {
     this.activeUsers.filter = this.searchKey.trim().toLowerCase();
     this.deActivatedUsers.filter = this.searchKey.trim().toLowerCase();
   }
+
+  private clientSideUpdateUserList(updatedUser: User) {
+
+    let deActivatedUsers: User[] = new Array();
+    let activatedUsers: User[] = new Array();
+
+    if (updatedUser.active) {
+
+      this.deActivatedUsers.data.forEach((deactiveUser: User) => {
+        if (deactiveUser.userId != updatedUser.userId) {
+          deActivatedUsers.push(deactiveUser);
+        }
+      })
+      activatedUsers = this.activeUsers.data;
+      activatedUsers.push(updatedUser);
+    } else {
+      this.activeUsers.data.forEach((activeUser: User) => {
+        if (activeUser.userId != updatedUser.userId) {
+          activatedUsers.push(activeUser);
+        }
+      });
+      deActivatedUsers = this.deActivatedUsers.data;
+      deActivatedUsers.push(updatedUser);
+    }
+
+    this.deActivatedUsers.data = deActivatedUsers;
+    this.activeUsers.data = activatedUsers;
+  }
+
+
 }
