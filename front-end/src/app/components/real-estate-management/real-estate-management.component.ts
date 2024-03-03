@@ -17,15 +17,15 @@ export class RealEstateManagementComponent implements OnInit {
 
   ngOnInit() {
     this.getRealEstates()
-    this.activeRealEstate.filterPredicate = (data:RealEstate, filter:string) => {
+    this.activeRealEstate.filterPredicate = (data: RealEstate, filter: string) => {
       return this.displayedColumns.some(ele => {
-        return ele != 'actions' && typeof data[ele]==="string" &&
+        return ele != 'actions' && typeof data[ele] === "string" &&
           data[ele]?.toLowerCase().indexOf(filter) != -1;
       });
     }
     this.deActivatedRealEstate.filterPredicate = (data, filter) => {
       return this.displayedColumns.some(name => {
-        return name != 'actions' && typeof data[name]==="string" &&
+        return name != 'actions' && typeof data[name] === "string" &&
           data[name]?.toLowerCase().indexOf(filter) != -1;
       });
     }
@@ -44,13 +44,13 @@ export class RealEstateManagementComponent implements OnInit {
   }
 
   getRealEstates() {
-    let realEstatesActive:RealEstate[] = new Array();
-    let realEstatesDeactivated:RealEstate[] = new Array();
+    let realEstatesActive: RealEstate[] = new Array();
+    let realEstatesDeactivated: RealEstate[] = new Array();
     this.realEstateService.getAllRealEstates()
       .subscribe({
         next: (realEstates: RealEstate[]) => {
-          realEstates.forEach( (realEstate:RealEstate) => {
-            if (realEstate.active){
+          realEstates.forEach((realEstate: RealEstate) => {
+            if (realEstate.active) {
               realEstatesActive.push(realEstate);
             } else {
               realEstatesDeactivated.push(realEstate);
@@ -62,7 +62,44 @@ export class RealEstateManagementComponent implements OnInit {
       });
   }
 
-  onChangeRealEstateStatus(element: RealEstate, status: boolean) {
+  onChangeRealEstateStatus(realEstate: RealEstate, status: boolean) {
+    realEstate.active = status;
+    this.realEstateService.save(realEstate).subscribe({
+      next: (realEstateUpdated: RealEstate) => {
+        //this approach implemented to avoid unnecessary get server request
+        if (realEstateUpdated.active) {
+          let deactivatedRealEstate:  RealEstate [] = new Array();
+            this.deActivatedRealEstate.data.forEach((realEstateDeactived: RealEstate) => {
+              if (realEstateDeactived.id != realEstateUpdated.id){
+                deactivatedRealEstate.push(realEstateDeactived);
+              }
+            })
+          this.deActivatedRealEstate.data = deactivatedRealEstate;
+          let activatedRealEstate:RealEstate[] = this.deActivatedRealEstate.data
+          activatedRealEstate.push(realEstateUpdated)
+          this.activeRealEstate.data = activatedRealEstate
+        } else {
+          let activatedRealEstate:  RealEstate [] = new Array();
+          this.activeRealEstate.data.forEach((realEstateActivated: RealEstate) => {
+            if (realEstateActivated.id != realEstateUpdated.id){
+              activatedRealEstate.push(realEstateActivated);
+            }
+          })
+          this.activeRealEstate.data = activatedRealEstate;
+          let deactivatedRealEstate:RealEstate[] = this.deActivatedRealEstate.data
+          deactivatedRealEstate.push(realEstateUpdated)
+          this.deActivatedRealEstate.data = deactivatedRealEstate
+        }
 
+        // this.activeRealEstate = new MatTableDataSource<RealEstate>(this.activeRealEstate.data);
+        // this.deActivatedRealEstate = new MatTableDataSource<RealEstate>(this.deActivatedRealEstate.data);
+
+        this.realEstateService.toastr.success("Real estate " + realEstateUpdated.name + " successfully updated!");
+      },
+      error: (err) => {
+        this.realEstateService.toastr.error("An unexpected error occurred while changing the status of real estate!");
+        console.log(err);
+      }
+    })
   }
 }
