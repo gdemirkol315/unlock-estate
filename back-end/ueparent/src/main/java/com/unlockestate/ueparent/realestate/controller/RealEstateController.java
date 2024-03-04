@@ -45,4 +45,14 @@ public class RealEstateController {
         }
     }
 
+    @GetMapping("/getRealEstate")
+    public ResponseEntity<RealEstate> getRealEState(@RequestParam String id){
+        try {
+            return ResponseEntity.ok(realEstateService.getRealEstate(id));
+        } catch (InternalServerRuntimeException e) {
+            logger.error("Could not get real estate {}", id);
+            return ResponseEntity.internalServerError().build();
+        }
+    }
+
 }

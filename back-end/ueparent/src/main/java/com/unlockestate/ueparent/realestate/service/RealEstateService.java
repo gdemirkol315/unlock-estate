@@ -30,4 +30,8 @@ public class RealEstateService {
     public List<RealEstate> getAllRealEstates() {
         return realEstateRepository.findAll();
     }
+
+    public RealEstate getRealEstate(String reId) {
+        return realEstateRepository.findById(Integer.parseInt(reId)).orElseThrow();
+    }
 }
