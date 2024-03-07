@@ -6,6 +6,7 @@ import com.unlockestate.ueparent.realestate.dto.RealEstate;
 import com.unlockestate.ueparent.user.dto.User;
 import jakarta.persistence.*;
 
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -22,11 +23,18 @@ public class Task {
     private List<Comment> comments;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    private User user;
+    @JoinColumn(name = "assignee_user_id")
+    private User assignee;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "creator_user_id")
+    private User creator;
 
     @OneToMany(mappedBy = "task", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<TaskCheckListItem> taskCheckListItems;
+
+    private Date taskDate;
+    private Date createdDate;
 
     public Integer getId() {
         return id;
@@ -52,12 +60,12 @@ public class Task {
         this.comments = comments;
     }
 
-    public User getUser() {
-        return user;
+    public User getAssignee() {
+        return assignee;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setAssignee(User assignee) {
+        this.assignee = assignee;
     }
 
     public List<TaskCheckListItem> getTaskCheckListItems() {
@@ -66,5 +74,29 @@ public class Task {
 
     public void setTaskCheckListItems(List<TaskCheckListItem> taskCheckListItems) {
         this.taskCheckListItems = taskCheckListItems;
+    }
+
+    public User getCreator() {
+        return creator;
+    }
+
+    public void setCreator(User creator) {
+        this.creator = creator;
+    }
+
+    public Date getTaskDate() {
+        return taskDate;
+    }
+
+    public void setTaskDate(Date taskDate) {
+        this.taskDate = taskDate;
+    }
+
+    public Date getCreatedDate() {
+        return createdDate;
+    }
+
+    public void setCreatedDate(Date createdDate) {
+        this.createdDate = createdDate;
     }
 }

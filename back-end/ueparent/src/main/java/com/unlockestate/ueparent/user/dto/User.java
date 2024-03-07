@@ -31,8 +31,11 @@ public class User implements UserDetails {
 
     private String preferredArea;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Task> tasks;
+    @OneToMany(mappedBy = "assignee", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Task> assignedTasks;
+
+    @OneToMany(mappedBy = "creator", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Task> createdTasks;
 
     public User() {
         //spring boot needs empty constructor
@@ -140,5 +143,21 @@ public class User implements UserDetails {
 
     public void setPreferredArea(String preferredArea) {
         this.preferredArea = preferredArea;
+    }
+
+    public List<Task> getAssignedTasks() {
+        return assignedTasks;
+    }
+
+    public void setAssignedTasks(List<Task> assignedTasks) {
+        this.assignedTasks = assignedTasks;
+    }
+
+    public List<Task> getCreatedTasks() {
+        return createdTasks;
+    }
+
+    public void setCreatedTasks(List<Task> createdTasks) {
+        this.createdTasks = createdTasks;
     }
 }

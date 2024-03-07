@@ -7,8 +7,12 @@ export class Task {
   id: number;
   realEstate: RealEstate;
   assignee: User;
+  creator: User;
   comments: Comment[] = new Array();
   taskCheckListItems: TaskCheckListItem[] = new Array();
   taskDate: Date;
   createdDate: Date;
+  active:boolean;
+
+  [key: string]: any;
 }
