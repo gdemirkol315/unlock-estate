@@ -44,16 +44,6 @@
     <mat-card-header>
       <mat-card-title>Checklists</mat-card-title>
     </mat-card-header>
-    <div *ngIf="isEditMode">
-      <mat-form-field class="slightly-spaced">
-        <input matInput [(ngModel)]="newCheckListName" placeholder="Please enter the name of the checklist">
-      </mat-form-field>
-      <!-- Button to add a new checklist to the array -->
-      <button mat-fab color="primary" aria-label="Add" (click)="addChecklist()"
-              matTooltip="Add Checklist" class="slightly-spaced">
-        <mat-icon>add</mat-icon>
-      </button>
-    </div>
     <!-- Iterate over each checklist in the array -->
     <mat-accordion multi="true">
       <mat-expansion-panel *ngFor="let checkList of realEstate.checkLists; let iList = index">
@@ -67,7 +57,7 @@
           <mat-form-field class="slightly-spaced">
             <input matInput [(ngModel)]="item.description" name="item-{{iList}}-{{iListItem}}" [readonly]="!isEditMode">
           </mat-form-field>
-          <button mat-fab color="warn" aria-label="Add" (click)="realEstate.deleteCheckListItem(iList,iListItem)"
+          <button mat-fab color="warn" aria-label="Add" (click)="onDeleteCheckListItem(iList,iListItem)"
                   matTooltip="Delete Checklist Item" class="slightly-spaced" *ngIf="isEditMode">
             <mat-icon>delete</mat-icon>
           </button>
@@ -79,6 +69,17 @@
         </button>
       </mat-expansion-panel>
     </mat-accordion>
+    <br>
+    <div *ngIf="isEditMode">
+      <mat-form-field class="slightly-spaced">
+        <input matInput [(ngModel)]="newCheckListName" placeholder="Please enter the name of the checklist">
+      </mat-form-field>
+      <!-- Button to add a new checklist to the array -->
+      <button mat-fab color="primary" aria-label="Add" (click)="addChecklist()"
+              matTooltip="Add Checklist" class="slightly-spaced">
+        <mat-icon>add</mat-icon>
+      </button>
+    </div>
     <br>
     <div *ngIf="isEditMode">
       <button

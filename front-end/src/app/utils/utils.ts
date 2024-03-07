@@ -1,10 +1,11 @@
 import {User} from "../models/user.model";
 import {AbstractControl, FormControl, FormGroup, ValidationErrors, ValidatorFn} from "@angular/forms";
+import {RealEstate} from "../models/real-estate.model";
 
 export class Utils {
-  public static getUserFromObject(obj:any): User {
+  public static getUserFromObject(obj: any): User {
     let updatedUser = new User();
-    if (obj instanceof FormGroup){
+    if (obj instanceof FormGroup) {
       updatedUser.userId = obj.get('userId')?.value;
       updatedUser.name = obj.get('name')?.value;
       updatedUser.email = obj.get('email')?.value;
@@ -29,14 +30,14 @@ export class Utils {
     return updatedUser;
   }
 
-  public static isUserDetailsChanged(updatedUser: User, user:User): boolean {
+  public static isUserDetailsChanged(updatedUser: User, user: User): boolean {
     return !(updatedUser.role === user.role
       && updatedUser.preferredArea === user.preferredArea
       && updatedUser.phoneNumber === user.phoneNumber
       && updatedUser.lastName === user.lastName);
   }
 
-  public static initializeUserDetailForm(user:User, isEditMode:boolean): FormGroup {
+  public static initializeUserDetailForm(user: User, isEditMode: boolean): FormGroup {
     return new FormGroup({
       userId: new FormControl({value: user.userId, disabled: true}),
       name: new FormControl({value: user.name, disabled: true}),
@@ -45,5 +46,14 @@ export class Utils {
       phoneNumber: new FormControl({value: user.phoneNumber, disabled: !isEditMode}),
       preferredArea: new FormControl({value: user.preferredArea, disabled: !isEditMode})
     });
+  }
+
+  static jsonObjToInstance<T>(obj: T, jsonObj: object): T {
+
+    for (var propName in jsonObj) {
+      obj[propName] = jsonObj[propName]
+    }
+
+    return obj;
   }
 }

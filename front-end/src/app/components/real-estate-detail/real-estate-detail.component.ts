@@ -3,6 +3,7 @@ import {RealEstate} from "../../models/real-estate.model";
 import {CheckList} from "../../models/check-list.model";
 import {ActivatedRoute} from "@angular/router";
 import {RealEstateService} from "../../services/real-estate/real-estate.service";
+import {Utils} from "../../utils/utils";
 
 @Component({
   selector: 'app-real-estate-detail',
@@ -26,8 +27,7 @@ export class RealEstateDetailComponent implements OnInit {
     if (reId != null) {
       this.realEstateService.getRealEstate(reId).subscribe({
         next: (realEstate: RealEstate) => {
-          this.realEstate = realEstate;
-          console.log(realEstate);
+          this.realEstate = Utils.jsonObjToInstance(new RealEstate(), realEstate);
           this.isLoading = false;
         }, error: (err) => {
           console.log(err)
@@ -51,5 +51,19 @@ export class RealEstateDetailComponent implements OnInit {
 
   onSave() {
     this.isEditMode = false
+    this.realEstateService.save(this.realEstate).subscribe({
+        next: (realEstate: RealEstate) => {
+          this.realEstateService.toastr.success("Real Estate " + realEstate.name + " details has been saved successfully.");
+        },
+        error: (err) => {
+          console.log(err);
+          this.realEstateService.toastr.error("An unexpected error occurred while saving real estate details!")
+        }
+      }
+    )
+  }
+
+  onDeleteCheckListItem(iList: number, iListItem: number) {
+    this.realEstate.deleteCheckListItem(iList, iListItem)
   }
 }
