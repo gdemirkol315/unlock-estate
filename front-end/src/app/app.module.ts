@@ -23,7 +23,7 @@ import { MainNavComponent } from './components/main-nav/main-nav.component';
 import {MatActionList, MatListModule} from '@angular/material/list';
 import { UserManagementComponent } from './components/user-management/user-management.component';
 import { RealEstateManagementComponent } from './components/real-estate-management/real-estate-management.component';
-import { TaskOverviewComponent } from './components/task-management/task-overview.component';
+import { TaskOverviewComponent } from './components/task-overview/task-overview.component';
 import {MatHeaderCell, MatRow, MatTableModule} from "@angular/material/table";
 import { RealEstateCreateComponent } from './components/real-estate-create/real-estate-create.component';
 import { TaskCreateComponent } from './components/task-create/task-create.component';

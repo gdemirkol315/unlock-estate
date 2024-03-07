@@ -25,7 +25,7 @@ export class AuthService extends DataService {
           this.jwtToken.token = jwtTokenObj.token
           this.isLoggedIn = true;
           this.toastr.success("Successfully logged in");
-          this.router.navigate(['task-management']);
+          this.router.navigate(['task-overview']);
         } else if (jwtTokenObj.token == "") {
           this.toastr.error("Provided credentials are wrong!","Wrong Credentials")
         } else if (jwtTokenObj.token == "deactivated") {
