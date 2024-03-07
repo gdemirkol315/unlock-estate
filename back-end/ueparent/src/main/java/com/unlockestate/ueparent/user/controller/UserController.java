@@ -53,7 +53,8 @@ public class UserController {
 
         try {
             if (user != null) {
-                resultUser = userService.updateProfile(user.getEmail(), user).orElseThrow();
+                resultUser = userService.updateProfile(user).orElseThrow();
+                resultUser.setPassword(null);
             }
         } catch (InternalServerRuntimeException e) {
             logger.error("Could not find user!");
@@ -64,6 +65,7 @@ public class UserController {
     }
 
     @GetMapping("/user")
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('USER')")
     public ResponseEntity<User> getUserDetails(
             @RequestParam String email
     ) {

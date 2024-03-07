@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -26,6 +27,7 @@ public class RealEstateController {
     }
 
     @PostMapping("/save")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<RealEstate> saveRealEstate(@RequestBody RealEstate realEstate) {
         try {
             return ResponseEntity.ok(realEstateService.saveRealEstate(realEstate));
@@ -36,6 +38,7 @@ public class RealEstateController {
     }
 
     @GetMapping("/getAll")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<List<RealEstate>> allRealEstate() {
         try {
             return ResponseEntity.ok(realEstateService.getAllRealEstates());
@@ -46,6 +49,7 @@ public class RealEstateController {
     }
 
     @GetMapping("/getRealEstate")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<RealEstate> getRealEState(@RequestParam String id){
         try {
             return ResponseEntity.ok(realEstateService.getRealEstate(id));

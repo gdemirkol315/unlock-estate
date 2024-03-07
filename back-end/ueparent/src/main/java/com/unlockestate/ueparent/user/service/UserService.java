@@ -4,7 +4,10 @@ import com.unlockestate.ueparent.user.dto.Role;
 import com.unlockestate.ueparent.user.dto.User;
 import com.unlockestate.ueparent.user.repository.UserRepository;
 import jakarta.transaction.Transactional;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,6 +17,7 @@ import java.util.stream.Stream;
 @Service
 public class UserService {
     private final UserRepository userRepository;
+    private static final Logger logger = LoggerFactory.getLogger(UserService.class);
 
     @Autowired
     public UserService(UserRepository userRepository) {
@@ -75,8 +79,15 @@ public class UserService {
         userRepository.deleteById(user.getUserId());
     }
     @Transactional
-    public Optional<User>  updateProfile(String email, User user) {
-        Optional<User> existingUserOpt = userRepository.findByEmail(email);
+    public Optional<User>  updateProfile(User user) {
+        Optional<User> existingUserOpt = userRepository.findByEmail(user.getEmail());
+        String principalName = SecurityContextHolder.getContext().getAuthentication().getName();
+        if (!principalName.equals(user.getEmail())){
+            logger.error("Principal {} is trying to change details of user profile {}!",
+                    principalName,
+                    user.getEmail());
+            throw new SecurityException("Security Breach!!! Unexpected party trying to change profile of a user!");
+        }
 
         if (existingUserOpt.isPresent()) {
             User existingUser = existingUserOpt.get();

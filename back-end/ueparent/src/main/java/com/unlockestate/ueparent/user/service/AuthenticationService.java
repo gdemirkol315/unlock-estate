@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -102,6 +103,14 @@ public class AuthenticationService {
         } catch (BadCredentialsException e) {
             logger.error("Credentials provided are wrong!");
             return new AuthenticationResponse("");
+        }
+
+        String principalName = SecurityContextHolder.getContext().getAuthentication().getName();
+        if (!principalName.equals(changePassword.getUser().getEmail())){
+            logger.error("Principal {} is trying to change password of user {}!",
+                    principalName,
+                    changePassword.getUser().getEmail());
+            throw new SecurityException("Security Breach!!! Unexpected party trying to change password of a user!");
         }
 
         User user = userRepository.findByEmail(changePassword.getUser().getEmail()).orElseThrow();

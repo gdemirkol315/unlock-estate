@@ -4,7 +4,6 @@ import com.unlockestate.ueparent.user.dto.AuthenticationResponse;
 import com.unlockestate.ueparent.user.dto.ChangePassword;
 import com.unlockestate.ueparent.user.dto.User;
 import com.unlockestate.ueparent.user.service.AuthenticationService;
-import com.unlockestate.ueparent.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -15,12 +14,10 @@ import org.springframework.web.bind.annotation.*;
 public class AuthenticationController {
 
     private final AuthenticationService authenticationService;
-    private final UserService userService;
 
     @Autowired
-    public AuthenticationController(AuthenticationService authenticationService, UserService userService) {
+    public AuthenticationController(AuthenticationService authenticationService) {
         this.authenticationService = authenticationService;
-        this.userService = userService;
     }
     @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping("/register")
@@ -40,6 +37,7 @@ public class AuthenticationController {
     }
 
     @PostMapping("/changePassword")
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('USER')")
     public ResponseEntity<AuthenticationResponse> changePassword(
             @RequestBody ChangePassword changePassword
     ) {
