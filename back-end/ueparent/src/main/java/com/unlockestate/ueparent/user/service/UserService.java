@@ -12,6 +12,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
@@ -28,10 +29,12 @@ public class UserService {
 
     public List<User> getAllUsers() {
         List<User> users = userRepository.findAll();
-        for (User user : users) {
-            user.setPassword(null);
-        }
-        return users;
+        return isolatePassword(users);
+    }
+
+    public List<User> getAllServiceStaff() {
+        List<User> users = userRepository.findActiveUsersByRole(Role.USER.name()).get();
+        return isolatePassword(users);
     }
 
     public User getUser(String email) {
@@ -115,5 +118,13 @@ public class UserService {
     public String getPrincipalName(){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         return authentication.getName();
+    }
+
+    public List<User> isolatePassword(List<User> users){
+        for (User user : users) {
+            user.setPassword(null);
+        }
+
+        return users;
     }
 }

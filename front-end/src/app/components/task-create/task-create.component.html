@@ -1,1 +1,21 @@
-<p>task-create works!</p>
+<mat-card class="centered-container" *ngIf="!isLoading">
+  <mat-card-header>
+    <mat-card-title>Create Task</mat-card-title>
+  </mat-card-header>
+  <br>
+  <mat-form-field>
+    <mat-label>Assignee</mat-label>
+    <mat-select [(ngModel)]="task.assignee">
+      <mat-option *ngFor="let user of users" [value]="user">{{ user.name + " " + user.lastName }}</mat-option>
+    </mat-select>
+  </mat-form-field>
+  <br>
+  <button mat-raised-button color="primary" class="slightly-spaced" type="submit"
+          (click)="onCreateTask()"
+  >Create Task
+  </button>
+  <button mat-raised-button color="warn" class="slightly-spaced" (click)="onCancel()"
+  >Cancel
+  </button>
+</mat-card>
+

@@ -55,6 +55,10 @@ export class AuthService extends DataService {
     return this.http.get<User[]>(this.hostname + "allUsers");
   }
 
+    getServiceStaff() {
+    return this.http.get<User[]>(this.hostname + "allServiceStaff");
+  }
+
   getUser(email: string) {
 
     const headers = new HttpHeaders({
