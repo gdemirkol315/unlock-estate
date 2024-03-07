@@ -39,11 +39,13 @@ export class RealEstateManagementComponent implements OnInit {
   }
 
   applyFilter() {
-
+    this.activeRealEstate.filter = this.searchKey.trim().toLowerCase();
+    this.deActivatedRealEstate.filter = this.searchKey.trim().toLowerCase();
   }
 
   onSearchClear() {
-
+    this.searchKey = "";
+    this.applyFilter();
   }
 
   getRealEstates() {
