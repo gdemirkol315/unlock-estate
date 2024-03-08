@@ -33,7 +33,7 @@ import {
   MatExpansionPanelDescription, MatExpansionPanelHeader,
   MatExpansionPanelTitle
 } from "@angular/material/expansion";
-import {MatDatepicker, MatDatepickerInput} from "@angular/material/datepicker";
+import {MatDatepicker, MatDatepickerInput, MatDatepickerToggle} from "@angular/material/datepicker";
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { RealEstateDetailComponent } from './components/real-estate-detail/real-estate-detail.component';
 import { TaskDetailComponent } from './components/task-detail/task-detail.component';
@@ -44,6 +44,7 @@ import { LastWarningComponent } from './components/last-warning/last-warning.com
 import {MatTooltip} from "@angular/material/tooltip";
 import { UserProfileComponent } from './components/user-profile/user-profile.component';
 import { ChangePasswordComponent } from './components/change-password/change-password.component';
+import {provideNativeDateAdapter} from "@angular/material/core";
 
 
 @NgModule({
@@ -97,9 +98,11 @@ import { ChangePasswordComponent } from './components/change-password/change-pas
     MatExpansionPanelTitle,
     MatExpansionPanelDescription,
     MatDatepicker,
-    MatDatepickerInput
+    MatDatepickerInput,
+    MatDatepickerToggle
   ],
   providers: [
+    provideNativeDateAdapter(),
     provideClientHydration(),
     provideHttpClient(withFetch()),
     {

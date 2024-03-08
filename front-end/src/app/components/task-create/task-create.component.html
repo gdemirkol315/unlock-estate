@@ -4,6 +4,20 @@
   </mat-card-header>
   <br>
   <mat-form-field>
+    <mat-label>Real Estate</mat-label>
+    <mat-select [(ngModel)]="task.realEstate">
+      <mat-option *ngFor="let realEstate of realEstates" [value]="realEstate">{{ realEstate.zipCode + "-" + realEstate.name }}</mat-option>
+    </mat-select>
+  </mat-form-field>
+  <br>
+  <mat-form-field>
+    <mat-label>Task Date</mat-label>
+    <input matInput [matDatepicker]="picker" [ngModel]="task.taskDate">
+    <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+    <mat-datepicker #picker></mat-datepicker>
+  </mat-form-field>
+  <br>
+  <mat-form-field>
     <mat-label>Assignee</mat-label>
     <mat-select [(ngModel)]="task.assignee">
       <mat-option *ngFor="let user of users" [value]="user">{{ user.name + " " + user.lastName }}</mat-option>

@@ -20,6 +20,10 @@ export class RealEstateService extends DataService {
     return this.http.get<RealEstate[]>(this.hostname + this.serviceUrlSuffix + "/getAll")
   }
 
+  getAllActiveRealEstates() {
+    return this.http.get<RealEstate[]>(this.hostname + this.serviceUrlSuffix + "/getAllActive")
+  }
+
   getRealEstate(realEstateId: string) {
     let queryParams = new HttpParams();
     queryParams = queryParams.append("id", realEstateId);

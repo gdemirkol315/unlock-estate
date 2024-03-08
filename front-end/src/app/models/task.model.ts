@@ -10,8 +10,8 @@ export class Task {
   creator: User = new User();
   comments: Comment[] = new Array();
   taskCheckListItems: TaskCheckListItem[] = new Array();
-  taskDate: Date;
-  createdDate: Date;
+  taskDate: Date = new Date();
+  createdDate: Date = new Date();
   active:boolean;
 
   [key: string]: any;

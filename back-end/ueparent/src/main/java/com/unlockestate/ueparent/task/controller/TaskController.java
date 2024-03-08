@@ -8,9 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -28,13 +26,21 @@ public class TaskController {
 
     @GetMapping("/tasks")
     @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('USER')")
-    public ResponseEntity<List<Task>> allRealEstate() {
+    public ResponseEntity<List<Task>> allTasks() {
         try {
             return ResponseEntity.ok(taskService.getTasks());
         } catch (InternalServerRuntimeException e) {
             logger.error("Could not get real estates");
             return ResponseEntity.internalServerError().build();
         }
+    }
+
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('USER')")
+    @PostMapping("/saveTask")
+    public ResponseEntity<Task> saveTask(
+            @RequestBody Task task
+    ) {
+        return ResponseEntity.ok(taskService.saveTask(task));
     }
 
 

@@ -2,6 +2,7 @@ package com.unlockestate.ueparent.realestate.service;
 
 import com.unlockestate.ueparent.realestate.dto.RealEstate;
 import com.unlockestate.ueparent.realestate.repository.RealEstateRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -12,6 +13,7 @@ public class RealEstateService {
 
     private final RealEstateRepository realEstateRepository;
 
+    @Autowired
     public RealEstateService(RealEstateRepository realEstateRepository) {
         this.realEstateRepository = realEstateRepository;
     }
@@ -31,6 +33,9 @@ public class RealEstateService {
         return realEstateRepository.findAll();
     }
 
+    public List<RealEstate> getAllActiveRealEstates() {
+        return realEstateRepository.findAllActiveRealEstates().get();
+    }
     public RealEstate getRealEstate(String reId) {
         return realEstateRepository.findById(Integer.parseInt(reId)).orElseThrow();
     }

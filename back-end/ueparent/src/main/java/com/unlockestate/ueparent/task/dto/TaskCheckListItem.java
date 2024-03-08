@@ -1,6 +1,7 @@
 package com.unlockestate.ueparent.task.dto;
 
 
+import com.unlockestate.ueparent.task.repository.Status;
 import jakarta.persistence.*;
 
 @Entity
@@ -17,9 +18,16 @@ public class TaskCheckListItem {
     @JoinColumn(name = "checklist_item_id")
     private CheckListItem checklistItem;
 
-    private String status;
+    private Status status;
 
+    public TaskCheckListItem() {
+    }
 
+    public TaskCheckListItem(Task task, CheckListItem checklistItem, Status status) {
+        this.task = task;
+        this.checklistItem = checklistItem;
+        this.status = status;
+    }
 
     public Integer getId() {
         return id;
@@ -45,11 +53,11 @@ public class TaskCheckListItem {
         this.checklistItem = checklistItem;
     }
 
-    public String getStatus() {
+    public Status getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(Status status) {
         this.status = status;
     }
 }

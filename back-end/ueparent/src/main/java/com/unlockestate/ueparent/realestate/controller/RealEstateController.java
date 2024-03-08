@@ -48,6 +48,17 @@ public class RealEstateController {
         }
     }
 
+    @GetMapping("/getAllActive")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<List<RealEstate>> allActiveRealEstate() {
+        try {
+            return ResponseEntity.ok(realEstateService.getAllActiveRealEstates());
+        } catch (InternalServerRuntimeException e) {
+            logger.error("Could not get real estates");
+            return ResponseEntity.internalServerError().build();
+        }
+    }
+
     @GetMapping("/getRealEstate")
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<RealEstate> getRealEState(@RequestParam String id){

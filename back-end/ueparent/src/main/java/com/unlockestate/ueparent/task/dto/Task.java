@@ -36,6 +36,8 @@ public class Task {
     private Date taskDate;
     private Date createdDate;
 
+    private boolean isActive;
+
     public Integer getId() {
         return id;
     }
@@ -98,5 +100,13 @@ public class Task {
 
     public void setCreatedDate(Date createdDate) {
         this.createdDate = createdDate;
+    }
+
+    public boolean isActive() {
+        return isActive;
+    }
+
+    public void setActive(boolean active) {
+        isActive = active;
     }
 }
