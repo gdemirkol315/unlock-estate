@@ -1,9 +1,10 @@
-import {Component, OnInit} from '@angular/core';
+import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
 import {MatTableDataSource} from "@angular/material/table";
 import {RealEstate} from "../../models/real-estate.model";
 import {RealEstateService} from "../../services/real-estate/real-estate.service";
 import {MatDialog, MatDialogRef} from "@angular/material/dialog";
 import {LastWarningComponent} from "../last-warning/last-warning.component";
+import {MatSort} from "@angular/material/sort";
 
 @Component({
   selector: 'real-estate-management',
@@ -11,14 +12,23 @@ import {LastWarningComponent} from "../last-warning/last-warning.component";
   styleUrl: './real-estate-management.component.scss'
 })
 
-export class RealEstateManagementComponent implements OnInit {
+export class RealEstateManagementComponent implements OnInit, AfterViewInit {
   searchKey: string;
   activeRealEstate: MatTableDataSource<RealEstate> = new MatTableDataSource<RealEstate>();
   deActivatedRealEstate: MatTableDataSource<RealEstate> = new MatTableDataSource<RealEstate>();
   displayedColumns: string[] = ['id', 'name', 'country', 'city', 'zipCode', 'type', 'actions'];
 
+  @ViewChild(MatSort) sort: MatSort;
+
+  ngAfterViewInit() {
+    this.activeRealEstate.sort = this.sort;
+    this.deActivatedRealEstate.sort = this.sort;
+  }
+
   ngOnInit() {
     this.getRealEstates()
+    this.activeRealEstate.sort = this.sort;
+    this.deActivatedRealEstate.sort = this.sort;
     this.activeRealEstate.filterPredicate = (data: RealEstate, filter: string) => {
       return this.displayedColumns.some(ele => {
         return ele != 'actions' && typeof data[ele] === "string" &&

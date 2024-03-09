@@ -26,33 +26,32 @@
         Active Real Estates
       </mat-panel-title>
     </mat-expansion-panel-header>
-    <table mat-table [dataSource]="activeRealEstate" class="mat-elevation-z8 full-width slightly-spaced">
+    <table mat-table [dataSource]="activeRealEstate" class="mat-elevation-z8 full-width slightly-spaced" matSort>
       <ng-container matColumnDef="id">
-        <th mat-header-cell *matHeaderCellDef>Id</th>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header="id">Id</th>
         <td mat-cell *matCellDef="let element">{{ element.id }}</td>
       </ng-container>
 
       <ng-container matColumnDef="name">
-        <th mat-header-cell *matHeaderCellDef>Name</th>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header="name">Name</th>
         <td mat-cell *matCellDef="let element">{{ element.name }}</td>
       </ng-container>
 
-      <!-- Name Column -->
       <ng-container matColumnDef="country">
-        <th mat-header-cell *matHeaderCellDef>Country</th>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header="country">Country</th>
         <td mat-cell *matCellDef="let element">{{ element.country }}</td>
       </ng-container>
 
       <ng-container matColumnDef="city">
-        <th mat-header-cell *matHeaderCellDef>City</th>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header="city">City</th>
         <td mat-cell *matCellDef="let element">{{ element.city }}</td>
       </ng-container>
       <ng-container matColumnDef="zipCode">
-        <th mat-header-cell *matHeaderCellDef>Zip Code</th>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header="zipCode">Zip Code</th>
         <td mat-cell *matCellDef="let element">{{ element.zipCode }}</td>
       </ng-container>
       <ng-container matColumnDef="type">
-        <th mat-header-cell *matHeaderCellDef>Type</th>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header="type">Type</th>
         <td mat-cell *matCellDef="let element">{{ element.type }}</td>
       </ng-container>
       <ng-container matColumnDef="actions">
@@ -82,33 +81,33 @@
         Deactivated Real Estate
       </mat-panel-title>
     </mat-expansion-panel-header>
-    <table mat-table [dataSource]="deActivatedRealEstate" class="mat-elevation-z8 full-width slightly-spaced">
+    <table mat-table [dataSource]="deActivatedRealEstate" class="mat-elevation-z8 full-width slightly-spaced" matSort>
       <ng-container matColumnDef="id">
-        <th mat-header-cell *matHeaderCellDef>Id</th>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header="id">Id</th>
         <td mat-cell *matCellDef="let element">{{ element.id }}</td>
       </ng-container>
 
       <ng-container matColumnDef="name">
-        <th mat-header-cell *matHeaderCellDef>Name</th>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header="name">Name</th>
         <td mat-cell *matCellDef="let element">{{ element.name }}</td>
       </ng-container>
 
       <ng-container matColumnDef="country">
-        <th mat-header-cell *matHeaderCellDef>Country</th>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header="country">Country</th>
         <td mat-cell *matCellDef="let element">{{ element.country }}</td>
       </ng-container>
 
       <ng-container matColumnDef="city">
-        <th mat-header-cell *matHeaderCellDef>City</th>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header="city">City</th>
         <td mat-cell *matCellDef="let element">{{ element.city }}</td>
       </ng-container>
       <ng-container matColumnDef="zipCode">
-        <th mat-header-cell *matHeaderCellDef>Zip Code</th>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header="zipCode">Zip Code</th>
         <td mat-cell *matCellDef="let element">{{ element.zipCode }}</td>
       </ng-container>
 
       <ng-container matColumnDef="type">
-        <th mat-header-cell *matHeaderCellDef>Type</th>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header="type">Type</th>
         <td mat-cell *matCellDef="let element">{{ element.type }}</td>
       </ng-container>
 
