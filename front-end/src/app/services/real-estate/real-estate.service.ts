@@ -29,4 +29,10 @@ export class RealEstateService extends DataService {
     queryParams = queryParams.append("id", realEstateId);
     return this.http.get<RealEstate>(this.hostname + this.serviceUrlSuffix + "/getRealEstate", { params: queryParams })
   }
+
+  getRealEstateFromTask(taskId: number) {
+    let queryParams = new HttpParams();
+    queryParams = queryParams.append("taskId", taskId);
+    return this.http.get<RealEstate>(this.hostname + this.serviceUrlSuffix + "/getRealEstateWithTaskId", { params: queryParams })
+  }
 }

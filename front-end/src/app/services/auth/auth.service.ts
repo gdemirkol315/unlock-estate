@@ -107,4 +107,18 @@ export class AuthService extends DataService {
     this.jwtToken.clear()
     this.router.navigate(['/']);
   }
+
+  getAssigneeUser(taskId: number) {
+
+    let params = new HttpParams().set('taskId',taskId);
+
+    return this.http.get<User>(this.hostname + 'getAssigneeWithTaskId', {params});
+  }
+
+  getCreatorUser(taskId: number) {
+
+    let params = new HttpParams().set('taskId',taskId);
+
+    return this.http.get<User>(this.hostname + 'getCreatorWithTaskId', {params});
+  }
 }

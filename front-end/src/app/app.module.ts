@@ -48,6 +48,7 @@ import {provideNativeDateAdapter} from "@angular/material/core";
 import {CommonModule} from "@angular/common";
 import {NgxMaterialTimepickerModule} from "ngx-material-timepicker";
 import {MatSortModule} from "@angular/material/sort";
+import {MatProgressSpinner} from "@angular/material/progress-spinner";
 
 
 @NgModule({
@@ -105,7 +106,8 @@ import {MatSortModule} from "@angular/material/sort";
     MatExpansionPanelDescription,
     MatDatepicker,
     MatDatepickerInput,
-    MatDatepickerToggle
+    MatDatepickerToggle,
+    MatProgressSpinner
   ],
   providers: [
     provideNativeDateAdapter(),

@@ -67,4 +67,8 @@ public class TaskService {
 
         return taskRepository.save(task);
     }
+
+    public Task getTask(String id) {
+        return taskRepository.findById(Integer.parseInt(id)).get();
+    }
 }

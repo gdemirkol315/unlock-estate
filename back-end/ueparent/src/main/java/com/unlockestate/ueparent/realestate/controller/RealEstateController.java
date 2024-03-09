@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+import static org.springframework.data.jpa.domain.AbstractPersistable_.id;
+
 @RequestMapping("/realEstate")
 @RestController
 public class RealEstateController {
@@ -64,6 +66,17 @@ public class RealEstateController {
     public ResponseEntity<RealEstate> getRealEState(@RequestParam String id){
         try {
             return ResponseEntity.ok(realEstateService.getRealEstate(id));
+        } catch (InternalServerRuntimeException e) {
+            logger.error("Could not get real estate {}", id);
+            return ResponseEntity.internalServerError().build();
+        }
+    }
+
+    @GetMapping("/getRealEstateWithTaskId")
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('USER')")
+    public ResponseEntity<RealEstate> getRealEstateTaskId(@RequestParam String taskId){
+        try {
+            return ResponseEntity.ok(realEstateService.getRealEstateFromTask(taskId));
         } catch (InternalServerRuntimeException e) {
             logger.error("Could not get real estate {}", id);
             return ResponseEntity.internalServerError().build();

@@ -1,1 +1,56 @@
-<p>task-detail works!</p>
+<mat-spinner *ngIf="!(task.id && task.realEstate.name && task.assignee.userId && task.assignee.userId && !errorOccurred)"></mat-spinner>
+<div *ngIf="task.id && task.realEstate.name && task.assignee.userId && task.assignee.userId && !errorOccurred">
+  <mat-card multi="true" class="centered-container">
+    <mat-card-header>
+      <mat-card-title>Task Details</mat-card-title>
+    </mat-card-header>
+
+    <mat-form-field class="slightly-spaced">
+      <mat-label>Id</mat-label>
+      <input matInput type="text" [ngModel]="task.id" readonly>
+    </mat-form-field>
+    <mat-form-field class="slightly-spaced">
+      <mat-label>Check-Out Date</mat-label>
+      <input matInput type="text" [ngModel]="task.taskDate |  date: 'dd.MM.yyyy HH:mm'" readonly>
+    </mat-form-field>
+    <mat-form-field class="slightly-spaced">
+      <mat-label>Assignee</mat-label>
+      <input matInput type="text" [ngModel]="task.assignee.name + ' ' + task.assignee.lastName" readonly>
+    </mat-form-field>
+    <mat-form-field class="slightly-spaced">
+      <mat-label>Creator</mat-label>
+      <input matInput type="text" [ngModel]="task.creator.name + ' ' + task.creator.lastName" readonly>
+    </mat-form-field>
+  </mat-card>
+  <br>
+  <mat-card multi="true" class="centered-container">
+    <mat-card-header>
+      <mat-card-title>Real Estate Details</mat-card-title>
+    </mat-card-header>
+    <mat-form-field class="slightly-spaced">
+      <mat-label>Country</mat-label>
+      <input matInput type="text" [ngModel]="task.realEstate.country" readonly>
+    </mat-form-field>
+    <mat-form-field class="slightly-spaced">
+      <mat-label>City</mat-label>
+      <input matInput type="text" [ngModel]="task.realEstate.city" readonly>
+    </mat-form-field>
+    <mat-form-field class="slightly-spaced">
+      <mat-label>Name</mat-label>
+      <input matInput type="text" [ngModel]="task.realEstate.name" readonly>
+    </mat-form-field>
+    <mat-form-field class="slightly-spaced">
+      <mat-label>Address</mat-label>
+      <input matInput type="text" [ngModel]="task.realEstate.address" readonly>
+    </mat-form-field>
+    <mat-form-field class="slightly-spaced">
+      <mat-label>Zip Code</mat-label>
+      <input matInput type="text" [ngModel]="task.realEstate.zipCode" readonly>
+    </mat-form-field>
+    <mat-form-field class="slightly-spaced">
+      <mat-label>Type</mat-label>
+      <input matInput type="text" [ngModel]="task.realEstate.type" readonly>
+    </mat-form-field>
+  </mat-card>
+</div>
+<br>

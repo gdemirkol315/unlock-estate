@@ -37,6 +37,18 @@ public class UserService {
         return isolatePassword(users);
     }
 
+    public User getTaskAssignee(String taskId) {
+        User user = userRepository.findAssigneeByTaskId(Integer.parseInt(taskId)).get();
+        user.setPassword(null);
+        return user;
+    }
+
+    public User getTaskCreator(String taskId) {
+        User user = userRepository.findCreatorByTaskId(Integer.parseInt(taskId)).get();
+        user.setPassword(null);
+        return user;
+    }
+
     public User getUser(String email) {
         User user = userRepository.findByEmail(email).orElseThrow();
         user.setPassword(null);
