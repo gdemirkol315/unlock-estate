@@ -15,7 +15,8 @@
     <br>
     <mat-form-field>
       <mat-label>Task Date</mat-label>
-      <input matInput [matDatepicker]="picker" [(ngModel)]="task.taskDate">
+      <input matInput [matDatepicker]="picker" [(ngModel)]="task.taskDate"
+        placeholder="Click here to choose task time">
       <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
       <mat-datepicker #picker></mat-datepicker>
     </mat-form-field>

@@ -72,10 +72,6 @@ export class TaskCreateComponent implements OnInit {
     this.task = new Task();
   }
 
-  onTimeSet($event: any) {
-
-  }
-
   private setTime() {
     const timeParts = this.fullTime.split(":");
     const hours = +timeParts[0];
