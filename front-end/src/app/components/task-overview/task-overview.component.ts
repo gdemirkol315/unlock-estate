@@ -82,21 +82,19 @@ export class TaskOverviewComponent implements OnInit, AfterViewInit {
         }
       }
     } else {
-      this.userService.getUser(this.jwtToken.getUserEmail()).subscribe({
-        next: (user: User) => {
-          for (const task of user.assignedTasks) {
-            task.realEstate = this.taskService.findRealEstate(realEstates, task.id);
-            task.assignee = this.taskService.findAssignee(users,task.id);
-            task.creator = this.taskService.findCreator(users,task.id);
-            if (task.active) {
-              currentTasks.push(task);
-            } else {
-              closedTasks.push(task);
-            }
-          }
+      let user = await firstValueFrom(this.userService.getUser(this.jwtToken.getUserEmail()));
+      for (const task of user.assignedTasks) {
+        task.realEstate = this.taskService.findRealEstate(realEstates, task.id);
+        task.assignee = this.taskService.findAssignee(users,task.id);
+        task.creator = this.taskService.findCreator(users,task.id);
+        if (task.active) {
+          currentTasks.push(task);
+        } else {
+          closedTasks.push(task);
         }
-      });
+      }
     }
+
     this.currentTasks.data = currentTasks;
     this.closedTasks.data = closedTasks;
   }
