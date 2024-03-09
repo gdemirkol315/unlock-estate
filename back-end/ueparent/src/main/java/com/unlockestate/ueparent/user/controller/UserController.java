@@ -1,5 +1,6 @@
 package com.unlockestate.ueparent.user.controller;
 
+import com.unlockestate.ueparent.realestate.dto.RealEstate;
 import com.unlockestate.ueparent.user.dto.User;
 import com.unlockestate.ueparent.user.service.UserService;
 import com.unlockestate.ueparent.exception.InternalServerRuntimeException;
@@ -12,6 +13,8 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+
+import static org.springframework.data.jpa.domain.AbstractPersistable_.id;
 
 
 @RestController
@@ -82,6 +85,28 @@ public class UserController {
     @GetMapping("/allServiceStaff")
     public ResponseEntity<List<User>> getAllServiceStaff() {
         return ResponseEntity.ok(userService.getAllServiceStaff());
+    }
+
+    @GetMapping("/getAssigneeWithTaskId")
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('USER')")
+    public ResponseEntity<User> getAssigneeWithTaskId(@RequestParam String taskId){
+        try {
+            return ResponseEntity.ok(userService.getTaskAssignee(taskId));
+        } catch (InternalServerRuntimeException e) {
+            logger.error("Could not get asignee {}", id);
+            return ResponseEntity.internalServerError().build();
+        }
+    }
+
+    @GetMapping("/getCreatorWithTaskId")
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('USER')")
+    public ResponseEntity<User> getCreatorWithTaskId(@RequestParam String taskId){
+        try {
+            return ResponseEntity.ok(userService.getTaskCreator(taskId));
+        } catch (InternalServerRuntimeException e) {
+            logger.error("Could not get asignee {}", id);
+            return ResponseEntity.internalServerError().build();
+        }
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")

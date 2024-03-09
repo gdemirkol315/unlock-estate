@@ -35,6 +35,17 @@ public class TaskController {
         }
     }
 
+    @GetMapping("/task")
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('USER')")
+    public ResponseEntity<Task> getTask(@RequestParam String id) {
+        try {
+            return ResponseEntity.ok(taskService.getTask(id));
+        } catch (InternalServerRuntimeException e) {
+            logger.error("Could not get real estates");
+            return ResponseEntity.internalServerError().build();
+        }
+    }
+
     @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('USER')")
     @PostMapping("/saveTask")
     public ResponseEntity<Task> saveTask(

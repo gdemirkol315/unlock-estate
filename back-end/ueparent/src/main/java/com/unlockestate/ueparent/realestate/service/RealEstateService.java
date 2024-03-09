@@ -39,4 +39,8 @@ public class RealEstateService {
     public RealEstate getRealEstate(String reId) {
         return realEstateRepository.findById(Integer.parseInt(reId)).orElseThrow();
     }
+
+    public RealEstate getRealEstateFromTask(String taskId){
+        return realEstateRepository.findByTaskId(Integer.parseInt(taskId)).get();
+    }
 }
