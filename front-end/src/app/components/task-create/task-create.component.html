@@ -1,35 +1,43 @@
-<mat-card class="centered-container" *ngIf="!isLoading">
-  <mat-card-header>
-    <mat-card-title>Create Task</mat-card-title>
-  </mat-card-header>
-  <br>
-  <mat-form-field>
-    <mat-label>Real Estate</mat-label>
-    <mat-select [(ngModel)]="task.realEstate">
-      <mat-option *ngFor="let realEstate of realEstates" [value]="realEstate">{{ realEstate.zipCode + "-" + realEstate.name }}</mat-option>
-    </mat-select>
-  </mat-form-field>
-  <br>
-  <mat-form-field>
-    <mat-label>Task Date</mat-label>
-    <input matInput [matDatepicker]="picker" [ngModel]="task.taskDate">
-    <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
-    <mat-datepicker #picker></mat-datepicker>
-  </mat-form-field>
-  <br>
-  <mat-form-field>
-    <mat-label>Assignee</mat-label>
-    <mat-select [(ngModel)]="task.assignee">
-      <mat-option *ngFor="let user of users" [value]="user">{{ user.name + " " + user.lastName }}</mat-option>
-    </mat-select>
-  </mat-form-field>
-  <br>
-  <button mat-raised-button color="primary" class="slightly-spaced" type="submit"
-          (click)="onCreateTask()"
-  >Create Task
-  </button>
-  <button mat-raised-button color="warn" class="slightly-spaced" (click)="onCancel()"
-  >Cancel
-  </button>
-</mat-card>
+<div *ngIf="!isLoading">
+  <mat-card class="centered-container">
+    <mat-card-header>
+      <mat-card-title>Create Task</mat-card-title>
+    </mat-card-header>
+    <br>
+    <mat-form-field>
+      <mat-label>Real Estate</mat-label>
+      <mat-select [(ngModel)]="task.realEstate">
+        <mat-option *ngFor="let realEstate of realEstates"
+                    [value]="realEstate">{{ realEstate.zipCode + "-" + realEstate.name }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+    <br>
+    <mat-form-field>
+      <mat-label>Task Date</mat-label>
+      <input matInput [matDatepicker]="picker" [(ngModel)]="task.taskDate">
+      <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
+    </mat-form-field>
+    <br>
+    <mat-form-field>
+      <input matInput [ngxTimepicker]="timePicker"
+             [(ngModel)]="fullTime"
+             [format]="24"
+             readonly>
+      <ngx-material-timepicker #timePicker></ngx-material-timepicker>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Assignee</mat-label>
+      <mat-select [(ngModel)]="task.assignee.userId">
+        <mat-option *ngFor="let user of users" [value]="user.userId">{{ user.name + " " + user.lastName }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <br>
+    <button mat-raised-button color="primary" class="slightly-spaced" type="submit"
+            (click)="onCreateTask()"
+    >Create Task
+    </button>
+  </mat-card>
 
+</div>

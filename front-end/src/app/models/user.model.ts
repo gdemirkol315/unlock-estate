@@ -1,3 +1,5 @@
+import {Task} from "./task.model";
+
 export class User {
   userId: string;
   name:string;
@@ -9,6 +11,8 @@ export class User {
   preferredArea: string;
   isActive:boolean;
   active:boolean;
+  assignedTasks: Task[];
+  createdTasks: Task[]
 
   [key: string]: any;
 

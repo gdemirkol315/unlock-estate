@@ -1,6 +1,8 @@
 package com.unlockestate.ueparent.user.dto;
 
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.unlockestate.ueparent.task.dto.Task;
 import jakarta.persistence.*;
 import org.springframework.security.core.GrantedAuthority;
@@ -31,9 +33,11 @@ public class User implements UserDetails {
 
     private String preferredArea;
 
+    @JsonManagedReference("assignee-task")
     @OneToMany(mappedBy = "assignee", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Task> assignedTasks;
 
+    @JsonManagedReference("creator-task")
     @OneToMany(mappedBy = "creator", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Task> createdTasks;
 

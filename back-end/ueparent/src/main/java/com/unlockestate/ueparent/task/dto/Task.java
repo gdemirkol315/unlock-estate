@@ -1,6 +1,8 @@
 package com.unlockestate.ueparent.task.dto;
 
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.unlockestate.ueparent.comment.dto.Comment;
 import com.unlockestate.ueparent.realestate.dto.RealEstate;
 import com.unlockestate.ueparent.user.dto.User;
@@ -15,21 +17,25 @@ public class Task {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @JsonBackReference("task-real-estate")
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "real_estate_id")
     private RealEstate realEstate;
 
+    @JsonManagedReference("task-comment")
     @OneToMany(mappedBy = "task", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Comment> comments;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @JsonBackReference("assignee-task")
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "assignee_user_id")
     private User assignee;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @JsonBackReference("creator-task")
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "creator_user_id")
     private User creator;
-
+    @JsonManagedReference("task-task-check-list-item")
     @OneToMany(mappedBy = "task", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<TaskCheckListItem> taskCheckListItems;
 

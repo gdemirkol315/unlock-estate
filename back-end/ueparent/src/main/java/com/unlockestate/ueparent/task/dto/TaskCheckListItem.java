@@ -1,6 +1,7 @@
 package com.unlockestate.ueparent.task.dto;
 
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.unlockestate.ueparent.task.repository.Status;
 import jakarta.persistence.*;
 
@@ -12,9 +13,10 @@ public class TaskCheckListItem {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "task_id")
+    @JsonBackReference("task-task-check-list-item")
     private Task task;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "checklist_item_id")
     private CheckListItem checklistItem;
 

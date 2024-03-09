@@ -45,6 +45,8 @@ import {MatTooltip} from "@angular/material/tooltip";
 import { UserProfileComponent } from './components/user-profile/user-profile.component';
 import { ChangePasswordComponent } from './components/change-password/change-password.component';
 import {provideNativeDateAdapter} from "@angular/material/core";
+import {CommonModule} from "@angular/common";
+import {NgxMaterialTimepickerModule} from "ngx-material-timepicker";
 
 
 @NgModule({
@@ -69,6 +71,8 @@ import {provideNativeDateAdapter} from "@angular/material/core";
     ChangePasswordComponent
   ],
   imports: [
+    NgxMaterialTimepickerModule,
+    CommonModule,
     HttpClientModule,
     BrowserModule,
     AppRoutingModule,

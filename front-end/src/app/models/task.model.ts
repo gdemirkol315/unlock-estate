@@ -5,7 +5,7 @@ import {Comment} from "./comment.model"
 
 export class Task {
   id: number;
-  realEstate: RealEstate;
+  realEstate: RealEstate = new RealEstate();
   assignee: User = new User();
   creator: User = new User();
   comments: Comment[] = new Array();

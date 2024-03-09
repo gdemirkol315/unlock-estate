@@ -3,8 +3,11 @@ import {JwtToken} from "../../models/jwt-token.model";
 import {TaskService} from "../../services/task/task.service";
 import {MatTableDataSource} from "@angular/material/table";
 import {Task} from "../../models/task.model";
-import {MatDialog, MatDialogConfig, MatDialogRef} from "@angular/material/dialog";
-import {TaskCreateComponent} from "../task-create/task-create.component";
+import {RealEstateService} from "../../services/real-estate/real-estate.service";
+import {RealEstate} from "../../models/real-estate.model";
+import {AuthService} from "../../services/auth/auth.service";
+import {User} from "../../models/user.model";
+import {firstValueFrom} from "rxjs";
 
 @Component({
   selector: 'app-task-overview',
@@ -16,11 +19,11 @@ export class TaskOverviewComponent implements OnInit{
   currentTasks: MatTableDataSource<Task> = new MatTableDataSource<Task>();
   closedTasks: MatTableDataSource<Task> = new MatTableDataSource<Task>();
   displayedColumns:string[] =  ['id', 'taskDate', 'realEstateName','realEstateCountry','realEstateCity', 'realEstateZip', 'assignee', 'creator'];
-  private dialogRefTaskCreate: MatDialogRef<TaskCreateComponent>;
 
   constructor(protected jwtToken: JwtToken,
               private taskService: TaskService,
-              private matDialog: MatDialog) {
+              private realEstateService: RealEstateService,
+              private userService:AuthService) {
   }
 
   ngOnInit() {
@@ -39,16 +42,6 @@ export class TaskOverviewComponent implements OnInit{
     }
   }
 
-  addTask() {
-    const dialogConfig = new MatDialogConfig();
-    dialogConfig.disableClose = true;
-    dialogConfig.autoFocus = true;
-    this.dialogRefTaskCreate = this.matDialog.open(TaskCreateComponent, dialogConfig);
-    this.dialogRefTaskCreate.afterClosed().subscribe(() => {
-      this.getTasks();
-    })
-  }
-
   onSearchClear() {
     this.searchKey = "";
     this.applyFilter();
@@ -59,26 +52,44 @@ export class TaskOverviewComponent implements OnInit{
     this.closedTasks.filter = this.searchKey.trim().toLowerCase();
   }
 
-  getTasks() {
-    this.taskService.getTasks().subscribe({
-      next: (tasks: Task[]) => {
-        let currentTasks: Task[] = [];
-        let closedTasks: Task[] = [];
-        for (const task of tasks) {
+  async getTasks() {
 
+    let currentTasks: Task[] = [];
+    let closedTasks: Task[] = [];
+
+    let realEstates:RealEstate[] = await firstValueFrom(this.realEstateService.getAllRealEstates());
+    let users:User[] = await firstValueFrom(this.userService.getUsers());
+
+    if (this.jwtToken.getRole().includes('ADMIN')) {
+      for (const realEstate of realEstates) {
+        for (const task of realEstate.tasks) {
+          task.realEstate = realEstate;
+          task.assignee = this.taskService.findAssignee(users,task.id);
+          task.creator = this.taskService.findCreator(users,task.id);
           if (task.active) {
             currentTasks.push(task);
           } else {
             closedTasks.push(task);
           }
-          this.currentTasks.data = currentTasks;
-          this.closedTasks.data = closedTasks;
         }
-      },
-      error: (err) => {
-        this.taskService.toastr.error("An unexpected error occurred while getting tasks!")
-        console.log(err);
       }
-    });
+    } else {
+      this.userService.getUser(this.jwtToken.getUserEmail()).subscribe({
+        next: (user: User) => {
+          for (const task of user.assignedTasks) {
+            task.realEstate = this.taskService.findRealEstate(realEstates, task.id);
+            task.assignee = this.taskService.findAssignee(users,task.id);
+            task.creator = this.taskService.findCreator(users,task.id);
+            if (task.active) {
+              currentTasks.push(task);
+            } else {
+              closedTasks.push(task);
+            }
+          }
+        }
+      });
+    }
+    this.currentTasks.data = currentTasks;
+    this.closedTasks.data = closedTasks;
   }
 }

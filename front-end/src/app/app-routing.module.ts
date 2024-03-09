@@ -10,6 +10,7 @@ import {UserProfileComponent} from "./components/user-profile/user-profile.compo
 import {RealEstateCreateComponent} from "./components/real-estate-create/real-estate-create.component";
 import {RealEstateDetailComponent} from "./components/real-estate-detail/real-estate-detail.component";
 import {TaskDetailComponent} from "./components/task-detail/task-detail.component";
+import {TaskCreateComponent} from "./components/task-create/task-create.component";
 
 const routes: Routes = [
   {
@@ -39,6 +40,11 @@ const routes: Routes = [
   {
     path: 'admin/real-estate-create',
     component: RealEstateCreateComponent,
+    canMatch: [authGuardGuard]
+  },
+  {
+    path: 'admin/create-task',
+    component: TaskCreateComponent,
     canMatch: [authGuardGuard]
   },
   {

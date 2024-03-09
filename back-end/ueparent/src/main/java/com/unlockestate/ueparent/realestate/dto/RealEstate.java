@@ -32,6 +32,7 @@ public class RealEstate {
 
 
     @OneToMany(mappedBy = "realEstate", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference("task-real-estate")
     private List<Task> tasks;
 
 

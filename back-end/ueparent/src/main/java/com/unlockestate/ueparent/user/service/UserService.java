@@ -120,6 +120,10 @@ public class UserService {
         return authentication.getName();
     }
 
+    public Integer getPrincipalUserId(){
+        return userRepository.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).get().getUserId();
+    }
+
     public List<User> isolatePassword(List<User> users){
         for (User user : users) {
             user.setPassword(null);
