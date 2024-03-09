@@ -40,7 +40,7 @@ public class RealEstateController {
     }
 
     @GetMapping("/getAll")
-    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('USER')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<List<RealEstate>> allRealEstate() {
         try {
             return ResponseEntity.ok(realEstateService.getAllRealEstates());

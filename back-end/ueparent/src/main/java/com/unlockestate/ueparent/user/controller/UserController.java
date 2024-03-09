@@ -75,7 +75,7 @@ public class UserController {
         return ResponseEntity.ok(userService.getUser(email));
     }
 
-    @PreAuthorize("hasAuthority('ADMIN')  or hasAuthority('USER')")
+    @PreAuthorize("hasAuthority('ADMIN') ")
     @GetMapping("/allUsers")
     public ResponseEntity<List<User>> getAllUsers() {
         return ResponseEntity.ok(userService.getAllUsers());

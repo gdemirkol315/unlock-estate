@@ -65,10 +65,11 @@ export class TaskOverviewComponent implements OnInit, AfterViewInit {
     let currentTasks: Task[] = [];
     let closedTasks: Task[] = [];
 
-    let realEstates:RealEstate[] = await firstValueFrom(this.realEstateService.getAllRealEstates());
-    let users:User[] = await firstValueFrom(this.userService.getUsers());
+
 
     if (this.jwtToken.getRole().includes('ADMIN')) {
+      let realEstates:RealEstate[] = await firstValueFrom(this.realEstateService.getAllRealEstates());
+      let users:User[] = await firstValueFrom(this.userService.getUsers());
       for (const realEstate of realEstates) {
         for (const task of realEstate.tasks) {
           task.realEstate = realEstate;
@@ -84,9 +85,9 @@ export class TaskOverviewComponent implements OnInit, AfterViewInit {
     } else {
       let user = await firstValueFrom(this.userService.getUser(this.jwtToken.getUserEmail()));
       for (const task of user.assignedTasks) {
-        task.realEstate = this.taskService.findRealEstate(realEstates, task.id);
-        task.assignee = this.taskService.findAssignee(users,task.id);
-        task.creator = this.taskService.findCreator(users,task.id);
+        task.realEstate = await firstValueFrom(this.realEstateService.getRealEstateFromTask(task.id));
+        task.assignee = await firstValueFrom(this.userService.getAssigneeUser(task.id));
+        task.creator =  await firstValueFrom(this.userService.getCreatorUser(task.id));
         if (task.active) {
           currentTasks.push(task);
         } else {
