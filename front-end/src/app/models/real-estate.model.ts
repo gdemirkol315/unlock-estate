@@ -31,4 +31,8 @@ export class RealEstate {
     this.checkLists[checkListIndex].checkListItems = this.checkLists[checkListIndex].checkListItems
       .filter(item => item.description != itemDesc)
   }
+
+  deleteCheckList(checkListIndex: number){
+    this.checkLists.splice(checkListIndex,1)
+  }
 }
