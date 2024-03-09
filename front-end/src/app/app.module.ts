@@ -47,6 +47,7 @@ import { ChangePasswordComponent } from './components/change-password/change-pas
 import {provideNativeDateAdapter} from "@angular/material/core";
 import {CommonModule} from "@angular/common";
 import {NgxMaterialTimepickerModule} from "ngx-material-timepicker";
+import {MatSortModule} from "@angular/material/sort";
 
 
 @NgModule({
@@ -84,6 +85,7 @@ import {NgxMaterialTimepickerModule} from "ngx-material-timepicker";
     MatIconModule,
     MatDividerModule,
     MatSelect,
+    MatSortModule,
     BrowserAnimationsModule,
     ToastrModule.forRoot({positionClass: 'toast-bottom-center'}),
     ReactiveFormsModule.withConfig({warnOnNgModelWithFormControl: 'never'}),
