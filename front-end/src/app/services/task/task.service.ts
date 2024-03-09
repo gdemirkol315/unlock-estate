@@ -2,8 +2,8 @@ import {Injectable} from '@angular/core';
 import {DataService} from "../data/data.service";
 import {HttpParams} from "@angular/common/http";
 import {Task} from "../../models/task.model";
-import {RealEstate} from "../../models/real-estate.model";
 import {User} from "../../models/user.model";
+import {TaskCheckListItem} from "../../models/task-check-list-item.model";
 
 @Injectable({
   providedIn: 'root'
@@ -48,14 +48,8 @@ export class TaskService extends DataService {
     return new User();
   }
 
-  findRealEstate(realEstates: RealEstate[], taskId: number) {
-    for (const realEstate of realEstates) {
-      for (const task of realEstate.tasks) {
-        if (task.id == taskId) {
-          return realEstate;
-        }
-      }
-    }
-    return new RealEstate();
+
+  updateTaskCheckListItemStatus(item: TaskCheckListItem) {
+    return this.http.post(this.hostname + this.serviceUrlSuffix + "/updateTaskChecklistItem", item)
   }
 }

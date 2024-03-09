@@ -49,6 +49,7 @@ import {CommonModule} from "@angular/common";
 import {NgxMaterialTimepickerModule} from "ngx-material-timepicker";
 import {MatSortModule} from "@angular/material/sort";
 import {MatProgressSpinner} from "@angular/material/progress-spinner";
+import {MatCheckbox} from "@angular/material/checkbox";
 
 
 @NgModule({
@@ -107,7 +108,8 @@ import {MatProgressSpinner} from "@angular/material/progress-spinner";
     MatDatepicker,
     MatDatepickerInput,
     MatDatepickerToggle,
-    MatProgressSpinner
+    MatProgressSpinner,
+    MatCheckbox
   ],
   providers: [
     provideNativeDateAdapter(),

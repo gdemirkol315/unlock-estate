@@ -1,5 +1,6 @@
-<mat-spinner *ngIf="!(task.id && task.realEstate.name && task.assignee.userId && task.assignee.userId && !errorOccurred)"></mat-spinner>
-<div *ngIf="task.id && task.realEstate.name && task.assignee.userId && task.assignee.userId && !errorOccurred">
+<mat-spinner
+  *ngIf="taskLoading && realEstateLoading && creatorLoading && assigneeLoading"></mat-spinner>
+<div *ngIf="!(taskLoading && realEstateLoading && creatorLoading && assigneeLoading)">
   <mat-card multi="true" class="centered-container">
     <mat-card-header>
       <mat-card-title>Task Details</mat-card-title>
@@ -52,5 +53,36 @@
       <input matInput type="text" [ngModel]="task.realEstate.type" readonly>
     </mat-form-field>
   </mat-card>
+  <br>
+  <mat-card class="centered-container">
+    <mat-card-header>
+      <mat-card-title>Checklists</mat-card-title>
+    </mat-card-header>
+    <!-- Iterate over each checklist in the array -->
+    <mat-accordion multi="true">
+      <mat-expansion-panel *ngFor="let checkList of task.realEstate.checkLists; let iList = index" [expanded]="true">
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            {{ checkList.name }}
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+
+        <div *ngFor="let item of getTaskCheckListItems(checkList); let iListItem = index">
+          <mat-form-field class="slightly-spaced">
+            <input matInput [ngModel]="item.checklistItem.description" name="item-{{iList}}-{{iListItem}}" readonly>
+          </mat-form-field>
+          <mat-checkbox color="primary" matTooltip="Done" [ngModel]="item.status =='DONE'" (change)="toggleCheck($event,item)"></mat-checkbox>
+
+        </div>
+      </mat-expansion-panel>
+    </mat-accordion>
+    <button mat-raised-button color="primary" aria-label="Submit Task" (click)="submitTask()"
+            matTooltip="Submit Task" class="slightly-spaced">
+      Task Completed
+    </button>
+    <button mat-fab color="warn" aria-label="Add" (click)="reportProblem()"
+            matTooltip="Report Problem Immediately" class="slightly-spaced">
+      <mat-icon>mood_bad</mat-icon>
+    </button>
+  </mat-card>
 </div>
-<br>

@@ -8,6 +8,9 @@ import {RealEstateService} from "../../services/real-estate/real-estate.service"
 import {RealEstate} from "../../models/real-estate.model";
 import {AuthService} from "../../services/auth/auth.service";
 import {User} from "../../models/user.model";
+import {CheckList} from "../../models/check-list.model";
+import {TaskCheckListItem} from "../../models/task-check-list-item.model";
+import {MatCheckboxChange} from "@angular/material/checkbox";
 
 @Component({
   selector: 'app-task-detail',
@@ -17,8 +20,10 @@ import {User} from "../../models/user.model";
 export class TaskDetailComponent implements OnInit {
 
   task: Task;
-  isLoading: boolean = true;
-  errorOccurred: boolean = false;
+  taskLoading: boolean = true;
+  realEstateLoading: boolean = true;
+  assigneeLoading: boolean = true;
+  creatorLoading: boolean = true;
 
   constructor(private route: ActivatedRoute,
               private taskService: TaskService,
@@ -36,38 +41,84 @@ export class TaskDetailComponent implements OnInit {
         next: (task: Task) => {
           this.task = Utils.jsonObjToInstance(new Task(), task);
         }, error: (err) => {
-          console.log(err);
-          this.errorOccurred = true;
+          this.errorToastr(err);
+        }, complete: () => {
+          this.taskLoading = false
         }
       });
       this.realEstateService.getRealEstateFromTask(+taskId).pipe(first()).subscribe({
         next: (realEstate: RealEstate) => {
-          console.log(realEstate)
           this.task.realEstate = Utils.jsonObjToInstance(new RealEstate(), realEstate);
         }, error: (err) => {
-          console.log(err);
-          this.errorOccurred = true;
+          this.errorToastr(err);
+        }, complete: () => {
+          this.realEstateLoading = false
         }
       });
-      this.userService.getAssigneeUser(+taskId).subscribe({
-        next: (assignee:User) => {
-          this.task.assignee = Utils.jsonObjToInstance(new User(),assignee);
-        }, error: (err)=>{
-          console.log(err);
-          this.errorOccurred = true;
+      this.userService.getAssigneeUser(+taskId).pipe(first()).subscribe({
+        next: (assignee: User) => {
+          this.task.assignee.cloneUser(assignee)
+          this.assigneeLoading = false
+        }, error: (err) => {
+          this.errorToastr(err);
+        }, complete: () => {
+          this.assigneeLoading = false
         }
       });
 
-      this.userService.getCreatorUser(+taskId).subscribe({
-        next: (creator:User) => {
-          this.task.creator = Utils.jsonObjToInstance(new User(),creator);
-        }, error: (err)=>{
-          console.log(err);
-          this.errorOccurred = true;
+      this.userService.getCreatorUser(+taskId).pipe(first()).subscribe({
+        next: (creator: User) => {
+          this.task.creator.cloneUser(creator)
+        }, error: (err) => {
+          this.errorToastr(err);
+        }, complete: () => {
+          this.creatorLoading = false
         }
       });
     }
   }
 
 
+  submitTask() {
+
+  }
+
+  reportProblem() {
+
+  }
+
+  getTaskCheckListItems(checkList: CheckList) {
+    let currentTaskCheckListItems: TaskCheckListItem[] = new Array();
+    this.task.taskCheckListItems.forEach(
+      (taskCheckListItem: TaskCheckListItem) => {
+        for (const checkListItem of checkList.checkListItems) {
+          if (taskCheckListItem.checklistItem.id == checkListItem.id) {
+            currentTaskCheckListItems.push(taskCheckListItem);
+          }
+        }
+      }
+    )
+    return currentTaskCheckListItems;
+  }
+
+  toggleCheck(event: MatCheckboxChange, item: TaskCheckListItem) {
+    if (event.checked) {
+      item.status = "DONE"
+    } else {
+      item.status = "PENDING"
+    }
+    this.taskService.updateTaskCheckListItemStatus(item).subscribe({
+      next: () => {
+        this.taskService.toastr.success("Updated item status")
+      }, error: (err) => {
+        console.log(err);
+        this.taskService.toastr.error("Error updating item status!")
+      }
+    })
+  }
+
+  private errorToastr(err: any) {
+    console.log(err)
+    this.taskService.toastr.error("Unexpected error occured while loading task details!")
+  }
 }

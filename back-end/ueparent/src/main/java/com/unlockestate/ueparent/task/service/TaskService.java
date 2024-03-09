@@ -22,18 +22,15 @@ public class TaskService {
 
     private final UserService userService;
     private final TaskRepository taskRepository;
-    private final CheckListRepository checkListRepository;
-    private final CheckListItemRepository checkListItemRepository;
+    private final TaskCheckListItemRepository taskCheckListItemRepository;
 
     @Autowired
     public TaskService(UserService userService,
                        TaskRepository taskRepository,
-                       CheckListRepository checkListRepository,
-                       CheckListItemRepository checkListItemRepository) {
+                       TaskCheckListItemRepository taskCheckListItemRepository) {
         this.userService = userService;
         this.taskRepository = taskRepository;
-        this.checkListRepository = checkListRepository;
-        this.checkListItemRepository = checkListItemRepository;
+        this.taskCheckListItemRepository = taskCheckListItemRepository;
     }
 
     public List<Task> getTasks() {
@@ -70,5 +67,10 @@ public class TaskService {
 
     public Task getTask(String id) {
         return taskRepository.findById(Integer.parseInt(id)).get();
+    }
+
+    @Transactional
+    public void updateTaskChecklistItem(TaskCheckListItem taskCheckListItem) {
+        taskCheckListItemRepository.setStatus(taskCheckListItem.getStatus().name(), taskCheckListItem.getId());
     }
 }

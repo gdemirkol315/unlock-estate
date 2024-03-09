@@ -2,7 +2,9 @@ package com.unlockestate.ueparent.task.controller;
 
 import com.unlockestate.ueparent.exception.InternalServerRuntimeException;
 import com.unlockestate.ueparent.task.dto.Task;
+import com.unlockestate.ueparent.task.dto.TaskCheckListItem;
 import com.unlockestate.ueparent.task.service.TaskService;
+import com.unlockestate.ueparent.utils.dto.MessageEntity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,6 +54,15 @@ public class TaskController {
             @RequestBody Task task
     ) {
         return ResponseEntity.ok(taskService.saveTask(task));
+    }
+
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('USER')")
+    @PostMapping("/updateTaskChecklistItem")
+    public ResponseEntity<MessageEntity> updateTaskChecklistItem(
+            @RequestBody TaskCheckListItem taskCheckListItem
+    ) {
+        taskService.updateTaskChecklistItem(taskCheckListItem);
+        return ResponseEntity.ok(new MessageEntity("OK"));
     }
 
 

@@ -20,6 +20,7 @@ public class TaskCheckListItem {
     @JoinColumn(name = "checklist_item_id")
     private CheckListItem checklistItem;
 
+    @Enumerated(EnumType.STRING)
     private Status status;
 
     public TaskCheckListItem() {
