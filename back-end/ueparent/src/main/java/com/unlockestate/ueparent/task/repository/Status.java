@@ -2,7 +2,8 @@ package com.unlockestate.ueparent.task.repository;
 
 public enum Status {
     PENDING("PENDING"),
-    DONE("DONE");
+    DONE("DONE"),
+    ISSUE("ISSUE");
 
     private String value;
 
