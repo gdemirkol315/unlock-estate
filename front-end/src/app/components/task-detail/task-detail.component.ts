@@ -11,6 +11,7 @@ import {User} from "../../models/user.model";
 import {CheckList} from "../../models/check-list.model";
 import {TaskCheckListItem} from "../../models/task-check-list-item.model";
 import {MatCheckboxChange} from "@angular/material/checkbox";
+import {CheckListItem} from "../../models/check-list-item.model";
 
 @Component({
   selector: 'app-task-detail',
@@ -107,6 +108,24 @@ export class TaskDetailComponent implements OnInit {
     } else {
       item.status = "PENDING"
     }
+    this.updateCheckListItemStatus(item);
+  }
+
+  private errorToastr(err: any) {
+    console.log(err)
+    this.taskService.toastr.error("Unexpected error occured while loading task details!")
+  }
+
+  markProblematic(item: TaskCheckListItem) {
+    if (item.status == 'ISSUE') {
+      item.status = ''
+    } else {
+      item.status = 'ISSUE'
+    }
+    this.updateCheckListItemStatus(item);
+  }
+
+  updateCheckListItemStatus(item: TaskCheckListItem) {
     this.taskService.updateTaskCheckListItemStatus(item).subscribe({
       next: () => {
         this.taskService.toastr.success("Updated item status")
@@ -114,11 +133,6 @@ export class TaskDetailComponent implements OnInit {
         console.log(err);
         this.taskService.toastr.error("Error updating item status!")
       }
-    })
-  }
-
-  private errorToastr(err: any) {
-    console.log(err)
-    this.taskService.toastr.error("Unexpected error occured while loading task details!")
+    });
   }
 }

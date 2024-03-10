@@ -72,6 +72,9 @@
             <input matInput [ngModel]="item.checklistItem.description" name="item-{{iList}}-{{iListItem}}" readonly>
           </mat-form-field>
           <mat-checkbox color="primary" matTooltip="Done" [ngModel]="item.status =='DONE'" (change)="toggleCheck($event,item)"></mat-checkbox>
+          <button mat-icon-button (click)="markProblematic(item)" matTooltip="Mark as problematic" class="slightly-spaced">
+            <mat-icon [ngClass]="item.status == 'ISSUE' ? 'warn' : 'dark'">warning</mat-icon>
+          </button>
 
         </div>
       </mat-expansion-panel>
