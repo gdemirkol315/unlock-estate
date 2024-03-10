@@ -71,8 +71,10 @@
           <mat-form-field class="slightly-spaced checklist-item">
             <input matInput [ngModel]="item.checklistItem.description" name="item-{{iList}}-{{iListItem}}" readonly>
           </mat-form-field>
-          <mat-checkbox color="primary" matTooltip="Done" [ngModel]="item.status =='DONE'" (change)="toggleCheck($event,item)"></mat-checkbox>
-          <button mat-icon-button (click)="markProblematic(item)" matTooltip="Mark as problematic" class="slightly-spaced">
+          <mat-checkbox color="primary" matTooltip="Done" [ngModel]="item.status =='DONE'"
+                        (change)="toggleCheck($event,item)"></mat-checkbox>
+          <button mat-icon-button (click)="markProblematic(item)" matTooltip="Mark as problematic"
+                  class="slightly-spaced">
             <mat-icon [ngClass]="item.status == 'ISSUE' ? 'warn' : 'dark'">warning</mat-icon>
           </button>
 
@@ -85,10 +87,12 @@
     <div *ngFor="let comment of comments">
       <mat-card class="comment-card">
         <mat-card-header>
-          <mat-card-title>{{ comment.author.name + " " + comment.author.lastName }}</mat-card-title>
-          <mat-card-subtitle>{{ comment.date | date: 'medium' }}</mat-card-subtitle>
+          <mat-card-subtitle [innerHTML]="comment.author.name + ' ' + comment.author.lastName
+          + '<br>' + (comment.date | date: 'medium')">
+          </mat-card-subtitle>
         </mat-card-header>
-        <mat-card-content>
+        <br>
+        <mat-card-content class="comment-content">
           {{ comment.content }}
         </mat-card-content>
       </mat-card>
@@ -98,10 +102,12 @@
       <mat-label>Add a comment</mat-label>
       <textarea matInput [(ngModel)]="currentComment.content"></textarea>
     </mat-form-field>
-    <button mat-button (click)="addComment()">Post Comment</button>
+    <button mat-button (click)="addComment()" [disabled]="!currentComment.content || currentComment.content == ''">Post
+      Comment
+    </button>
     <br>
     <button mat-raised-button color="primary" aria-label="Submit Task" (click)="submitTask()"
-            matTooltip="Submit Task" style="width: 50%">
+            matTooltip="Submit Task">
       Submit Task
     </button>
     <button mat-fab color="warn" aria-label="Add" (click)="reportProblem()"
