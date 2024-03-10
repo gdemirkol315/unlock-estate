@@ -5,6 +5,7 @@ import {HttpHeaders, HttpParams} from "@angular/common/http";
 import {JwtToken} from "../../models/jwt-token.model";
 import {ChangePasswordComponent} from "../../components/change-password/change-password.component";
 import {ChangePassword} from "../../models/password-change.model";
+import {firstValueFrom} from "rxjs";
 
 @Injectable({
   providedIn: 'root'
@@ -12,35 +13,27 @@ import {ChangePassword} from "../../models/password-change.model";
 export class AuthService extends DataService {
 
   isLoggedIn: boolean = false;
+  userProfile: User = new User();
   redirectUrl: string | null = null;
 
-  login(user: User) {
+  async login(user: User) {
     const headers = new HttpHeaders({
       'Content-Type': 'application/json'
       // Add other headers as needed
     });
-    return this.http.post<JwtToken>(this.hostname + "login", user, {headers}).subscribe({
-      next: (jwtTokenObj: JwtToken) => {
-        if (jwtTokenObj.token != "" && jwtTokenObj.token != "deactivated") {
-          this.jwtToken.token = jwtTokenObj.token
-          this.isLoggedIn = true;
-          this.toastr.success("Successfully logged in");
-          this.router.navigate(['task-overview']);
-        } else if (jwtTokenObj.token == "") {
-          this.toastr.error("Provided credentials are wrong!","Wrong Credentials")
-        } else if (jwtTokenObj.token == "deactivated") {
-          this.toastr.error("User account is deactivated! Contact system administrator!","Deactivated Account")
-        } else {
-          this.toastr.error("There was an unexpected error during login!","Unexpected Problem")
-        }
-      },
-      error: (err) => {
-        this.isLoggedIn = false;
-        console.log(err);
-        this.toastr.error("There was an unexpected error on the server during login!","Connection Problem")
-      }
-    });
-
+    let jwtTokenObj: JwtToken = await firstValueFrom(this.http.post<JwtToken>(this.hostname + "login", user, {headers}))
+    if (jwtTokenObj.token != "" && jwtTokenObj.token != "deactivated") {
+      this.jwtToken.token = jwtTokenObj.token
+      this.isLoggedIn = true;
+      this.toastr.success("Successfully logged in");
+      this.router.navigate(['task-overview']);
+    } else if (jwtTokenObj.token == "") {
+      this.toastr.error("Provided credentials are wrong!", "Wrong Credentials")
+    } else if (jwtTokenObj.token == "deactivated") {
+      this.toastr.error("User account is deactivated! Contact system administrator!", "Deactivated Account")
+    } else {
+      this.toastr.error("There was an unexpected error during login!", "Unexpected Problem")
+    }
   }
 
   createUser(user: User) {
@@ -55,19 +48,15 @@ export class AuthService extends DataService {
     return this.http.get<User[]>(this.hostname + "allUsers");
   }
 
-    getServiceStaff() {
+  getServiceStaff() {
     return this.http.get<User[]>(this.hostname + "allServiceStaff");
   }
 
   getUser(email: string) {
 
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json'
-      // Add other headers as needed
-    });
     let params = new HttpParams().set('email', email);
 
-    return this.http.get<User>(this.hostname + 'user', {headers, params});
+    return this.http.get<User>(this.hostname + 'user', {params: params});
   }
 
   getRoles() {
@@ -86,9 +75,9 @@ export class AuthService extends DataService {
     return this.http.post<User>(this.hostname + 'updateProfile', user);
   }
 
-  changePassword(changePassword:ChangePassword){
+  changePassword(changePassword: ChangePassword) {
     this.http.post<JwtToken>(this.hostname + "changePassword", changePassword).subscribe({
-      next:(jwtTokenObj: JwtToken) => {
+      next: (jwtTokenObj: JwtToken) => {
         if (jwtTokenObj.token != "") {
           this.jwtToken.token = jwtTokenObj.token
           this.toastr.success("Successfully change password");
@@ -97,7 +86,7 @@ export class AuthService extends DataService {
         }
       }, error: (err) => {
         console.log(err);
-        this.toastr.error("There was an unexpected error during password change!","Connection Problem")
+        this.toastr.error("There was an unexpected error during password change!", "Connection Problem")
       }
     })
   }
@@ -110,15 +99,27 @@ export class AuthService extends DataService {
 
   getAssigneeUser(taskId: number) {
 
-    let params = new HttpParams().set('taskId',taskId);
+    let params = new HttpParams().set('taskId', taskId);
 
     return this.http.get<User>(this.hostname + 'getAssigneeWithTaskId', {params});
   }
 
   getCreatorUser(taskId: number) {
 
-    let params = new HttpParams().set('taskId',taskId);
+    let params = new HttpParams().set('taskId', taskId);
 
     return this.http.get<User>(this.hostname + 'getCreatorWithTaskId', {params});
+  }
+
+  getUserProfile(email: string) {
+    this.getUser(email).subscribe({
+      next: (user: User) => {
+        this.userProfile.cloneUser(user);
+      },
+      error: (err) => {
+        this.toastr.error("An unexpected error occured while getting user profile!")
+        console.log(err);
+      }
+    });
   }
 }

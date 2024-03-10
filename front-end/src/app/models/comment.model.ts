@@ -1,10 +1,12 @@
 import {Image} from "./image.model";
 import {Task} from "./task.model";
+import {User} from "./user.model";
 
 export class Comment {
   id: number;
   content: string;
   date: Date;
-  task: Task;
-  image: Image;
+  author: User = new User;
+  task: Task = new Task();
+  image: Image = new Image();
 }

@@ -1,9 +1,11 @@
-package com.unlockestate.ueparent.comment.dto;
+package com.unlockestate.ueparent.task.dto;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.unlockestate.ueparent.image.dto.Image;
-import com.unlockestate.ueparent.task.dto.Task;
+import com.unlockestate.ueparent.user.dto.User;
 import jakarta.persistence.*;
+
+import java.util.Date;
 
 @Entity
 public class Comment {
@@ -12,6 +14,12 @@ public class Comment {
     private Integer id;
 
     private String content;
+    private Date date;
+
+    @JsonBackReference("author-comment")
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "user_id")
+    private User author;
 
     @JsonBackReference("task-comment")
     @ManyToOne(fetch = FetchType.LAZY)
@@ -51,5 +59,21 @@ public class Comment {
 
     public void setImage(Image image) {
         this.image = image;
+    }
+
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
+    }
+
+    public User getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(User author) {
+        this.author = author;
     }
 }

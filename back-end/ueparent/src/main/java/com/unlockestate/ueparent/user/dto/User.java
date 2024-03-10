@@ -1,8 +1,8 @@
 package com.unlockestate.ueparent.user.dto;
 
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.unlockestate.ueparent.task.dto.Comment;
 import com.unlockestate.ueparent.task.dto.Task;
 import jakarta.persistence.*;
 import org.springframework.security.core.GrantedAuthority;
@@ -40,6 +40,11 @@ public class User implements UserDetails {
     @JsonManagedReference("creator-task")
     @OneToMany(mappedBy = "creator", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Task> createdTasks;
+
+    @JsonManagedReference("author-comment")
+    @OneToMany(mappedBy = "author", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Comment> comments;
+
 
     public User() {
         //spring boot needs empty constructor
@@ -163,5 +168,13 @@ public class User implements UserDetails {
 
     public void setCreatedTasks(List<Task> createdTasks) {
         this.createdTasks = createdTasks;
+    }
+
+    public List<Comment> getComments() {
+        return comments;
+    }
+
+    public void setComments(List<Comment> comments) {
+        this.comments = comments;
     }
 }

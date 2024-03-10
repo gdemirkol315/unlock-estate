@@ -4,6 +4,7 @@ import {HttpParams} from "@angular/common/http";
 import {Task} from "../../models/task.model";
 import {User} from "../../models/user.model";
 import {TaskCheckListItem} from "../../models/task-check-list-item.model";
+import {Comment} from "../../models/comment.model"
 
 @Injectable({
   providedIn: 'root'
@@ -50,6 +51,22 @@ export class TaskService extends DataService {
 
 
   updateTaskCheckListItemStatus(item: TaskCheckListItem) {
-    return this.http.post(this.hostname + this.serviceUrlSuffix + "/updateTaskChecklistItem", item)
+    return this.http.post(this.hostname + this.serviceUrlSuffix + "/updateTaskChecklistItem", item);
+  }
+
+  addComment(currentComment: Comment) {
+    return this.http.post<Comment>(this.hostname + this.serviceUrlSuffix + "/addComment", currentComment);
+  }
+
+  getComments(taskId:number) {
+    let queryParams = new HttpParams();
+    queryParams = queryParams.append("taskId", taskId);
+    return this.http.get<Comment[]>(this.hostname + this.serviceUrlSuffix + "/getComments",{params: queryParams})
+  }
+
+  getCommentAuthorDetails (commentId: number) {
+    let queryParams = new HttpParams();
+    queryParams = queryParams.append("commentId", commentId);
+    return this.http.get<User>(this.hostname + this.serviceUrlSuffix + "/getAuthor",{params: queryParams})
   }
 }

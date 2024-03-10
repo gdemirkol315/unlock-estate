@@ -1,6 +1,6 @@
 package com.unlockestate.ueparent.image.dto;
 
-import com.unlockestate.ueparent.comment.dto.Comment;
+import com.unlockestate.ueparent.task.dto.Comment;
 import jakarta.persistence.*;
 
 @Entity

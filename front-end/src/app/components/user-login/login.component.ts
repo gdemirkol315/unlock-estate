@@ -20,13 +20,13 @@ export class LoginComponent {
     });
   }
 
-  onLogin(): void {
+  async onLogin() {
     let user: User = new User();
     user.email = this.loginForm.get('email')?.value;
     user.password = this.loginForm.get('password')?.value;
     user.role = 'NONE';
-    this.authService.login(user);
-    // You might want to authenticate against a backend service
+    await this.authService.login(user);
+    this.authService.getUserProfile(user.email);
   }
 
   toggleHide() {

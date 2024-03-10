@@ -3,7 +3,6 @@ package com.unlockestate.ueparent.task.dto;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.unlockestate.ueparent.comment.dto.Comment;
 import com.unlockestate.ueparent.realestate.dto.RealEstate;
 import com.unlockestate.ueparent.user.dto.User;
 import jakarta.persistence.*;
