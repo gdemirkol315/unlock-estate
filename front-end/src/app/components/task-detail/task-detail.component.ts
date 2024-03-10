@@ -166,4 +166,8 @@ export class TaskDetailComponent implements OnInit {
       this.comments.push(comment)
     }
   }
+
+  onFileSelected($event: Event) {
+
+  }
 }
