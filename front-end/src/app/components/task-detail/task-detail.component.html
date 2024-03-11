@@ -127,7 +127,9 @@
           <img [src]="image.link" class="uploaded-image">
         </mat-card-content>
         <mat-card-actions>
-          <button mat-button (click)="deleteImage(i)">Delete</button>
+          <button mat-icon-button color ="warn" (click)="deleteImage(i)" matTooltip="Delete picture">
+            <mat-icon matSuffix>delete</mat-icon>
+          </button>
         </mat-card-actions>
       </mat-card>
     </div>
