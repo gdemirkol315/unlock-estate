@@ -39,6 +39,6 @@ public class FileUploadService {
         File dest = Paths.get(absolutePathPrefix + path, file.getOriginalFilename()).toFile();
         file.transferTo(dest);
 
-        imageRepository.setLink(absolutePathPrefix + path + file.getOriginalFilename(), Integer.valueOf(imageId) );
+        imageRepository.setLink(absolutePathPrefix + path + File.separator + file.getOriginalFilename(), Integer.valueOf(imageId) );
     }
 }
