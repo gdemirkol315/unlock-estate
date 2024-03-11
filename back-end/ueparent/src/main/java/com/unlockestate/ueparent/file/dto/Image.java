@@ -1,4 +1,4 @@
-package com.unlockestate.ueparent.image.dto;
+package com.unlockestate.ueparent.file.dto;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.unlockestate.ueparent.task.dto.Comment;

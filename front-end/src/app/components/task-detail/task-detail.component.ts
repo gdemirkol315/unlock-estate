@@ -12,8 +12,8 @@ import {CheckList} from "../../models/check-list.model";
 import {TaskCheckListItem} from "../../models/task-check-list-item.model";
 import {MatCheckboxChange} from "@angular/material/checkbox";
 import {Comment} from "../../models/comment.model"
-import {JwtToken} from "../../models/jwt-token.model";
 import {Image} from "../../models/image.model";
+import {FileUploadService} from "../../services/file-upload/file-upload.service";
 
 @Component({
   selector: 'app-task-detail',
@@ -33,7 +33,8 @@ export class TaskDetailComponent implements OnInit {
   constructor(private route: ActivatedRoute,
               private taskService: TaskService,
               private realEstateService: RealEstateService,
-              private userService: AuthService) {
+              private userService: AuthService,
+              private fileUploadService: FileUploadService) {
 
   }
 
@@ -147,15 +148,22 @@ export class TaskDetailComponent implements OnInit {
     this.currentComment.author = this.userService.userProfile;
     this.taskService.addComment(this.currentComment)
       .subscribe({
-        next: (comment: Comment) => {
+        next: async (comment: Comment) => {
           comment.author = this.userService.userProfile
-          this.comments.push(Utils.jsonObjToInstance(new Comment(), comment))
+          let i :number = 0;
+          for (let image of comment.images) {
+            await firstValueFrom(this.fileUploadService.uploadImage(this.currentComment.images[i].dataFile,
+              "images/task_" + this.task.id + "/comment_" + comment.id ,
+              '' + image.id));
+            i++;
+          }
+          this.comments.push(Utils.jsonObjToInstance(new Comment(), comment));
+          this.currentComment = new Comment();
         }, error: (err) => {
           console.log(err)
         }
       });
 
-    this.currentComment = new Comment();
   }
 
   private async getComments() {
@@ -175,12 +183,14 @@ export class TaskDetailComponent implements OnInit {
       const reader = new FileReader();
       reader.onload = (e) => {
         let image: Image = new Image();
-        image.link = e?.target?.result as string
+        image.encodedImg = e?.target?.result as string;
+        image.dataFile = this.fileUploadService.dataURLtoFile(e?.target?.result as string, "img_" + this.currentComment.images.length + ".jpg");
         this.currentComment.images.push(image);
       };
       reader.readAsDataURL(file);
     }
   }
+
   deleteImage(index: number) {
     this.currentComment.images.splice(index, 1);
   }

@@ -2,7 +2,7 @@ package com.unlockestate.ueparent.task.dto;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.unlockestate.ueparent.image.dto.Image;
+import com.unlockestate.ueparent.file.dto.Image;
 import com.unlockestate.ueparent.user.dto.User;
 import jakarta.persistence.*;
 
