@@ -9,3 +9,16 @@
 .comment-content{
   font-size: 1.15em;
 }
+
+.uploaded-image {
+  width: 100%; /* Adjust based on your design */
+  height: auto;
+  object-fit: cover; /* This maintains the aspect ratio */
+}
+
+.image-card {
+  display: inline-block;
+  width: 400px; /* Or whatever suits your layout */
+  margin: 10px;
+}
+

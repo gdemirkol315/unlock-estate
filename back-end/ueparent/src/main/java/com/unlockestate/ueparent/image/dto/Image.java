@@ -1,5 +1,6 @@
 package com.unlockestate.ueparent.image.dto;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.unlockestate.ueparent.task.dto.Comment;
 import jakarta.persistence.*;
 
@@ -11,8 +12,9 @@ public class Image {
 
     private String link;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "comment_id")
+    @JsonBackReference("comment-image")
     private Comment comment;
 
     public Integer getId() {

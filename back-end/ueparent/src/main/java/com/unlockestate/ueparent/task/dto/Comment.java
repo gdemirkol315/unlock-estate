@@ -1,11 +1,13 @@
 package com.unlockestate.ueparent.task.dto;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.unlockestate.ueparent.image.dto.Image;
 import com.unlockestate.ueparent.user.dto.User;
 import jakarta.persistence.*;
 
 import java.util.Date;
+import java.util.List;
 
 @Entity
 public class Comment {
@@ -26,8 +28,9 @@ public class Comment {
     @JoinColumn(name = "task_id")
     private Task task;
 
-    @OneToOne(mappedBy = "comment", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
-    private Image image;
+    @OneToMany(mappedBy = "comment", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    @JsonManagedReference("comment-image")
+    private List<Image> images;
 
     public Integer getId() {
         return id;
@@ -53,12 +56,12 @@ public class Comment {
         this.task = task;
     }
 
-    public Image getImage() {
-        return image;
+    public List<Image> getImages() {
+        return images;
     }
 
-    public void setImage(Image image) {
-        this.image = image;
+    public void setImages(List<Image> images) {
+        this.images = images;
     }
 
     public Date getDate() {

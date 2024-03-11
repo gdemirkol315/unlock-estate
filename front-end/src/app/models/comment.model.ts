@@ -8,5 +8,5 @@ export class Comment {
   date: Date;
   author: User = new User;
   task: Task = new Task();
-  image: Image = new Image();
+  images: Image[] = new Array();
 }

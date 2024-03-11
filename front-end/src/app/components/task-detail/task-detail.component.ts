@@ -13,6 +13,7 @@ import {TaskCheckListItem} from "../../models/task-check-list-item.model";
 import {MatCheckboxChange} from "@angular/material/checkbox";
 import {Comment} from "../../models/comment.model"
 import {JwtToken} from "../../models/jwt-token.model";
+import {Image} from "../../models/image.model";
 
 @Component({
   selector: 'app-task-detail',
@@ -32,8 +33,7 @@ export class TaskDetailComponent implements OnInit {
   constructor(private route: ActivatedRoute,
               private taskService: TaskService,
               private realEstateService: RealEstateService,
-              private userService: AuthService,
-              private jwtToken: JwtToken) {
+              private userService: AuthService) {
 
   }
 
@@ -149,7 +149,7 @@ export class TaskDetailComponent implements OnInit {
       .subscribe({
         next: (comment: Comment) => {
           comment.author = this.userService.userProfile
-          this.comments.push(Utils.jsonObjToInstance(new Comment(),comment))
+          this.comments.push(Utils.jsonObjToInstance(new Comment(), comment))
         }, error: (err) => {
           console.log(err)
         }
@@ -161,13 +161,27 @@ export class TaskDetailComponent implements OnInit {
   private async getComments() {
     let commentObjs = await firstValueFrom(this.taskService.getComments(this.task.id));
     for (const commentObj of commentObjs) {
-      let comment:Comment = Utils.jsonObjToInstance(new Comment(), commentObj);
+      let comment: Comment = Utils.jsonObjToInstance(new Comment(), commentObj);
       comment.author = await firstValueFrom(this.taskService.getCommentAuthorDetails(comment.id))
       this.comments.push(comment)
     }
   }
 
-  onFileSelected($event: Event) {
 
+  handleFileInput(event: Event) {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files.length > 0) {
+      const file = input.files[0];
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        let image: Image = new Image();
+        image.link = e?.target?.result as string
+        this.currentComment.images.push(image);
+      };
+      reader.readAsDataURL(file);
+    }
+  }
+  deleteImage(index: number) {
+    this.currentComment.images.splice(index, 1);
   }
 }

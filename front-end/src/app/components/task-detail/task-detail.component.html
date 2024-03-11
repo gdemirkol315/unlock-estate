@@ -104,12 +104,13 @@
       <mat-label>Add a comment</mat-label>
       <textarea matInput [(ngModel)]="currentComment.content"></textarea>
     </mat-form-field>
-    <div class="form-row">
+    <div id="action-buttons" class="form-row">
       <input
         hidden
         type="file"
+        id="imgInput"
         #uploader
-        accept="image/*" capture="camera" [(ngModel)]="currentComment.image.link"
+        accept="image/*" capture="camera" (change)="handleFileInput($event)"
       />
       <button mat-icon-button (click)="uploader.click()" matTooltip="Add picture"
               class="slightly-spaced">
@@ -120,6 +121,17 @@
         <mat-icon matSuffix>mood_bad</mat-icon>
       </button>
     </div>
+    <div *ngFor="let image of currentComment.images; let i = index" class="image-card">
+      <mat-card>
+        <mat-card-content>
+          <img [src]="image.link" class="uploaded-image">
+        </mat-card-content>
+        <mat-card-actions>
+          <button mat-button (click)="deleteImage(i)">Delete</button>
+        </mat-card-actions>
+      </mat-card>
+    </div>
+
     <button mat-button (click)="addComment()" [disabled]="!currentComment.content || currentComment.content == ''">Post
       Comment
     </button>
