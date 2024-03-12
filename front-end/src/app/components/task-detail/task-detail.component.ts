@@ -106,7 +106,7 @@ export class TaskDetailComponent implements OnInit {
     email.header = "Problem Reported: " + this.task.realEstate.name + "!"
     email.content = "There is a problem with the task number " + this.task.id + " user: " + this.task.assignee.name
       + this.task.assignee.lastName + " reports a problem with real estate: " + this.task.realEstate.name + "please check: \n" +
-      window.location.host + this.taskService.router.url ;
+      window.location.protocol + "//" + window.location.host + this.taskService.router.url ;
     email.to = this.task.creator.email;
     this.emailService.send(email,"Dispatchers has been notified.");
   }
