@@ -52,6 +52,7 @@ import {MatProgressSpinner} from "@angular/material/progress-spinner";
 import {MatCheckbox} from "@angular/material/checkbox";
 import {MatTabHeader} from "@angular/material/tabs";
 import {MatBadge} from "@angular/material/badge";
+import { FullSizeImageDialogComponent } from './components/full-size-image-dialog/full-size-image-dialog.component';
 
 
 @NgModule({
@@ -73,7 +74,8 @@ import {MatBadge} from "@angular/material/badge";
     ChecklistTemplatesComponent,
     LastWarningComponent,
     UserProfileComponent,
-    ChangePasswordComponent
+    ChangePasswordComponent,
+    FullSizeImageDialogComponent
   ],
     imports: [
         NgxMaterialTimepickerModule,

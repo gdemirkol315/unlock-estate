@@ -16,6 +16,8 @@ import {Image} from "../../models/image.model";
 import {FileUploadService} from "../../services/file-upload/file-upload.service";
 import {DomSanitizer, SafeUrl} from "@angular/platform-browser";
 import {map} from "rxjs/operators";
+import {MatDialog} from "@angular/material/dialog";
+import {FullSizeImageDialogComponent} from "../full-size-image-dialog/full-size-image-dialog.component";
 
 @Component({
   selector: 'app-task-detail',
@@ -38,7 +40,8 @@ export class TaskDetailComponent implements OnInit {
               private realEstateService: RealEstateService,
               private userService: AuthService,
               private fileService: FileUploadService,
-              private sanitizer: DomSanitizer) {
+              private sanitizer: DomSanitizer,
+              private matDialog: MatDialog) {
 
   }
 
@@ -183,7 +186,7 @@ export class TaskDetailComponent implements OnInit {
   loadImages(comment: Comment) {
     // Convert each image path to an Observable<Blob>, then fetch all images concurrently
     const imageFetchObservables: Observable<Blob>[] = comment.images.map(image =>
-      this.fileService.fetchImage(image.id+'')
+      this.fileService.fetchImage(image.id + '')
     );
 
     this.imageUrls$ = forkJoin(imageFetchObservables).pipe(
@@ -210,4 +213,11 @@ export class TaskDetailComponent implements OnInit {
   deleteImage(index: number) {
     this.currentComment.images.splice(index, 1);
   }
+
+  openImageInFullSize(imageUrl): void {
+    this.matDialog.open(FullSizeImageDialogComponent, {
+      data: {secureImageUrl: imageUrl}
+    });
+  }
+
 }

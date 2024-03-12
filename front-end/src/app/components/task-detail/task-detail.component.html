@@ -99,7 +99,7 @@
           <br>
           <div class="image-card" *ngIf="imageUrls$ | async as imageUrls">
             <div *ngFor="let imageUrl of imageUrls">
-              <mat-card>
+              <mat-card  (click)="openImageInFullSize(imageUrl)">
                 <mat-card-content>
                   <img [src]="imageUrl" class="uploaded-image">
                 </mat-card-content>
@@ -133,7 +133,7 @@
       </button>
     </div>
     <div *ngFor="let image of currentComment.images; let i = index" class="image-card">
-      <mat-card>
+      <mat-card (click)="openImageInFullSize(image.encodedImg)">
         <mat-card-content>
           <img [src]="image.encodedImg" class="uploaded-image">
         </mat-card-content>
