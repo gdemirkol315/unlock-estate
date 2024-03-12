@@ -27,7 +27,9 @@ export class AuthService extends DataService {
       this.jwtToken.timer = new Date();
       this.isLoggedIn = true;
       this.toastr.success("Successfully logged in");
-      this.router.navigate(['task-overview']);
+      const redirectUrl = localStorage.getItem('redirectUrl') || 'task-overview';
+      this.router.navigate([redirectUrl]);
+      localStorage.removeItem('redirectUrl');
     } else if (jwtTokenObj.token == "") {
       this.toastr.error("Provided credentials are wrong!", "Wrong Credentials")
     } else if (jwtTokenObj.token == "deactivated") {

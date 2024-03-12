@@ -1,4 +1,4 @@
-import {CanMatchFn, Router} from '@angular/router';
+import {CanMatchFn, Router, RouterStateSnapshot} from '@angular/router';
 import {inject} from "@angular/core";
 import {AuthService} from "../services/auth/auth.service";
 import {JwtToken} from "../models/jwt-token.model";
@@ -19,6 +19,7 @@ export const authGuardGuard: CanMatchFn = (route, segments) => {
   const router = inject(Router);
   const authService: AuthService = inject(AuthService);
   const jwtToken: JwtToken = inject(JwtToken)
+
   if (jwtToken && isTokenExpired(jwtToken.timer)) {
     authService.logout();
   }
@@ -26,12 +27,23 @@ export const authGuardGuard: CanMatchFn = (route, segments) => {
     if (jwtToken.getRole().includes("ADMIN")) {
       return true;
     } else {
-      return false;
       authService.toastr.error("Unauthorized! Access denied!")
+      return false;
     }
   }
-
-  return authService.isLoggedIn;
+  if (authService.isLoggedIn) {
+    return true;
+  } else {
+    let path: string ="";
+    segments.forEach((segment)=>{
+      path = path + "/" + segment
+    })
+    // Store the attempted URL for redirecting
+    localStorage.setItem('redirectUrl', path);
+    // Navigate to the login page
+    router.navigate(['/login']);
+    return false;
+  }
 };
 
 
