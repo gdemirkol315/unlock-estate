@@ -34,6 +34,7 @@ export class TaskDetailComponent implements OnInit {
   currentComment: Comment = new Comment();
   comments: Comment[] = new Array();
   imageUrls$: Observable<SafeUrl[]>;
+  commentsLoading: boolean = true;
 
   constructor(private route: ActivatedRoute,
               private taskService: TaskService,
@@ -164,6 +165,7 @@ export class TaskDetailComponent implements OnInit {
               '' + image.id));
             i++;
           }
+          this.loadImages(comment);
           this.comments.push(Utils.jsonObjToInstance(new Comment(), comment));
           this.currentComment = new Comment();
         }, error: (err) => {
@@ -181,6 +183,7 @@ export class TaskDetailComponent implements OnInit {
       comment.author = await firstValueFrom(this.taskService.getCommentAuthorDetails(comment.id))
       this.comments.push(comment)
     }
+    this.commentsLoading = false;
   }
 
   loadImages(comment: Comment) {

@@ -1,6 +1,6 @@
 <mat-spinner
-  *ngIf="taskLoading || realEstateLoading || creatorLoading || assigneeLoading"></mat-spinner>
-<div *ngIf="!(taskLoading || realEstateLoading || creatorLoading || assigneeLoading)">
+  *ngIf="taskLoading || realEstateLoading || creatorLoading || assigneeLoading || commentsLoading"></mat-spinner>
+<div *ngIf="!(taskLoading || realEstateLoading || creatorLoading || assigneeLoading || commentsLoading)">
   <mat-card multi="true" class="centered-container">
     <mat-card-header>
       <mat-card-title>Task Details</mat-card-title>
