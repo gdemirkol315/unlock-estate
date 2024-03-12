@@ -24,6 +24,7 @@ export class AuthService extends DataService {
     let jwtTokenObj: JwtToken = await firstValueFrom(this.http.post<JwtToken>(this.hostname + "login", user, {headers}))
     if (jwtTokenObj.token != "" && jwtTokenObj.token != "deactivated") {
       this.jwtToken.token = jwtTokenObj.token
+      this.jwtToken.timer = new Date();
       this.isLoggedIn = true;
       this.toastr.success("Successfully logged in");
       this.router.navigate(['task-overview']);

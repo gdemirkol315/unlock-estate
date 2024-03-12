@@ -7,6 +7,7 @@ export class JwtToken {
   token: string;
   roles: string[]
   sub: string;
+  timer: Date = new Date()
 
   constructor() {
   }
