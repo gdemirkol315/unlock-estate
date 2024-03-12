@@ -18,6 +18,8 @@ import {DomSanitizer, SafeUrl} from "@angular/platform-browser";
 import {map} from "rxjs/operators";
 import {MatDialog} from "@angular/material/dialog";
 import {FullSizeImageDialogComponent} from "../full-size-image-dialog/full-size-image-dialog.component";
+import {EmailService} from "../../services/email/email.service";
+import {Email} from "../../models/email.model";
 
 @Component({
   selector: 'app-task-detail',
@@ -42,7 +44,8 @@ export class TaskDetailComponent implements OnInit {
               private userService: AuthService,
               private fileService: FileUploadService,
               private sanitizer: DomSanitizer,
-              private matDialog: MatDialog) {
+              private matDialog: MatDialog,
+              private emailService: EmailService) {
 
   }
 
@@ -99,7 +102,13 @@ export class TaskDetailComponent implements OnInit {
   }
 
   reportProblem() {
-
+    let email: Email = new Email();
+    email.header = "Problem Reported: " + this.task.realEstate.name + "!"
+    email.content = "There is a problem with the task number " + this.task.id + " user: " + this.task.assignee.name
+      + this.task.assignee.lastName + " reports a problem with real estate: " + this.task.realEstate.name + "please check: \n" +
+      window.location.host + this.taskService.router.url ;
+    email.to = this.task.creator.email;
+    this.emailService.send(email,"Dispatchers has been notified.");
   }
 
   getTaskCheckListItems(checkList: CheckList) {
