@@ -41,4 +41,8 @@ public class FileUploadService {
 
         imageRepository.setLink(absolutePathPrefix + path + File.separator + file.getOriginalFilename(), Integer.valueOf(imageId) );
     }
+
+    public String getImagePath(String imageId) {
+        return imageRepository.findById(Integer.valueOf(imageId)).get().getLink();
+    }
 }

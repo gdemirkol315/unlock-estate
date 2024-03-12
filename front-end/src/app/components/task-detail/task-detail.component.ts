@@ -3,7 +3,7 @@ import {ActivatedRoute} from "@angular/router";
 import {TaskService} from "../../services/task/task.service";
 import {Task} from "../../models/task.model";
 import {Utils} from "../../utils/utils";
-import {first, firstValueFrom} from "rxjs";
+import {first, firstValueFrom, forkJoin, Observable} from "rxjs";
 import {RealEstateService} from "../../services/real-estate/real-estate.service";
 import {RealEstate} from "../../models/real-estate.model";
 import {AuthService} from "../../services/auth/auth.service";
@@ -14,6 +14,8 @@ import {MatCheckboxChange} from "@angular/material/checkbox";
 import {Comment} from "../../models/comment.model"
 import {Image} from "../../models/image.model";
 import {FileUploadService} from "../../services/file-upload/file-upload.service";
+import {DomSanitizer, SafeUrl} from "@angular/platform-browser";
+import {map} from "rxjs/operators";
 
 @Component({
   selector: 'app-task-detail',
@@ -29,12 +31,14 @@ export class TaskDetailComponent implements OnInit {
   creatorLoading: boolean = true;
   currentComment: Comment = new Comment();
   comments: Comment[] = new Array();
+  imageUrls$: Observable<SafeUrl[]>;
 
   constructor(private route: ActivatedRoute,
               private taskService: TaskService,
               private realEstateService: RealEstateService,
               private userService: AuthService,
-              private fileUploadService: FileUploadService) {
+              private fileService: FileUploadService,
+              private sanitizer: DomSanitizer) {
 
   }
 
@@ -150,10 +154,10 @@ export class TaskDetailComponent implements OnInit {
       .subscribe({
         next: async (comment: Comment) => {
           comment.author = this.userService.userProfile
-          let i :number = 0;
+          let i: number = 0;
           for (let image of comment.images) {
-            await firstValueFrom(this.fileUploadService.uploadImage(this.currentComment.images[i].dataFile,
-              "images/task_" + this.task.id + "/comment_" + comment.id ,
+            await firstValueFrom(this.fileService.uploadImage(this.currentComment.images[i].dataFile,
+              "images/task_" + this.task.id + "/comment_" + comment.id,
               '' + image.id));
             i++;
           }
@@ -170,9 +174,21 @@ export class TaskDetailComponent implements OnInit {
     let commentObjs = await firstValueFrom(this.taskService.getComments(this.task.id));
     for (const commentObj of commentObjs) {
       let comment: Comment = Utils.jsonObjToInstance(new Comment(), commentObj);
+      this.loadImages(comment);
       comment.author = await firstValueFrom(this.taskService.getCommentAuthorDetails(comment.id))
       this.comments.push(comment)
     }
+  }
+
+  loadImages(comment: Comment) {
+    // Convert each image path to an Observable<Blob>, then fetch all images concurrently
+    const imageFetchObservables: Observable<Blob>[] = comment.images.map(image =>
+      this.fileService.fetchImage(image.id+'')
+    );
+
+    this.imageUrls$ = forkJoin(imageFetchObservables).pipe(
+      map(blobs => blobs.map(blob => this.sanitizer.bypassSecurityTrustUrl(URL.createObjectURL(blob))))
+    );
   }
 
 
@@ -184,7 +200,7 @@ export class TaskDetailComponent implements OnInit {
       reader.onload = (e) => {
         let image: Image = new Image();
         image.encodedImg = e?.target?.result as string;
-        image.dataFile = this.fileUploadService.dataURLtoFile(e?.target?.result as string, "img_" + this.currentComment.images.length + ".jpg");
+        image.dataFile = this.fileService.dataURLtoFile(e?.target?.result as string, "img_" + this.currentComment.images.length + ".jpg");
         this.currentComment.images.push(image);
       };
       reader.readAsDataURL(file);

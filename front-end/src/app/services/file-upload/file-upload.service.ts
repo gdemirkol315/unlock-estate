@@ -1,6 +1,7 @@
 import {Injectable} from '@angular/core';
 import {DataService} from "../data/data.service";
-import {Comment} from "../../models/comment.model"
+import {Observable} from "rxjs";
+import {HttpParams} from "@angular/common/http";
 
 @Injectable({
   providedIn: 'root'
@@ -37,4 +38,11 @@ export class FileUploadService extends DataService {
       responseType: 'text',
     });
   }
+
+  fetchImage(imageId: string): Observable<Blob> {
+    let queryParams = new HttpParams();
+    queryParams = queryParams.append("imageId", imageId);
+    return this.http.get(this.hostname + this.servicePrefix + "/retrieveImage", { params: queryParams, responseType: 'blob' });
+  }
+
 }

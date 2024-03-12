@@ -96,6 +96,17 @@
         <br>
         <mat-card-content class="comment-content">
           {{ comment.content }}
+          <br>
+          <div class="image-card" *ngIf="imageUrls$ | async as imageUrls">
+            <div *ngFor="let imageUrl of imageUrls">
+              <mat-card>
+                <mat-card-content>
+                  <img [src]="imageUrl" class="uploaded-image">
+                </mat-card-content>
+              </mat-card>
+              <br>
+            </div>
+          </div>
         </mat-card-content>
       </mat-card>
       <br>
@@ -127,7 +138,7 @@
           <img [src]="image.encodedImg" class="uploaded-image">
         </mat-card-content>
         <mat-card-actions>
-          <button mat-icon-button color ="warn" (click)="deleteImage(i)" matTooltip="Delete picture">
+          <button mat-icon-button color="warn" (click)="deleteImage(i)" matTooltip="Delete picture">
             <mat-icon matSuffix>delete</mat-icon>
           </button>
         </mat-card-actions>
