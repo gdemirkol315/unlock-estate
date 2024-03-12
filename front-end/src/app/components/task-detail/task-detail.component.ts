@@ -132,7 +132,7 @@ export class TaskDetailComponent implements OnInit {
 
   markProblematic(item: TaskCheckListItem) {
     if (item.status == 'ISSUE') {
-      item.status = ''
+      item.status = 'PENDING'
     } else {
       item.status = 'ISSUE'
     }
