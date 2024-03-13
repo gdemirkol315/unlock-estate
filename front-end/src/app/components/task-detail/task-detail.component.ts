@@ -16,10 +16,11 @@ import {Image} from "../../models/image.model";
 import {FileUploadService} from "../../services/file-upload/file-upload.service";
 import {DomSanitizer, SafeUrl} from "@angular/platform-browser";
 import {map} from "rxjs/operators";
-import {MatDialog} from "@angular/material/dialog";
+import {MatDialog, MatDialogRef} from "@angular/material/dialog";
 import {FullSizeImageDialogComponent} from "../full-size-image-dialog/full-size-image-dialog.component";
 import {EmailService} from "../../services/email/email.service";
 import {Email} from "../../models/email.model";
+import {LastWarningComponent} from "../last-warning/last-warning.component";
 
 @Component({
   selector: 'app-task-detail',
@@ -102,13 +103,27 @@ export class TaskDetailComponent implements OnInit {
   }
 
   reportProblem() {
-    let email: Email = new Email();
-    email.header = "Problem Reported: " + this.task.realEstate.name + "!"
-    email.content = "There is a problem with the task number " + this.task.id + " user: " + this.task.assignee.name
-      + this.task.assignee.lastName + " reports a problem with real estate: " + this.task.realEstate.name + "please check: \n" +
-      window.location.protocol + "//" + window.location.host + this.taskService.router.url ;
-    email.to = this.task.creator.email;
-    this.emailService.send(email,"Dispatchers has been notified.");
+    let dialogRefLastWarn: MatDialogRef<LastWarningComponent> = this.matDialog.open(LastWarningComponent, {
+      data: {
+        message: "Do you really want to notify dispatchers?"
+      }
+    });
+    dialogRefLastWarn.afterClosed().subscribe({
+      next: (dialogAnswer: boolean) => {
+        if (dialogAnswer) {
+          let email: Email = new Email();
+          email.header = "Problem Reported: " + this.task.realEstate.name + "!"
+          email.content = "There is a problem with the task number " + this.task.id + " user: " + this.task.assignee.name
+            + this.task.assignee.lastName + " reports a problem with real estate: " + this.task.realEstate.name + "please check: \n" +
+            window.location.protocol + "//" + window.location.host + this.taskService.router.url ;
+          email.to = this.task.creator.email;
+          this.emailService.send(email,"Dispatchers has been notified.");
+        }
+      }, error: (err) => {
+        console.log(err);
+        this.emailService.toastr.error("An unexpected error occurred while notifying the dispatchers");
+      }
+    });
   }
 
   getTaskCheckListItems(checkList: CheckList) {
