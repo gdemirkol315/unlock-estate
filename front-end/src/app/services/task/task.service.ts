@@ -13,10 +13,6 @@ export class TaskService extends DataService {
 
   private serviceUrlSuffix: string = "task"
 
-  getTasks() {
-    return this.http.get<Task[]>(this.hostname + this.serviceUrlSuffix + "/tasks")
-  }
-
   getTask(taskId: number) {
     let queryParams = new HttpParams();
     queryParams = queryParams.append("id", taskId);

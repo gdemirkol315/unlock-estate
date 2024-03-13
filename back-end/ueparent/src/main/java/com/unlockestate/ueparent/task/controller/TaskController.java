@@ -5,7 +5,6 @@ import com.unlockestate.ueparent.exception.InternalServerRuntimeException;
 import com.unlockestate.ueparent.task.dto.Task;
 import com.unlockestate.ueparent.task.dto.TaskCheckListItem;
 import com.unlockestate.ueparent.task.service.TaskService;
-import com.unlockestate.ueparent.user.dto.User;
 import com.unlockestate.ueparent.utils.dto.MessageEntity;
 import com.unlockestate.ueparent.utils.dto.UserDto;
 import org.slf4j.Logger;
@@ -29,24 +28,13 @@ public class TaskController {
         this.taskService = taskService;
     }
 
-    @GetMapping("/tasks")
-    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('USER')")
-    public ResponseEntity<List<Task>> allTasks() {
-        try {
-            return ResponseEntity.ok(taskService.getTasks());
-        } catch (InternalServerRuntimeException e) {
-            logger.error("Could not get real estates");
-            return ResponseEntity.internalServerError().build();
-        }
-    }
-
     @GetMapping("/task")
     @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('USER')")
     public ResponseEntity<Task> getTask(@RequestParam String id) {
         try {
             return ResponseEntity.ok(taskService.getTask(id));
         } catch (InternalServerRuntimeException e) {
-            logger.error("Could not get real estates");
+            logger.error("Could not get task with id {}",id);
             return ResponseEntity.internalServerError().build();
         }
     }
@@ -56,7 +44,13 @@ public class TaskController {
     public ResponseEntity<Task> saveTask(
             @RequestBody Task task
     ) {
-        return ResponseEntity.ok(taskService.saveTask(task));
+        try {
+            return ResponseEntity.ok(taskService.saveTask(task));
+        } catch (InternalServerRuntimeException e) {
+            logger.error("Could not save task!");
+            return ResponseEntity.internalServerError().build();
+        }
+
     }
 
     @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('USER')")
@@ -64,8 +58,14 @@ public class TaskController {
     public ResponseEntity<MessageEntity> updateTaskChecklistItem(
             @RequestBody TaskCheckListItem taskCheckListItem
     ) {
-        taskService.updateTaskChecklistItem(taskCheckListItem);
-        return ResponseEntity.ok(new MessageEntity("OK"));
+        try {
+            taskService.updateTaskChecklistItem(taskCheckListItem);
+            return ResponseEntity.ok(new MessageEntity("OK"));
+        } catch (InternalServerRuntimeException e) {
+            logger.error("Could not update task!");
+            return ResponseEntity.internalServerError().build();
+        }
+
     }
 
     @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('USER')")
@@ -73,7 +73,12 @@ public class TaskController {
     public ResponseEntity<Comment> addComment(
             @RequestBody Comment comment
     ) {
-        return ResponseEntity.ok(taskService.addComment(comment));
+        try {
+            return ResponseEntity.ok(taskService.addComment(comment));
+        } catch (InternalServerRuntimeException e) {
+            logger.error("Could not add comment!");
+            return ResponseEntity.internalServerError().build();
+        }
     }
 
     @GetMapping("/getComments")
@@ -82,7 +87,7 @@ public class TaskController {
         try {
             return ResponseEntity.ok(taskService.getCommentByTaskId(taskId));
         } catch (InternalServerRuntimeException e) {
-            logger.error("Could not get real estates");
+            logger.error("Could not get comments");
             return ResponseEntity.internalServerError().build();
         }
     }
@@ -93,7 +98,7 @@ public class TaskController {
         try {
             return ResponseEntity.ok(taskService.getAuthorByCommentId(commentId));
         } catch (InternalServerRuntimeException e) {
-            logger.error("Could not get real estates");
+            logger.error("Could not get author");
             return ResponseEntity.internalServerError().build();
         }
     }
