@@ -11,6 +11,7 @@ import {RealEstateCreateComponent} from "./components/real-estate-create/real-es
 import {RealEstateDetailComponent} from "./components/real-estate-detail/real-estate-detail.component";
 import {TaskDetailComponent} from "./components/task-detail/task-detail.component";
 import {TaskCreateComponent} from "./components/task-create/task-create.component";
+import {SuccessComponent} from "./components/success/success.component";
 
 const routes: Routes = [
   {
@@ -55,6 +56,11 @@ const routes: Routes = [
   {
     path: 'task-detail/:id',
     component: TaskDetailComponent,
+    canMatch: [authGuardGuard]
+  },
+  {
+    path: 'success',
+    component: SuccessComponent,
     canMatch: [authGuardGuard]
   },
   {

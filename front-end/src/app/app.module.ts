@@ -53,6 +53,7 @@ import {MatCheckbox} from "@angular/material/checkbox";
 import {MatTabHeader} from "@angular/material/tabs";
 import {MatBadge} from "@angular/material/badge";
 import { FullSizeImageDialogComponent } from './components/full-size-image-dialog/full-size-image-dialog.component';
+import { SuccessComponent } from './components/success/success.component';
 
 
 @NgModule({
@@ -75,7 +76,8 @@ import { FullSizeImageDialogComponent } from './components/full-size-image-dialo
     LastWarningComponent,
     UserProfileComponent,
     ChangePasswordComponent,
-    FullSizeImageDialogComponent
+    FullSizeImageDialogComponent,
+    SuccessComponent
   ],
     imports: [
         NgxMaterialTimepickerModule,

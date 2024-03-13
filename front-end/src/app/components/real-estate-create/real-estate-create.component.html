@@ -64,7 +64,7 @@
       </mat-expansion-panel-header>
 
       <div *ngFor="let item of checkList.checkListItems; let iListItem = index">
-        <mat-form-field class="slightly-spaced">
+        <mat-form-field class="slightly-spaced checklist-item">
           <input matInput [(ngModel)]="item.description" name="item-{{iList}}-{{iListItem}}">
         </mat-form-field>
         <button mat-fab color="warn" aria-label="Add" (click)="realEstate.deleteCheckListItem(iList,iListItem)"

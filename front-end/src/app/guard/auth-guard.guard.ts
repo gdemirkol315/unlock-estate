@@ -38,7 +38,6 @@ export const authGuardGuard: CanMatchFn = (route, segments) => {
     segments.forEach((segment)=>{
       path = path + "/" + segment
     })
-    console.log("path:" + path)
     if (path != "/login" && path != "/" && path!=""){
       // Store the attempted URL for redirecting
       localStorage.setItem('redirectUrl', path);
