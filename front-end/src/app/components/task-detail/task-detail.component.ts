@@ -36,7 +36,6 @@ export class TaskDetailComponent implements OnInit {
   creatorLoading: boolean = true;
   currentComment: Comment = new Comment();
   comments: Comment[] = new Array();
-  imageUrls$: Observable<SafeUrl[]>;
   commentsLoading: boolean = true;
 
   constructor(private route: ActivatedRoute,
@@ -99,7 +98,24 @@ export class TaskDetailComponent implements OnInit {
 
 
   submitTask() {
-
+    let email: Email = new Email();
+    email.to = this.task.creator.email
+    let submitText: string = "Task Submitted for " + this.task.realEstate.name
+      + " from " + this.task.assignee.name + " " + this.task.assignee.lastName
+    email.header = submitText;
+    email.content = window.location.protocol + "//" + window.location.host + this.taskService.router.url;
+    let comment:Comment = new Comment();
+    comment.content = submitText;
+    this.postComment(comment);
+    this.emailService.send(email).subscribe({
+      next:()=>{
+        this.emailService.toastr.success( "Task Submitted successfully!");
+        this.emailService.router.navigate(['/success'])
+      }, error:(err)=>{
+        console.log(err);
+        this.emailService.toastr.error("There was an error on the server side while sending notification!")
+      }
+    });
   }
 
   reportProblem() {
@@ -115,9 +131,16 @@ export class TaskDetailComponent implements OnInit {
           email.header = "Problem Reported: " + this.task.realEstate.name + "!"
           email.content = "There is a problem with the task number " + this.task.id + " user: " + this.task.assignee.name
             + this.task.assignee.lastName + " reports a problem with real estate: " + this.task.realEstate.name + "please check: \n" +
-            window.location.protocol + "//" + window.location.host + this.taskService.router.url ;
+            window.location.protocol + "//" + window.location.host + this.taskService.router.url;
           email.to = this.task.creator.email;
-          this.emailService.send(email,"Dispatchers has been notified.");
+          this.emailService.send(email).subscribe({
+            next:()=>{
+              this.emailService.toastr.success( "Dispatchers has been notified.");
+            }, error:(err)=>{
+              console.log(err);
+              this.emailService.toastr.error("There was an error on the server side while sending notification!")
+            }
+          });;
         }
       }, error: (err) => {
         console.log(err);
@@ -174,29 +197,34 @@ export class TaskDetailComponent implements OnInit {
     });
   }
 
-  addComment() {
-    this.currentComment.date = new Date();
-    this.currentComment.task.id = this.task.id;
-    this.currentComment.author = this.userService.userProfile;
-    this.taskService.addComment(this.currentComment)
+  onAddComment(){
+    this.postComment(this.currentComment);
+    this.currentComment = new Comment();
+  }
+
+  postComment(comment:Comment){
+    comment.date = new Date();
+    comment.task.id = this.task.id;
+    comment.author = this.userService.userProfile;
+    this.taskService.addComment(comment)
       .subscribe({
-        next: async (comment: Comment) => {
-          comment.author = this.userService.userProfile
+        next: async (commentResponse: Comment) => {
           let i: number = 0;
-          for (let image of comment.images) {
-            await firstValueFrom(this.fileService.uploadImage(this.currentComment.images[i].dataFile,
-              "images/task_" + this.task.id + "/comment_" + comment.id,
+          for (let image of commentResponse.images) {
+            await firstValueFrom(this.fileService.uploadImage(comment.images[i].dataFile,
+              "images/task_" + comment.task.id + "/comment_" + commentResponse.id,
               '' + image.id));
             i++;
           }
-          this.loadImages(comment);
-          this.comments.push(Utils.jsonObjToInstance(new Comment(), comment));
-          this.currentComment = new Comment();
+          if (commentResponse.images.length>0){
+            this.loadImages(commentResponse);
+          }
+          this.comments.push(Utils.jsonObjToInstance(new Comment(), commentResponse));
         }, error: (err) => {
           console.log(err)
+          this.taskService.toastr.error("There was an error posting the comment");
         }
       });
-
   }
 
   private async getComments() {
@@ -216,7 +244,7 @@ export class TaskDetailComponent implements OnInit {
       this.fileService.fetchImage(image.id + '')
     );
 
-    this.imageUrls$ = forkJoin(imageFetchObservables).pipe(
+    comment.imageUrls$ = forkJoin(imageFetchObservables).pipe(
       map(blobs => blobs.map(blob => this.sanitizer.bypassSecurityTrustUrl(URL.createObjectURL(blob))))
     );
   }
@@ -247,4 +275,14 @@ export class TaskDetailComponent implements OnInit {
     });
   }
 
+  allChecklistItemsMarked(): boolean {
+    let isAllCheckListItemsMarked: boolean = true;
+
+    this.task.taskCheckListItems.forEach((taskChecklistItem: TaskCheckListItem) => {
+      if (taskChecklistItem.status == '' || taskChecklistItem.status == 'PENDING') {
+        isAllCheckListItemsMarked = false
+      }
+    });
+    return isAllCheckListItemsMarked;
+  }
 }

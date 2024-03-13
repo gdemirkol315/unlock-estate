@@ -9,11 +9,7 @@ export class EmailService extends DataService {
 
   private servicePrefix: string = "email";
 
-  send(email: Email, toastrMessage:string) {
-    this.http.post(this.hostname + this.servicePrefix + "/send", email).subscribe({
-      next:()=>{
-        this.toastr.success(toastrMessage)
-      }
-    })
+  send(email: Email) {
+    return this.http.post(this.hostname + this.servicePrefix + "/send", email)
   }
 }

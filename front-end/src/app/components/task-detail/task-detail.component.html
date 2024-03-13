@@ -1,6 +1,6 @@
 <mat-spinner
-  *ngIf="taskLoading || realEstateLoading || creatorLoading || assigneeLoading || commentsLoading"></mat-spinner>
-<div *ngIf="!(taskLoading || realEstateLoading || creatorLoading || assigneeLoading || commentsLoading)">
+  *ngIf="!(!taskLoading && !realEstateLoading && !creatorLoading && !assigneeLoading && !commentsLoading)"></mat-spinner>
+<div *ngIf="!taskLoading && !realEstateLoading && !creatorLoading && !assigneeLoading && !commentsLoading">
   <mat-card multi="true" class="centered-container">
     <mat-card-header>
       <mat-card-title>Task Details</mat-card-title>
@@ -97,7 +97,7 @@
         <mat-card-content class="comment-content">
           {{ comment.content }}
           <br>
-          <div class="image-card" *ngIf="imageUrls$ | async as imageUrls">
+          <div class="image-card" *ngIf="comment.imageUrls$ | async as imageUrls">
             <div *ngFor="let imageUrl of imageUrls">
               <mat-card  (click)="openImageInFullSize(imageUrl)">
                 <mat-card-content>
@@ -145,13 +145,14 @@
       </mat-card>
     </div>
 
-    <button mat-button (click)="addComment()" [disabled]="!currentComment.content || currentComment.content == ''">Post
+    <button mat-button (click)="onAddComment()" [disabled]="!currentComment.content || currentComment.content == ''">Post
       Comment
     </button>
     <br>
     <button mat-raised-button color="primary" aria-label="Submit Task" (click)="submitTask()"
-            matTooltip="Submit Task">
+            matTooltip="Submit Task" [disabled]="!allChecklistItemsMarked()">
       Submit Task
     </button>
+    <mat-card-footer *ngIf="!allChecklistItemsMarked()">*All checklist items must be marked to be able to submit the task.</mat-card-footer>
   </mat-card>
 </div>
