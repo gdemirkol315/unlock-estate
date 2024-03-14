@@ -2,7 +2,6 @@ package com.unlockestate.ueparent.email.controller;
 
 import com.unlockestate.ueparent.email.dto.Email;
 import com.unlockestate.ueparent.email.service.EmailService;
-import com.unlockestate.ueparent.task.dto.TaskCheckListItem;
 import com.unlockestate.ueparent.utils.dto.MessageEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatusCode;
@@ -22,7 +21,7 @@ public class EmailController {
 
     @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('USER')")
     @PostMapping("/send")
-    public ResponseEntity<MessageEntity> updateTaskChecklistItem(
+    public ResponseEntity<MessageEntity> sendEmail(
             @RequestBody Email email
     ) {
         try {

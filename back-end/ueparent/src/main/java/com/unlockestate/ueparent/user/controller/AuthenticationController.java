@@ -32,13 +32,9 @@ public class AuthenticationController {
             request.setActive(true);
             return ResponseEntity.ok(authenticationService.register(request));
         } catch (DataIntegrityViolationException e) {
-            MessageEntity messageEntity = new MessageEntity("User with same email address already exists!");
-            messageEntity.setError(true);
-            return ResponseEntity.badRequest().body(messageEntity);
+            return ResponseEntity.badRequest().body(new MessageEntity("User with same email address already exists!"));
         } catch (MailSendException e) {
-            MessageEntity messageEntity = new MessageEntity("There was an error sending activation email!");
-            messageEntity.setError(true);
-            return ResponseEntity.badRequest().body(messageEntity);
+            return ResponseEntity.badRequest().body(new MessageEntity("There was an error sending activation email!"));
         }
     }
 
