@@ -26,7 +26,9 @@ export class LoginComponent {
     user.password = this.loginForm.get('password')?.value;
     user.role = 'NONE';
     await this.authService.login(user);
-    this.authService.getUserProfile(user.email);
+    if (this.authService.isLoggedIn){
+      this.authService.getUserProfile(user.email);
+    }
   }
 
   toggleHide() {
