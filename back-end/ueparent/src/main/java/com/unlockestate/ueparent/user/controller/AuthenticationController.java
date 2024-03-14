@@ -4,8 +4,11 @@ import com.unlockestate.ueparent.user.dto.AuthenticationResponse;
 import com.unlockestate.ueparent.user.dto.ChangePassword;
 import com.unlockestate.ueparent.user.dto.User;
 import com.unlockestate.ueparent.user.service.AuthenticationService;
+import com.unlockestate.ueparent.utils.dto.MessageEntity;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mail.MailSendException;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,14 +22,24 @@ public class AuthenticationController {
     public AuthenticationController(AuthenticationService authenticationService) {
         this.authenticationService = authenticationService;
     }
+
     @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping("/register")
-    public ResponseEntity<AuthenticationResponse> register(
+    public ResponseEntity<?> register(
             @RequestBody User request
     ) {
-        request.setActive(true);
-        return ResponseEntity.ok(authenticationService.register(request));
-
+        try {
+            request.setActive(true);
+            return ResponseEntity.ok(authenticationService.register(request));
+        } catch (DataIntegrityViolationException e) {
+            MessageEntity messageEntity = new MessageEntity("User with same email address already exists!");
+            messageEntity.setError(true);
+            return ResponseEntity.badRequest().body(messageEntity);
+        } catch (MailSendException e) {
+            MessageEntity messageEntity = new MessageEntity("There was an error sending activation email!");
+            messageEntity.setError(true);
+            return ResponseEntity.badRequest().body(messageEntity);
+        }
     }
 
     @PostMapping("/login")

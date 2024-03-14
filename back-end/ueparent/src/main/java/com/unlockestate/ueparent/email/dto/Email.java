@@ -6,6 +6,15 @@ public class Email {
     private String content;
     private String header;
 
+    public Email() {
+    }
+
+    public Email(String to, String content, String header) {
+        this.to = to;
+        this.content = content;
+        this.header = header;
+    }
+
     public String getTo() {
         return to;
     }

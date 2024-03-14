@@ -13,7 +13,7 @@ public class DataLoader implements CommandLineRunner {
 
     private final UserRepository userRepository;
     private final AuthenticationService authenticationService;
-    @Value("${initial.password}")
+    @Value("${initial.user}")
     private String initialUser;
     @Value("${initial.password}")
     private String initialPassword;

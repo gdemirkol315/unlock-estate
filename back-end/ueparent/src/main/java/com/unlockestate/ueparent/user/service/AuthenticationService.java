@@ -1,5 +1,7 @@
 package com.unlockestate.ueparent.user.service;
 
+import com.unlockestate.ueparent.email.dto.Email;
+import com.unlockestate.ueparent.email.service.EmailService;
 import com.unlockestate.ueparent.user.dto.AuthenticationResponse;
 import com.unlockestate.ueparent.user.dto.ChangePassword;
 import com.unlockestate.ueparent.user.dto.Salt;
@@ -8,6 +10,8 @@ import com.unlockestate.ueparent.user.repository.SaltRepository;
 import com.unlockestate.ueparent.user.repository.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.mail.MailSendException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -27,6 +31,13 @@ public class AuthenticationService {
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
+    private final EmailService emailService;
+
+    @Value("${initial.user}")
+    private String initialUser;
+
+    @Value("${app.allowed-origin}")
+    private String allowedOrigin;
 
     private static final Logger logger = LoggerFactory.getLogger(AuthenticationService.class);
 
@@ -36,17 +47,18 @@ public class AuthenticationService {
                                  SaltRepository saltRepository,
                                  PasswordEncoder passwordEncoder,
                                  JwtService jwtService,
-                                 AuthenticationManager authenticationManager) {
+                                 AuthenticationManager authenticationManager,
+                                 EmailService emailService) {
         this.userRepository = repository;
         this.saltRepository = saltRepository;
         this.passwordEncoder = passwordEncoder;
         this.jwtService = jwtService;
         this.authenticationManager = authenticationManager;
+        this.emailService = emailService;
     }
 
-    public AuthenticationResponse register(User request) {
+    public AuthenticationResponse register(User request) throws MailSendException {
         User user = new User();
-
 
         user.setName(request.getName());
         user.setLastName(request.getLastName());
@@ -60,12 +72,24 @@ public class AuthenticationService {
         salt.setSalt(createSalt());
         salt.setEmail(request.getEmail());
 
-        salt = saltRepository.save(salt);
-        user.setPassword(passwordEncoder.encode(request.getPassword() + salt.getSalt()));
+        if (user.getEmail().equals(initialUser)) {
+            user.setPassword(passwordEncoder.encode(request.getPassword() + salt.getSalt()));
+        } else {
+            String tmpPassword = createSalt();
+            emailService.sendSimpleMessage(new Email(user.getEmail(),
+                    "Your CheckoutNow account has been created.\n\nYour user name:\n" + user.getEmail() +
+                            "\nYour temporary password:\n" + tmpPassword +
+                            "\n\nPlease change your password immediately after login!\n" +
+                            "Login via:\n" +
+                            allowedOrigin + "\\login",
+                    "CheckoutNow Account Activation"));
+            //TODO bounce-back mail check if user mail does not exists
+            user.setPassword(passwordEncoder.encode(tmpPassword + salt.getSalt()));
+        }
 
+        saltRepository.save(salt);
         user = userRepository.save(user);
         String token = jwtService.generateToken(user);
-
         return new AuthenticationResponse(token);
     }
 
@@ -97,7 +121,7 @@ public class AuthenticationService {
 
     }
 
-    public AuthenticationResponse changePassword(ChangePassword changePassword){
+    public AuthenticationResponse changePassword(ChangePassword changePassword) {
         try {
             authenticate(changePassword.getUser());
         } catch (BadCredentialsException e) {
@@ -106,7 +130,7 @@ public class AuthenticationService {
         }
 
         String principalName = SecurityContextHolder.getContext().getAuthentication().getName();
-        if (!principalName.equals(changePassword.getUser().getEmail())){
+        if (!principalName.equals(changePassword.getUser().getEmail())) {
             logger.error("Principal {} is trying to change password of user {}!",
                     principalName,
                     changePassword.getUser().getEmail());
@@ -114,7 +138,7 @@ public class AuthenticationService {
         }
 
         User user = userRepository.findByEmail(changePassword.getUser().getEmail()).orElseThrow();
-        user.setPassword(passwordEncoder.encode(changePassword.getNewPassword()+ getSalt(user.getEmail())));
+        user.setPassword(passwordEncoder.encode(changePassword.getNewPassword() + getSalt(user.getEmail())));
         userRepository.save(user);
 
         String token = jwtService.generateToken(user);
@@ -138,7 +162,7 @@ public class AuthenticationService {
 
     public String getSalt(String email) {
         Salt salt = new Salt();
-        try{
+        try {
             salt = saltRepository.findByEmail(email).orElseThrow();
         } catch (NoSuchElementException e) {
             logger.error("Salt not found for user {}", email);

@@ -32,28 +32,12 @@
       <input matInput type="text"
              formControlName="preferredArea">
     </mat-form-field>
-    <br>
-    <mat-form-field class="example-full-width-block">
-      <mat-label>Password</mat-label>
-      <input matInput type="password"
-             formControlName="password">
-    </mat-form-field>
-    <br>
-    <mat-form-field class="example-full-width-block">
-      <mat-label>Repeat password</mat-label>
-      <input matInput type="password"
-             formControlName="repeatedPassword">
-    </mat-form-field>
     <mat-form-field>
       <mat-label>Role</mat-label>
       <mat-select formControlName="role">
         <mat-option *ngFor="let role of roles" [value]="role">{{ role }}</mat-option>
       </mat-select>
     </mat-form-field>
-    <div *ngIf="createUserForm.get('password')?.value!=createUserForm.get('repeatedPassword')?.value
-        && (createUserForm.get('password')?.value!='' && createUserForm.get('repeatedPassword')?.value!='')">
-      <span>Passwords do not match!</span>
-    </div>
     <br>
     <button mat-raised-button color="primary" class="slightly-spaced" type="submit"
             (click)="onCreateUser()"

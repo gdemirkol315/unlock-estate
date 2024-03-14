@@ -3,7 +3,11 @@ import {User} from "../../models/user.model";
 import {AuthService} from "../../services/auth/auth.service";
 import {Validators} from "@angular/forms";
 import {FormBuilder, FormGroup} from '@angular/forms';
-import {MatDialogRef} from "@angular/material/dialog";
+import {MatDialog, MatDialogRef} from "@angular/material/dialog";
+import {Utils} from "../../utils/utils";
+import {MessageEntity} from "../../models/message-entity.model";
+import {SpinnerDialogComponent} from "../spinner-dialog/spinner-dialog.component";
+import {first} from "rxjs";
 
 @Component({
   selector: 'user-create',
@@ -15,12 +19,11 @@ export class UserCreateComponent {
 
   constructor(private authService: AuthService,
               private formBuilder: FormBuilder,
+              private matDialog: MatDialog,
               private dialogRef: MatDialogRef<UserCreateComponent>) {
     this.createUserForm = this.formBuilder.group({
       name: ['', [Validators.required]],
       lastName: ['', [Validators.required]],
-      repeatedPassword: ['', [Validators.required]],
-      password: ['', [Validators.required]],
       email: ['', [Validators.required, Validators.email]],
       phoneNumber: [''],
       preferredArea: [''],
@@ -37,37 +40,44 @@ export class UserCreateComponent {
 
 
   onCreateUser() {
+
     if (this.validateForm()) {
+      this.matDialog.open(SpinnerDialogComponent);
       this.user.email = this.createUserForm.get('email')?.value;
       this.user.name = this.createUserForm.get('name')?.value;
       this.user.lastName = this.createUserForm.get('lastName')?.value;
-      this.user.password = this.createUserForm.get('password')?.value;
       this.user.role = this.createUserForm.get('role')?.value;
       this.user.preferredArea = this.createUserForm.get('preferredArea')?.value;
       this.user.phoneNumber = this.createUserForm.get('phoneNumber')?.value;
-      this.authService.createUser(this.user).subscribe({
+      this.authService.createUser(this.user).pipe(first()).subscribe({
         next: (user: User) => {
-          this.authService.toastr.success("User for " + this.user.email + " has been successfully created.")
           this.dialogRef.close(user);
+          this.authService.toastr.success("User for " + this.user.email + " has been successfully created.")
         },
         error: (err) => {
-          console.log(err)
-          this.authService.toastr.error("User " + this.user.email + " could not be created! The user might already exist.")
-          this.dialogRef.close();
+          let messageEntity: MessageEntity = Utils.jsonObjToInstance(new MessageEntity(),err);
+          this.authService.toastr.error(messageEntity.message);
+        }, complete: ()=>{
+          this.matDialog.closeAll();
         }
       });
     }
   }
 
   private validateForm(): boolean {
-    if (this.createUserForm.get('password')?.value != this.createUserForm.get('repeatedPassword')?.value) {
-      this.authService.toastr.error("Passwords do not match!");
+    if (!this.validateEmail(this.createUserForm.get('email')?.value)) {
+      this.authService.toastr.error("Wrong e-mail format!");
       return false;
     } else if (this.createUserForm.invalid) {
       this.authService.toastr.error("Necessary entries should be done!");
       return false;
     }
     return true;
+  }
+
+  validateEmail(email: string): boolean {
+    const regex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@(([^<>()[\]\\.,;:\s@"]+\.)+[^<>()[\]\\.,;:\s@"]{2,})$/i;
+    return regex.test(email);
   }
 
   onCancel(){
