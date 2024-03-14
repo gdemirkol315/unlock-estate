@@ -21,7 +21,6 @@ import {FullSizeImageDialogComponent} from "../full-size-image-dialog/full-size-
 import {EmailService} from "../../services/email/email.service";
 import {Email} from "../../models/email.model";
 import {LastWarningComponent} from "../last-warning/last-warning.component";
-import {removeSourceMapComments} from "@angular/compiler-cli/src/ngtsc/sourcemaps/src/source_file";
 
 @Component({
   selector: 'app-task-detail',
@@ -107,6 +106,9 @@ export class TaskDetailComponent implements OnInit {
     email.content = window.location.protocol + "//" + window.location.host + this.taskService.router.url;
     let comment: Comment = new Comment();
     comment.content = submitText;
+    comment.author.email = 'admin';
+    comment.author.name = 'System';
+    comment.author.lastName = 'Automation';
     this.postComment(comment);
     this.emailService.send(email).subscribe({
       next: () => {
@@ -200,6 +202,7 @@ export class TaskDetailComponent implements OnInit {
   }
 
   onAddComment() {
+    this.currentComment.author = this.userService.userProfile;
     this.postComment(this.currentComment);
     this.currentComment = new Comment();
   }
@@ -207,7 +210,6 @@ export class TaskDetailComponent implements OnInit {
   postComment(comment: Comment) {
     comment.date = new Date();
     comment.task.id = this.task.id;
-    comment.author = this.userService.userProfile;
     this.taskService.addComment(comment)
       .subscribe({
         next: async (commentResponse: Comment) => {
