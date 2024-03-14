@@ -21,6 +21,7 @@ import {FullSizeImageDialogComponent} from "../full-size-image-dialog/full-size-
 import {EmailService} from "../../services/email/email.service";
 import {Email} from "../../models/email.model";
 import {LastWarningComponent} from "../last-warning/last-warning.component";
+import {removeSourceMapComments} from "@angular/compiler-cli/src/ngtsc/sourcemaps/src/source_file";
 
 @Component({
   selector: 'app-task-detail',
@@ -104,14 +105,14 @@ export class TaskDetailComponent implements OnInit {
       + " from " + this.task.assignee.name + " " + this.task.assignee.lastName
     email.header = submitText;
     email.content = window.location.protocol + "//" + window.location.host + this.taskService.router.url;
-    let comment:Comment = new Comment();
+    let comment: Comment = new Comment();
     comment.content = submitText;
     this.postComment(comment);
     this.emailService.send(email).subscribe({
-      next:()=>{
-        this.emailService.toastr.success( "Task Submitted successfully!");
+      next: () => {
+        this.emailService.toastr.success("Task Submitted successfully!");
         this.emailService.router.navigate(['/success'])
-      }, error:(err)=>{
+      }, error: (err) => {
         console.log(err);
         this.emailService.toastr.error("There was an error on the server side while sending notification!")
       }
@@ -134,13 +135,14 @@ export class TaskDetailComponent implements OnInit {
             window.location.protocol + "//" + window.location.host + this.taskService.router.url;
           email.to = this.task.creator.email;
           this.emailService.send(email).subscribe({
-            next:()=>{
-              this.emailService.toastr.success( "Dispatchers has been notified.");
-            }, error:(err)=>{
+            next: () => {
+              this.emailService.toastr.success("Dispatchers has been notified.");
+            }, error: (err) => {
               console.log(err);
               this.emailService.toastr.error("There was an error on the server side while sending notification!")
             }
-          });;
+          });
+          ;
         }
       }, error: (err) => {
         console.log(err);
@@ -197,12 +199,12 @@ export class TaskDetailComponent implements OnInit {
     });
   }
 
-  onAddComment(){
+  onAddComment() {
     this.postComment(this.currentComment);
     this.currentComment = new Comment();
   }
 
-  postComment(comment:Comment){
+  postComment(comment: Comment) {
     comment.date = new Date();
     comment.task.id = this.task.id;
     comment.author = this.userService.userProfile;
@@ -216,10 +218,12 @@ export class TaskDetailComponent implements OnInit {
               '' + image.id));
             i++;
           }
-          if (commentResponse.images.length>0){
+          if (commentResponse.images.length > 0) {
             this.loadImages(commentResponse);
           }
-          this.comments.push(Utils.jsonObjToInstance(new Comment(), commentResponse));
+          let commentResponseInstance: Comment = Utils.jsonObjToInstance(new Comment(), commentResponse);
+          commentResponseInstance.author = comment.author;
+          this.comments.push(commentResponseInstance);
         }, error: (err) => {
           console.log(err)
           this.taskService.toastr.error("There was an error posting the comment");
