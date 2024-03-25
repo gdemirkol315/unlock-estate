@@ -21,6 +21,7 @@ import {FullSizeImageDialogComponent} from "../full-size-image-dialog/full-size-
 import {EmailService} from "../../services/email/email.service";
 import {Email} from "../../models/email.model";
 import {LastWarningComponent} from "../last-warning/last-warning.component";
+import {JwtToken} from "../../models/jwt-token.model";
 
 @Component({
   selector: 'app-task-detail',
@@ -45,7 +46,8 @@ export class TaskDetailComponent implements OnInit {
               private fileService: FileUploadService,
               private sanitizer: DomSanitizer,
               private matDialog: MatDialog,
-              private emailService: EmailService) {
+              private emailService: EmailService,
+              private jwtToken:JwtToken) {
 
   }
 
@@ -97,18 +99,18 @@ export class TaskDetailComponent implements OnInit {
   }
 
 
-  submitTask() {
+  async submitTask() {
     let email: Email = new Email();
     email.to = this.task.creator.email
     let submitText: string = "Task Submitted for " + this.task.realEstate.name
-      + " from " + this.task.assignee.name + " " + this.task.assignee.lastName
     email.header = submitText;
-    email.content = window.location.protocol + "//" + window.location.host + this.taskService.router.url;
+    email.content = Utils.getTaskSubmittedMessage(this.task) + "\n\nfor task details:\n"
+    window.location.protocol + "//" + window.location.host + this.taskService.router.url;
     let comment: Comment = new Comment();
     comment.content = submitText;
-    comment.author.email = 'admin';
-    comment.author.name = 'System';
-    comment.author.lastName = 'Automation';
+    let currentUser = new User();
+    currentUser.cloneUser(await firstValueFrom(this.userService.getUser(this.jwtToken.getUserEmail())));
+    comment.author = currentUser;
     this.postComment(comment);
     this.emailService.send(email).subscribe({
       next: () => {
@@ -121,10 +123,10 @@ export class TaskDetailComponent implements OnInit {
     });
   }
 
-  reportProblem() {
+  reportProblem(item: TaskCheckListItem) {
     let dialogRefLastWarn: MatDialogRef<LastWarningComponent> = this.matDialog.open(LastWarningComponent, {
       data: {
-        message: "Do you really want to notify dispatchers?"
+        message: "Do you really want to report a problem to notify dispatchers?"
       }
     });
     dialogRefLastWarn.afterClosed().subscribe({
@@ -145,6 +147,8 @@ export class TaskDetailComponent implements OnInit {
             }
           });
           ;
+        } else {
+          item.status ='PENDING'
         }
       }, error: (err) => {
         console.log(err);
@@ -186,6 +190,7 @@ export class TaskDetailComponent implements OnInit {
       item.status = 'PENDING'
     } else {
       item.status = 'ISSUE'
+      this.reportProblem(item);
     }
     this.updateCheckListItemStatus(item);
   }

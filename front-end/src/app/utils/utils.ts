@@ -1,5 +1,7 @@
 import {User} from "../models/user.model";
 import {FormControl, FormGroup} from "@angular/forms";
+import {Task} from "../models/task.model";
+import {TaskCheckListItem} from "../models/task-check-list-item.model";
 
 export class Utils {
   public static getUserFromObject(obj: any): User {
@@ -55,4 +57,34 @@ export class Utils {
 
     return obj;
   }
+
+  static getTaskSubmittedMessage(task: Task):string {
+    let checkoutDateTime = this.formatDate(new Date(task.taskDate));
+    let taskCompleteDateTime = this.formatDate(new Date());
+    let message: string = "This is an automated message." +
+      "\n\n\nFollowing task is completed:\n" +
+      "\nProperty: " + task.realEstate.name
+      + "\nAssignee: " + task.assignee.name + " " + task.assignee.lastName
+      + "\nCheckout Date: " + checkoutDateTime
+      + "\nTask Complete Date: " + taskCompleteDateTime
+    +" \n\nChecklist Items:\n"
+    task.taskCheckListItems.forEach((taskCheckListItem: TaskCheckListItem) => {
+      message = message + "\n - " + taskCheckListItem.checklistItem.description + ": " + taskCheckListItem.status
+    })
+    return message;
+  }
+
+  static formatDate(date: Date): string {
+    const pad = (num: number) => num.toString().padStart(2, '0');
+
+    const day = pad(date.getDate());
+    const month = pad(date.getMonth() + 1); // Note: Months are zero-indexed
+    const year = date.getFullYear();
+    const hours = pad(date.getHours());
+    const minutes = pad(date.getMinutes());
+
+    return `${day}.${month}.${year} ${hours}:${minutes}`;
+  }
+
+
 }
