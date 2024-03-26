@@ -158,6 +158,6 @@
             matTooltip="Close Task" [disabled]="task.status == 'DONE'">
       Close Task
     </button>
-    <mat-card-footer *ngIf="!disableSubmitButton()">*All checklist items must be marked to be able to submit the task.</mat-card-footer>
+    <mat-card-footer *ngIf="disableSubmitButton()">*All checklist items must be marked to be able to submit the task.</mat-card-footer>
   </mat-card>
 </div>
