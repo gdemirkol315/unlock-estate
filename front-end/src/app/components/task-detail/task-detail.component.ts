@@ -47,7 +47,7 @@ export class TaskDetailComponent implements OnInit {
               private sanitizer: DomSanitizer,
               private matDialog: MatDialog,
               private emailService: EmailService,
-              private jwtToken:JwtToken) {
+              private jwtToken: JwtToken) {
 
   }
 
@@ -123,7 +123,7 @@ export class TaskDetailComponent implements OnInit {
     });
   }
 
-  reportProblem(item: TaskCheckListItem) {
+  reportProblem(item?: TaskCheckListItem) {
     let dialogRefLastWarn: MatDialogRef<LastWarningComponent> = this.matDialog.open(LastWarningComponent, {
       data: {
         message: "Do you really want to report a problem to notify dispatchers?"
@@ -147,8 +147,14 @@ export class TaskDetailComponent implements OnInit {
             }
           });
           ;
-        } else {
-          item.status ='PENDING'
+        }
+        if (item) {
+          if (dialogAnswer) {
+            item.status = "ISSUE"
+          } else {
+            item.status = "PENDING"
+          }
+          this.updateCheckListItemStatus(item);
         }
       }, error: (err) => {
         console.log(err);
@@ -188,11 +194,10 @@ export class TaskDetailComponent implements OnInit {
   markProblematic(item: TaskCheckListItem) {
     if (item.status == 'ISSUE') {
       item.status = 'PENDING'
+      this.updateCheckListItemStatus(item);
     } else {
-      item.status = 'ISSUE'
       this.reportProblem(item);
     }
-    this.updateCheckListItemStatus(item);
   }
 
   updateCheckListItemStatus(item: TaskCheckListItem) {
