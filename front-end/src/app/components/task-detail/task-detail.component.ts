@@ -206,8 +206,8 @@ export class TaskDetailComponent implements OnInit {
             currentTaskCheckListItems.push(taskCheckListItem);
           }
         }
-      }
-    )
+    });
+    currentTaskCheckListItems.sort((a,b)=> a.checklistItem.id - b.checklistItem.id);
     return currentTaskCheckListItems;
   }
 
