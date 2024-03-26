@@ -54,7 +54,6 @@ public class TaskService {
 
     @Transactional
     public Task createTask(Task task) {
-        task.setActive(true);
         User creator = new User();
         creator.setUserId(userService.getPrincipalUserId());
         task.setCreator(creator);

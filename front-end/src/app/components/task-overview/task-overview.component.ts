@@ -19,7 +19,7 @@ export class TaskOverviewComponent implements OnInit, AfterViewInit {
   searchKey: string;
   currentTasks: MatTableDataSource<Task> = new MatTableDataSource<Task>();
   closedTasks: MatTableDataSource<Task> = new MatTableDataSource<Task>();
-  displayedColumns:string[] =  ['id', 'taskDate', 'realEstateName','realEstateCountry','realEstateCity', 'realEstateZip', 'assignee', 'creator','actions'];
+  displayedColumns:string[] =  ['id', 'taskDate', 'realEstateName','realEstateCountry','realEstateCity', 'realEstateZip', 'assignee', 'creator', 'status','actions'];
 
   @ViewChild(MatSort) sort: MatSort;
 
@@ -75,10 +75,10 @@ export class TaskOverviewComponent implements OnInit, AfterViewInit {
           task.realEstate = realEstate;
           task.assignee = this.taskService.findAssignee(users,task.id);
           task.creator = this.taskService.findCreator(users,task.id);
-          if (task.active) {
-            currentTasks.push(task);
-          } else {
+          if (task.status == "DONE") {
             closedTasks.push(task);
+          } else {
+            currentTasks.push(task);
           }
         }
       }
@@ -88,10 +88,10 @@ export class TaskOverviewComponent implements OnInit, AfterViewInit {
         task.realEstate = await firstValueFrom(this.realEstateService.getRealEstateFromTask(task.id));
         task.assignee = await firstValueFrom(this.userService.getAssigneeUser(task.id));
         task.creator =  await firstValueFrom(this.userService.getCreatorUser(task.id));
-        if (task.active) {
-          currentTasks.push(task);
-        } else {
+        if (task.status == "DONE") {
           closedTasks.push(task);
+        } else {
+          currentTasks.push(task);
         }
       }
     }
@@ -100,7 +100,4 @@ export class TaskOverviewComponent implements OnInit, AfterViewInit {
     this.closedTasks.data = closedTasks;
   }
 
-  changeTaskStatus(task: Task, status: boolean) {
-
-  }
 }

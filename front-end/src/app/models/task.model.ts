@@ -12,7 +12,6 @@ export class Task {
   taskCheckListItems: TaskCheckListItem[] = new Array();
   taskDate: Date = new Date();
   createdDate: Date = new Date();
-  active:boolean;
   status: string;
 
   [key: string]: any;
