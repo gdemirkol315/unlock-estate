@@ -3,7 +3,8 @@ package com.unlockestate.ueparent.task.repository;
 public enum Status {
     PENDING("PENDING"),
     DONE("DONE"),
-    ISSUE("ISSUE");
+    ISSUE("ISSUE"),
+    SUBMITTED("SUBMITTED");
 
     private String value;
 

@@ -13,6 +13,7 @@ export class Task {
   taskDate: Date = new Date();
   createdDate: Date = new Date();
   active:boolean;
+  status: string;
 
   [key: string]: any;
 }

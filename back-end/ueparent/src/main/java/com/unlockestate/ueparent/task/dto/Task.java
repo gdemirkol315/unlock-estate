@@ -4,6 +4,7 @@ package com.unlockestate.ueparent.task.dto;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.unlockestate.ueparent.realestate.dto.RealEstate;
+import com.unlockestate.ueparent.task.repository.Status;
 import com.unlockestate.ueparent.user.dto.User;
 import jakarta.persistence.*;
 
@@ -42,6 +43,10 @@ public class Task {
     private Date createdDate;
 
     private boolean isActive;
+
+    @Enumerated(EnumType.STRING)
+    @Column(columnDefinition = "varchar default 'PENDING'")
+    private Status  status;
 
     public Integer getId() {
         return id;
@@ -113,5 +118,13 @@ public class Task {
 
     public void setActive(boolean active) {
         isActive = active;
+    }
+
+    public Status getStatus() {
+        return status;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
     }
 }

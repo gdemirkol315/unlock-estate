@@ -53,20 +53,27 @@ public class TaskService {
     }
 
     @Transactional
-    public Task saveTask(Task task) {
+    public Task createTask(Task task) {
         task.setActive(true);
         User creator = new User();
         creator.setUserId(userService.getPrincipalUserId());
         task.setCreator(creator);
 
+        task = taskRepository.save(task);
+
         for (CheckList checkList : task.getRealEstate().getCheckLists()) {
             for (CheckListItem checkListItem : checkList.getCheckListItems()) {
-                task.getTaskCheckListItems().add(new TaskCheckListItem(task, checkListItem, Status.PENDING));
+                TaskCheckListItem taskCheckListItem = new TaskCheckListItem(task, checkListItem, Status.PENDING);
+                taskCheckListItemRepository.save(taskCheckListItem);
             }
         }
 
+        return task;
+    }
 
-        return taskRepository.save(task);
+    @Transactional
+    public void updateTaskStatus(Task task){
+        taskRepository.setStatus(task.getStatus().name(), task.getId());
     }
 
     public Task getTask(String id) {
@@ -74,8 +81,10 @@ public class TaskService {
     }
 
     @Transactional
-    public void updateTaskChecklistItem(TaskCheckListItem taskCheckListItem) {
-        taskCheckListItemRepository.setStatus(taskCheckListItem.getStatus().name(), taskCheckListItem.getId());
+    public void updateTaskChecklistItem(TaskCheckListItem taskCheckListItem, String taskId) {
+        taskCheckListItemRepository.setStatus(taskCheckListItem.getStatus().name(),
+                Integer.parseInt(taskId),
+                taskCheckListItem.getChecklistItem().getId());
     }
 
     public Comment addComment(Comment comment) {

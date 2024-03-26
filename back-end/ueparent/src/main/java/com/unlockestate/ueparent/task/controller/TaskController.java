@@ -40,12 +40,12 @@ public class TaskController {
     }
 
     @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('USER')")
-    @PostMapping("/saveTask")
+    @PostMapping("/createTask")
     public ResponseEntity<Task> saveTask(
             @RequestBody Task task
     ) {
         try {
-            return ResponseEntity.ok(taskService.saveTask(task));
+            return ResponseEntity.ok(taskService.createTask(task));
         } catch (InternalServerRuntimeException e) {
             logger.error("Could not save task!");
             return ResponseEntity.internalServerError().build();
@@ -54,12 +54,28 @@ public class TaskController {
     }
 
     @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('USER')")
-    @PostMapping("/updateTaskChecklistItem")
-    public ResponseEntity<MessageEntity> updateTaskChecklistItem(
-            @RequestBody TaskCheckListItem taskCheckListItem
+    @PostMapping("/updateTask")
+    public ResponseEntity<MessageEntity> updateTask(
+            @RequestBody Task task
     ) {
         try {
-            taskService.updateTaskChecklistItem(taskCheckListItem);
+            taskService.updateTaskStatus(task);
+            return ResponseEntity.ok(new MessageEntity("Task status set succesfully to " + task.getStatus().name()));
+        } catch (InternalServerRuntimeException e) {
+            logger.error("Could not update task!");
+            return ResponseEntity.internalServerError().build();
+        }
+
+    }
+
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('USER')")
+    @PostMapping("/updateTaskChecklistItem/{taskId}")
+    public ResponseEntity<MessageEntity> updateTaskChecklistItem(
+            @RequestBody TaskCheckListItem taskCheckListItem,
+            @PathVariable String taskId
+    ) {
+        try {
+            taskService.updateTaskChecklistItem(taskCheckListItem, taskId);
             return ResponseEntity.ok(new MessageEntity("OK"));
         } catch (InternalServerRuntimeException e) {
             logger.error("Could not update task!");

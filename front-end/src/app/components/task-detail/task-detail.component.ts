@@ -30,7 +30,7 @@ import {JwtToken} from "../../models/jwt-token.model";
 })
 export class TaskDetailComponent implements OnInit {
 
-  task: Task;
+  task: Task = new Task();
   taskLoading: boolean = true;
   realEstateLoading: boolean = true;
   assigneeLoading: boolean = true;
@@ -47,7 +47,7 @@ export class TaskDetailComponent implements OnInit {
               private sanitizer: DomSanitizer,
               private matDialog: MatDialog,
               private emailService: EmailService,
-              private jwtToken: JwtToken) {
+              protected jwtToken: JwtToken) {
 
   }
 
@@ -100,28 +100,62 @@ export class TaskDetailComponent implements OnInit {
 
 
   async submitTask() {
-    let email: Email = new Email();
-    email.to = this.task.creator.email
-    let submitText: string = "Task Submitted for " + this.task.realEstate.name
-    email.header = submitText;
-    email.content = Utils.getTaskSubmittedMessage(this.task) + "\n\nfor task details:\n"
-    window.location.protocol + "//" + window.location.host + this.taskService.router.url;
-    let comment: Comment = new Comment();
-    comment.content = submitText;
-    let currentUser = new User();
-    currentUser.cloneUser(await firstValueFrom(this.userService.getUser(this.jwtToken.getUserEmail())));
-    comment.author = currentUser;
-    this.postComment(comment);
-    this.emailService.send(email).subscribe({
-      next: () => {
-        this.emailService.toastr.success("Task Submitted successfully!");
-        this.emailService.router.navigate(['/success'])
-      }, error: (err) => {
-        console.log(err);
-        this.emailService.toastr.error("There was an error on the server side while sending notification!")
+    let dialogRefLastWarn: MatDialogRef<LastWarningComponent> = this.matDialog.open(LastWarningComponent, {
+      data: {
+        message:"Are you sure to submit this task?"
       }
     });
+    let answer = await firstValueFrom(dialogRefLastWarn.afterClosed());
+    if (answer) {
+      let email: Email = new Email();
+      email.to = this.task.creator.email
+      let submitText: string = "Task Submitted for " + this.task.realEstate.name
+      email.header = submitText;
+      email.content = Utils.getTaskSubmittedMessage(this.task) + "\n\nfor task details:\n"
+      window.location.protocol + "//" + window.location.host + this.taskService.router.url;
+      let comment: Comment = new Comment();
+      comment.content = submitText;
+      let currentUser = new User();
+      currentUser.cloneUser(await firstValueFrom(this.userService.getUser(this.jwtToken.getUserEmail())));
+      comment.author = currentUser;
+      let issueExist = false;
+      this.task.taskCheckListItems.forEach((taskChecklistItem: TaskCheckListItem) => {
+        if (taskChecklistItem.status == 'ISSUE') {
+          issueExist = true
+        }
+      });
+      if (issueExist){
+        this.task.status = "SUBMITTED"
+      } else {
+        this.task.status = "DONE"
+      }
+
+      this.taskService.updateTask(this.task,"Task submitted successfully.")
+      this.postComment(comment);
+      this.emailService.send(email).subscribe({
+        next: () => {
+        }, error: (err) => {
+          console.log(err);
+          this.emailService.toastr.error("There was an error on the server side while sending notification!")
+        }
+      });
+    }
   }
+
+
+  async closeTask() {
+    let dialogRefLastWarn: MatDialogRef<LastWarningComponent> = this.matDialog.open(LastWarningComponent, {
+      data: {
+        message: "Are you sure to close this task?"
+      }
+    });
+    let answer = await firstValueFrom(dialogRefLastWarn.afterClosed());
+    if (answer){
+      this.task.status = "DONE";
+      this.taskService.updateTask(this.task,"Task closed successfully.");
+    }
+  }
+
 
   reportProblem(item?: TaskCheckListItem) {
     let dialogRefLastWarn: MatDialogRef<LastWarningComponent> = this.matDialog.open(LastWarningComponent, {
@@ -134,8 +168,8 @@ export class TaskDetailComponent implements OnInit {
         if (dialogAnswer) {
           let email: Email = new Email();
           email.header = "Problem Reported: " + this.task.realEstate.name + "!"
-          email.content = "There is a problem with the task number " + this.task.id + " user: " + this.task.assignee.name
-            + this.task.assignee.lastName + " reports a problem with real estate: " + this.task.realEstate.name + "please check: \n" +
+          email.content = "There is a problem with the task number " + this.task.id + "\nuser " + this.task.assignee.name
+            +" " + this.task.assignee.lastName + " reports a problem with real estate: " + this.task.realEstate.name + "\nplease check: \n" +
             window.location.protocol + "//" + window.location.host + this.taskService.router.url;
           email.to = this.task.creator.email;
           this.emailService.send(email).subscribe({
@@ -201,7 +235,7 @@ export class TaskDetailComponent implements OnInit {
   }
 
   updateCheckListItemStatus(item: TaskCheckListItem) {
-    this.taskService.updateTaskCheckListItemStatus(item).subscribe({
+    this.taskService.updateTaskCheckListItemStatus(item, "" + this.task.id).subscribe({
       next: () => {
         this.taskService.toastr.success("Updated item status")
       }, error: (err) => {
@@ -248,7 +282,10 @@ export class TaskDetailComponent implements OnInit {
     for (const commentObj of commentObjs) {
       let comment: Comment = Utils.jsonObjToInstance(new Comment(), commentObj);
       this.loadImages(comment);
-      comment.author = await firstValueFrom(this.taskService.getCommentAuthorDetails(comment.id))
+      comment.author = await firstValueFrom(this.taskService.getCommentAuthorDetails(comment.id)).catch(error => {
+        this.errorToastr(error);
+        return new User();
+      });
       this.comments.push(comment)
     }
     this.commentsLoading = false;
@@ -291,7 +328,7 @@ export class TaskDetailComponent implements OnInit {
     });
   }
 
-  allChecklistItemsMarked(): boolean {
+  disableSubmitButton(): boolean {
     let isAllCheckListItemsMarked: boolean = true;
 
     this.task.taskCheckListItems.forEach((taskChecklistItem: TaskCheckListItem) => {
@@ -299,6 +336,6 @@ export class TaskDetailComponent implements OnInit {
         isAllCheckListItemsMarked = false
       }
     });
-    return isAllCheckListItemsMarked;
+    return !isAllCheckListItemsMarked || this.task.status=="SUBMITTED" || this.task.status=="DONE";
   }
 }

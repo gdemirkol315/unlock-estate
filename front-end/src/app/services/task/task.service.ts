@@ -20,7 +20,19 @@ export class TaskService extends DataService {
   }
 
   saveTask(task: Task) {
-    return this.http.post<Task>(this.hostname + this.serviceUrlSuffix + "/saveTask", task)
+    return this.http.post<Task>(this.hostname + this.serviceUrlSuffix + "/createTask", task)
+  }
+
+  updateTask(task: Task, toastrSuccessMessage:string) {
+    this.http.post(this.hostname + this.serviceUrlSuffix + "/updateTask", task) .subscribe({
+      next: () =>{
+        this.toastr.success(toastrSuccessMessage);
+        this.router.navigate(['/success'])
+      }, error: err => {
+        console.log(err);
+        this.toastr.error("There was an unexpected error while saving task!");
+      }
+    });
   }
 
   findAssignee(users: User[], taskId: number) {
@@ -46,8 +58,8 @@ export class TaskService extends DataService {
   }
 
 
-  updateTaskCheckListItemStatus(item: TaskCheckListItem) {
-    return this.http.post(this.hostname + this.serviceUrlSuffix + "/updateTaskChecklistItem", item);
+  updateTaskCheckListItemStatus(item: TaskCheckListItem, taskId) {
+    return this.http.post(this.hostname + this.serviceUrlSuffix + "/updateTaskChecklistItem/"+taskId, item);
   }
 
   addComment(currentComment: Comment) {

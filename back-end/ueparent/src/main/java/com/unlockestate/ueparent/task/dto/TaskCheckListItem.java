@@ -6,16 +6,16 @@ import com.unlockestate.ueparent.task.repository.Status;
 import jakarta.persistence.*;
 
 @Entity
+@IdClass(TaskCheckListItemId.class)
 public class TaskCheckListItem {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
 
+    @Id
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "task_id")
     @JsonBackReference("task-task-check-list-item")
     private Task task;
 
+    @Id
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "checklist_item_id")
     private CheckListItem checklistItem;
@@ -30,14 +30,6 @@ public class TaskCheckListItem {
         this.task = task;
         this.checklistItem = checklistItem;
         this.status = status;
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
     }
 
     public Task getTask() {
