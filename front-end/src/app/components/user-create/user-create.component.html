@@ -21,6 +21,7 @@
              formControlName="email">
     </mat-form-field>
     <br>
+    <phone-country-dropdown (countryChange)="setPhoneNumber($event)"></phone-country-dropdown>
     <mat-form-field class="example-full-width">
       <mat-label>Phone Number</mat-label>
       <input matInput type="text"

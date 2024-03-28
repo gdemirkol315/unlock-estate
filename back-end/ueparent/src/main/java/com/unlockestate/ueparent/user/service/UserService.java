@@ -77,7 +77,7 @@ public class UserService {
 
             existingUser.setLastName(updatedUser.getLastName());
             existingUser.setPreferredArea(updatedUser.getPreferredArea());
-            existingUser.setPhoneNumber(updatedUser.getPhoneNumber());
+            existingUser.setPhoneNumber(updatedUser.getPhoneNumber().replaceAll("\\s+", ""));
             existingUser.setRole(updatedUser.getRole());
             existingUser.setActive(updatedUser.isActive());
 
@@ -111,7 +111,7 @@ public class UserService {
 
             existingUser.setLastName(user.getLastName());
             existingUser.setPreferredArea(user.getPreferredArea());
-            existingUser.setPhoneNumber(user.getPhoneNumber());
+            existingUser.setPhoneNumber(user.getPhoneNumber().replaceAll("\\s+", ""));
 
             userRepository.save(existingUser);
             // Return the updated user

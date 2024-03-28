@@ -8,6 +8,7 @@ import {Utils} from "../../utils/utils";
 import {MessageEntity} from "../../models/message-entity.model";
 import {SpinnerDialogComponent} from "../spinner-dialog/spinner-dialog.component";
 import {first} from "rxjs";
+import {isValidPhoneNumber} from "libphonenumber-js";
 
 @Component({
   selector: 'user-create',
@@ -16,6 +17,7 @@ import {first} from "rxjs";
 })
 export class UserCreateComponent {
   protected createUserForm: FormGroup;
+  private phoneNumberCountry;
 
   constructor(private authService: AuthService,
               private formBuilder: FormBuilder,
@@ -48,7 +50,6 @@ export class UserCreateComponent {
       this.user.lastName = this.createUserForm.get('lastName')?.value;
       this.user.role = this.createUserForm.get('role')?.value;
       this.user.preferredArea = this.createUserForm.get('preferredArea')?.value;
-      this.user.phoneNumber = this.createUserForm.get('phoneNumber')?.value;
       this.authService.createUser(this.user).pipe(first()).subscribe({
         next: (user: User) => {
           this.dialogRef.close(user);
@@ -65,8 +66,12 @@ export class UserCreateComponent {
   }
 
   private validateForm(): boolean {
+    this.user.phoneNumber = this.user.phoneNumber = '+' + this.phoneNumberCountry.dialCode + this.createUserForm.get('phoneNumber')?.value;
     if (!this.validateEmail(this.createUserForm.get('email')?.value)) {
       this.authService.toastr.error("Wrong e-mail format!");
+      return false;
+    } else if (!isValidPhoneNumber(this.user.phoneNumber, this.phoneNumberCountry)) {
+      this.authService.toastr.error("Phone number format is not correct!");
       return false;
     } else if (this.createUserForm.invalid) {
       this.authService.toastr.error("Necessary entries should be done!");
@@ -84,4 +89,7 @@ export class UserCreateComponent {
     this.dialogRef.close();
   }
 
+  setPhoneNumber($event:any) {
+    this.phoneNumberCountry = $event
+  }
 }

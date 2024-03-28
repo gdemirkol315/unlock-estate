@@ -64,7 +64,7 @@ public class AuthenticationService {
         user.setLastName(request.getLastName());
         user.setEmail(request.getEmail());
         user.setRole(request.getRole());
-        user.setPhoneNumber(request.getPhoneNumber());
+        user.setPhoneNumber(request.getPhoneNumber().replaceAll("\\s+", ""));
         user.setPreferredArea(request.getPreferredArea());
         user.setActive(request.isActive());
 

@@ -1,0 +1,13 @@
+<mat-form-field appearance="fill">
+  <mat-label>Country Dial</mat-label>
+  <mat-select [(ngModel)]="selectedCountry" (selectionChange)="onCountryChange($event)">
+    <!-- Custom trigger template -->
+    <ng-template mat-select-trigger>
+      {{selectedCountry?.dialCode}}
+    </ng-template>
+
+    <mat-option *ngFor="let country of countries" [value]="country">
+      {{ country.name }} (+{{ country.dialCode }})
+    </mat-option>
+  </mat-select>
+</mat-form-field>
