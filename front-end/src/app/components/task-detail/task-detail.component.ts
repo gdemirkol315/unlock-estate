@@ -310,6 +310,10 @@ export class TaskDetailComponent implements OnInit {
   }
 
   disableSubmitButton(): boolean {
+    return !this.isAllCheckListItemsMarked() || this.task.status=="SUBMITTED" || this.task.status=="DONE";
+  }
+
+  isAllCheckListItemsMarked(): boolean {
     let isAllCheckListItemsMarked: boolean = true;
 
     this.task.taskCheckListItems.forEach((taskChecklistItem: TaskCheckListItem) => {
@@ -317,6 +321,6 @@ export class TaskDetailComponent implements OnInit {
         isAllCheckListItemsMarked = false
       }
     });
-    return !isAllCheckListItemsMarked || this.task.status=="SUBMITTED" || this.task.status=="DONE";
+    return isAllCheckListItemsMarked;
   }
 }

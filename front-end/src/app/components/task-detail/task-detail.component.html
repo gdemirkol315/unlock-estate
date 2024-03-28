@@ -22,6 +22,10 @@
       <mat-label>Creator</mat-label>
       <input matInput type="text" [ngModel]="task.creator.name + ' ' + task.creator.lastName" readonly>
     </mat-form-field>
+    <mat-form-field class="slightly-spaced">
+      <mat-label>Status</mat-label>
+      <input matInput type="text" [ngModel]="task.status" readonly>
+    </mat-form-field>
   </mat-card>
   <br>
   <mat-card multi="true" class="centered-container">
@@ -158,6 +162,6 @@
             matTooltip="Close Task" [disabled]="task.status == 'DONE'">
       Close Task
     </button>
-    <mat-card-footer *ngIf="disableSubmitButton()">*All checklist items must be marked to be able to submit the task.</mat-card-footer>
+    <mat-card-footer *ngIf="!isAllCheckListItemsMarked()">*All checklist items must be marked to be able to submit the task.</mat-card-footer>
   </mat-card>
 </div>
