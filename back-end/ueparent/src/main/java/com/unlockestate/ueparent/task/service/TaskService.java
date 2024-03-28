@@ -1,5 +1,7 @@
 package com.unlockestate.ueparent.task.service;
 
+import com.unlockestate.ueparent.notification.dto.Email;
+import com.unlockestate.ueparent.notification.service.EmailService;
 import com.unlockestate.ueparent.notification.service.WhatsAppService;
 import com.unlockestate.ueparent.task.dto.Comment;
 import com.unlockestate.ueparent.task.dto.CheckList;
@@ -27,6 +29,9 @@ public class TaskService {
     @Value("${app.allowed-origin}")
     private String allowedOrigin;
 
+    @Value("${initial.user}")
+    private String initialUser;
+
     private final UserService userService;
     private final TaskRepository taskRepository;
     private final TaskCheckListItemRepository taskCheckListItemRepository;
@@ -34,6 +39,7 @@ public class TaskService {
     private final UserRepository userRepository;
 
     private final WhatsAppService whatsAppService;
+    private final EmailService emailService;
 
     @Autowired
     public TaskService(UserService userService,
@@ -41,13 +47,14 @@ public class TaskService {
                        TaskCheckListItemRepository taskCheckListItemRepository,
                        CommentRepository commentRepository,
                        UserRepository userRepository,
-                       WhatsAppService whatsAppService) {
+                       WhatsAppService whatsAppService, EmailService emailService) {
         this.userService = userService;
         this.taskRepository = taskRepository;
         this.taskCheckListItemRepository = taskCheckListItemRepository;
         this.commentRepository = commentRepository;
         this.userRepository = userRepository;
         this.whatsAppService = whatsAppService;
+        this.emailService = emailService;
     }
 
     public List<Task> getTasks() {
@@ -88,8 +95,46 @@ public class TaskService {
     }
 
     @Transactional
-    public void updateTaskStatus(Task task){
+    public void updateTaskStatus(Task task) {
         taskRepository.setStatus(task.getStatus().name(), task.getId());
+        commentRepository.save(getStatusUpdatedComment(task));
+        if (task.getStatus().equals(Status.SUBMITTED) || task.getStatus().equals(Status.DONE)) {
+            Email email = new Email(task.getCreator().getEmail(),
+                    getTaskSubmittedMessage(task),
+                    "Task " + task.getStatus().name() + " (" + task.getRealEstate().getName() + ")" );
+            emailService.sendSimpleMessage(email);
+        }
+    }
+
+    private Comment getStatusUpdatedComment(Task task) {
+        Comment comment = new Comment();
+        comment.setAuthor(userRepository.findByEmail(initialUser).get());
+        comment.setDate(new Date());
+        comment.setTask(task);
+        User statusChanger = userRepository.findByEmail(userService.getPrincipalName()).get();
+        comment.setContent("Task status set to " + task.getStatus().name() + " from " + statusChanger.getName() + " " + statusChanger.getLastName());
+        return comment;
+    }
+
+    private String getTaskSubmittedMessage(Task task) {
+        String checkoutDateTime = formatDate(new Date(task.getTaskDate().getTime()));
+        String taskCompleteDateTime = formatDate(new Date());
+        StringBuilder message = new StringBuilder("This is an automated message." +
+                "\n\n\nFollowing task is completed:\n" +
+                "\nProperty: " + task.getRealEstate().getName() +
+                "\nAssignee: " + task.getAssignee().getName() + " " + task.getAssignee().getLastName() +
+                "\nCheckout Date: " + checkoutDateTime +
+                "\nTask Complete Date: " + taskCompleteDateTime +
+                " \n\nChecklist Items:\n");
+
+        for (TaskCheckListItem taskCheckListItem : task.getTaskCheckListItems()) {
+            message.append("\n - ")
+                    .append(taskCheckListItem.getChecklistItem().getDescription())
+                    .append(": ")
+                    .append(taskCheckListItem.getStatus());
+        }
+
+        return message.toString();
     }
 
     public Task getTask(String id) {

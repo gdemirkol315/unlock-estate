@@ -38,7 +38,7 @@ public class User implements UserDetails {
     private List<Task> assignedTasks;
 
     @JsonManagedReference("creator-task")
-    @OneToMany(mappedBy = "creator", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "creator", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Task> createdTasks;
 
     @JsonManagedReference("author-comment")

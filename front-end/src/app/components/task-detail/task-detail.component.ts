@@ -107,17 +107,6 @@ export class TaskDetailComponent implements OnInit {
     });
     let answer = await firstValueFrom(dialogRefLastWarn.afterClosed());
     if (answer) {
-      let email: Email = new Email();
-      email.to = this.task.creator.email
-      let submitText: string = "Task Submitted for " + this.task.realEstate.name
-      email.header = submitText;
-      email.content = Utils.getTaskSubmittedMessage(this.task) + "\n\nfor task details:\n" +
-                  window.location.protocol + "//" + window.location.host + this.taskService.router.url;
-      let comment: Comment = new Comment();
-      comment.content = submitText;
-      let currentUser = new User();
-      currentUser.cloneUser(await firstValueFrom(this.userService.getUser(this.jwtToken.getUserEmail())));
-      comment.author = currentUser;
       let issueExist = false;
       this.task.taskCheckListItems.forEach((taskChecklistItem: TaskCheckListItem) => {
         if (taskChecklistItem.status == 'ISSUE') {
@@ -131,14 +120,6 @@ export class TaskDetailComponent implements OnInit {
       }
 
       this.taskService.updateTask(this.task,"Task submitted successfully.")
-      this.postComment(comment);
-      this.emailService.send(email).subscribe({
-        next: () => {
-        }, error: (err) => {
-          console.log(err);
-          this.emailService.toastr.error("There was an error on the server side while sending notification!")
-        }
-      });
     }
   }
 
