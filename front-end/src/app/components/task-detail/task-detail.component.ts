@@ -111,8 +111,8 @@ export class TaskDetailComponent implements OnInit {
       email.to = this.task.creator.email
       let submitText: string = "Task Submitted for " + this.task.realEstate.name
       email.header = submitText;
-      email.content = Utils.getTaskSubmittedMessage(this.task) + "\n\nfor task details:\n"
-      window.location.protocol + "//" + window.location.host + this.taskService.router.url;
+      email.content = Utils.getTaskSubmittedMessage(this.task) + "\n\nfor task details:\n" +
+                  window.location.protocol + "//" + window.location.host + this.taskService.router.url;
       let comment: Comment = new Comment();
       comment.content = submitText;
       let currentUser = new User();

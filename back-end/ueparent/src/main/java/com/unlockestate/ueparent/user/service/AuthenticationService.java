@@ -1,7 +1,7 @@
 package com.unlockestate.ueparent.user.service;
 
-import com.unlockestate.ueparent.email.dto.Email;
-import com.unlockestate.ueparent.email.service.EmailService;
+import com.unlockestate.ueparent.notification.dto.Email;
+import com.unlockestate.ueparent.notification.service.EmailService;
 import com.unlockestate.ueparent.user.dto.AuthenticationResponse;
 import com.unlockestate.ueparent.user.dto.ChangePassword;
 import com.unlockestate.ueparent.user.dto.Salt;

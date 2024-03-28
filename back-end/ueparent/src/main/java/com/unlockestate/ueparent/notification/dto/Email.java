@@ -1,4 +1,4 @@
-package com.unlockestate.ueparent.email.dto;
+package com.unlockestate.ueparent.notification.dto;
 
 public class Email {
 

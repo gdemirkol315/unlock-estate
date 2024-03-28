@@ -7,9 +7,9 @@ import {Email} from "../../models/email.model";
 })
 export class EmailService extends DataService {
 
-  private servicePrefix: string = "email";
+  private servicePrefix: string = "notification";
 
   send(email: Email) {
-    return this.http.post(this.hostname + this.servicePrefix + "/send", email)
+    return this.http.post(this.hostname + this.servicePrefix + "/sendEmail", email)
   }
 }

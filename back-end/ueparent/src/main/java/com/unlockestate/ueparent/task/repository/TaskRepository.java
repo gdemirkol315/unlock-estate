@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface TaskRepository extends JpaRepository<Task, Integer> {
-    @Query(value = "select * from task t, users u where t.assignee_id = u.user_id and u.email = ?1", nativeQuery = true)
+    @Query(value = "select * from task t, users u where t.assignee_id = u.user_id and u.notification = ?1", nativeQuery = true)
     Optional<List<Task>> findByAssignee(String assigneeEmail);
 
     @Modifying

@@ -1,7 +1,6 @@
-package com.unlockestate.ueparent.email.service;
+package com.unlockestate.ueparent.notification.service;
 
-import com.unlockestate.ueparent.email.dto.Email;
-import org.eclipse.angus.mail.smtp.SMTPAddressFailedException;
+import com.unlockestate.ueparent.notification.dto.Email;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.MailSendException;
 import org.springframework.mail.SimpleMailMessage;

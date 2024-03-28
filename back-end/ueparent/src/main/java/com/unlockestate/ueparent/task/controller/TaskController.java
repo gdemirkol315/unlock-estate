@@ -39,13 +39,14 @@ public class TaskController {
         }
     }
 
-    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('USER')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping("/createTask")
-    public ResponseEntity<Task> saveTask(
+    public ResponseEntity<Task> createTask(
             @RequestBody Task task
     ) {
         try {
-            return ResponseEntity.ok(taskService.createTask(task));
+            task = taskService.createTask(task);
+            return ResponseEntity.ok(task);
         } catch (InternalServerRuntimeException e) {
             logger.error("Could not save task!");
             return ResponseEntity.internalServerError().build();

@@ -1,5 +1,6 @@
 package com.unlockestate.ueparent.task.service;
 
+import com.unlockestate.ueparent.notification.service.WhatsAppService;
 import com.unlockestate.ueparent.task.dto.Comment;
 import com.unlockestate.ueparent.task.dto.CheckList;
 import com.unlockestate.ueparent.task.dto.CheckListItem;
@@ -13,12 +14,18 @@ import com.unlockestate.ueparent.user.service.UserService;
 import com.unlockestate.ueparent.utils.dto.UserDto;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 @Service
 public class TaskService {
+
+    @Value("${app.allowed-origin}")
+    private String allowedOrigin;
 
     private final UserService userService;
     private final TaskRepository taskRepository;
@@ -26,15 +33,21 @@ public class TaskService {
     private final CommentRepository commentRepository;
     private final UserRepository userRepository;
 
+    private final WhatsAppService whatsAppService;
+
     @Autowired
     public TaskService(UserService userService,
                        TaskRepository taskRepository,
-                       TaskCheckListItemRepository taskCheckListItemRepository, CommentRepository commentRepository, UserRepository userRepository) {
+                       TaskCheckListItemRepository taskCheckListItemRepository,
+                       CommentRepository commentRepository,
+                       UserRepository userRepository,
+                       WhatsAppService whatsAppService) {
         this.userService = userService;
         this.taskRepository = taskRepository;
         this.taskCheckListItemRepository = taskCheckListItemRepository;
         this.commentRepository = commentRepository;
         this.userRepository = userRepository;
+        this.whatsAppService = whatsAppService;
     }
 
     public List<Task> getTasks() {
@@ -68,6 +81,9 @@ public class TaskService {
             }
         }
 
+        User assignee = userRepository.findById(task.getAssignee().getUserId()).get();
+        whatsAppService.sendMessage(getTaskCreatedMessage(task), assignee.getPhoneNumber());
+
         return task;
     }
 
@@ -100,5 +116,18 @@ public class TaskService {
     public UserDto getAuthorByCommentId(String commentId) {
         User user = commentRepository.findById(Integer.parseInt(commentId)).get().getAuthor();
         return new UserDto(user.getUserId(), user.getName(), user.getLastName());
+    }
+
+    public String getTaskCreatedMessage(Task task) {
+        return "You have received a new task\n " +
+                "\nTask Date & Time:\n" + formatDate(task.getTaskDate()) + "\n"+
+                "\nProperty:\n" + task.getRealEstate().getName() + "\n" +
+                "\nAddress:\n" + task.getRealEstate().getAddress()+ "," + task.getRealEstate().getZipCode()+
+                "," + task.getRealEstate().getCity() + "," + task.getRealEstate().getCountry() +"\n" +
+                "\n\nTask link:\n" + allowedOrigin +"/task-detail/" + task.getId() ;
+    }
+    private String formatDate(Date date){
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+        return simpleDateFormat.format(date);
     }
 }
