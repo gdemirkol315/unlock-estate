@@ -95,21 +95,22 @@ public class AuthenticationService {
         return new AuthenticationResponse(token);
     }
 
-    public void authenticate(User request) throws BadCredentialsException {
-
-        authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        request.getEmail(),
-                        request.getPassword() + getSalt(request.getEmail()),
-                        request.getAuthorities()
-                )
-        );
+    public void authenticate(User request) throws BadCredentialsException, NoSuchElementException {
+        if (userRepository.findByEmail(request.getEmail()).orElseThrow() != null) {
+            authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(
+                            request.getEmail(),
+                            request.getPassword() + getSalt(request.getEmail()),
+                            request.getAuthorities()
+                    )
+            );
+        }
     }
 
     public AuthenticationResponse login(User request) {
         try {
             authenticate(request);
-        } catch (BadCredentialsException e) {
+        } catch (BadCredentialsException | NoSuchElementException e) {
             logger.error("Credentials provided are wrong!");
             return new AuthenticationResponse("");
         }
@@ -128,6 +129,9 @@ public class AuthenticationService {
             authenticate(changePassword.getUser());
         } catch (BadCredentialsException e) {
             logger.error("Credentials provided are wrong!");
+            return new AuthenticationResponse("");
+        } catch (NoSuchElementException e) {
+            logger.error("User not found!");
             return new AuthenticationResponse("");
         }
 
