@@ -4,10 +4,6 @@ public class ChangePassword {
     private User user;
     private String newPassword;
 
-    public ChangePassword(User user, String newPassword) {
-        this.user = user;
-        this.newPassword = newPassword;
-    }
 
     public User getUser() {
         return user;
