@@ -24,8 +24,6 @@ public class CheckList {
     @JsonManagedReference
     private List<CheckListItem> checkListItems;
 
-    public CheckList() {
-    }
 
     public Integer getId() {
         return id;

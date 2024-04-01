@@ -1,6 +1,5 @@
 package com.unlockestate.ueparent.user.repository;
 
-import com.unlockestate.ueparent.realestate.dto.RealEstate;
 import com.unlockestate.ueparent.user.dto.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

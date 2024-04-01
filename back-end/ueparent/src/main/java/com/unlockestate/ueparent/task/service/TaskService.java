@@ -9,7 +9,6 @@ import com.unlockestate.ueparent.task.dto.CheckListItem;
 import com.unlockestate.ueparent.task.dto.Task;
 import com.unlockestate.ueparent.task.dto.TaskCheckListItem;
 import com.unlockestate.ueparent.task.repository.*;
-import com.unlockestate.ueparent.user.dto.Role;
 import com.unlockestate.ueparent.user.dto.User;
 import com.unlockestate.ueparent.user.repository.UserRepository;
 import com.unlockestate.ueparent.user.service.UserService;
@@ -57,20 +56,6 @@ public class TaskService {
         this.emailService = emailService;
     }
 
-    public List<Task> getTasks() {
-        List<Task> tasks;
-
-        if (userService.hasRole(Role.ADMIN)) {
-            tasks = taskRepository.findAll();
-        } else {
-            tasks = taskRepository.findByAssignee(userService.getPrincipalName()).get();
-        }
-        for (Task task : tasks) {
-            task.getAssignee().setPassword(null);
-            task.getCreator().setPassword(null);
-        }
-        return tasks;
-    }
 
     @Transactional
     public Task createTask(Task task) {
@@ -88,7 +73,7 @@ public class TaskService {
             }
         }
 
-        User assignee = userRepository.findById(task.getAssignee().getUserId()).get();
+        User assignee = userRepository.findById(task.getAssignee().getUserId()).orElseThrow();
         whatsAppService.sendMessage(getTaskCreatedMessage(task), assignee.getPhoneNumber());
 
         return task;
@@ -108,10 +93,10 @@ public class TaskService {
 
     private Comment getStatusUpdatedComment(Task task) {
         Comment comment = new Comment();
-        comment.setAuthor(userRepository.findByEmail(initialUser).get());
+        comment.setAuthor(userRepository.findByEmail(initialUser).orElseThrow());
         comment.setDate(new Date());
         comment.setTask(task);
-        User statusChanger = userRepository.findByEmail(userService.getPrincipalName()).get();
+        User statusChanger = userRepository.findByEmail(userService.getPrincipalName()).orElseThrow();
         comment.setContent("Task status set to " + task.getStatus().name() + " from " + statusChanger.getName() + " " + statusChanger.getLastName());
         return comment;
     }
@@ -138,7 +123,7 @@ public class TaskService {
     }
 
     public Task getTask(String id) {
-        return taskRepository.findById(Integer.parseInt(id)).get();
+        return taskRepository.findById(Integer.parseInt(id)).orElseThrow();
     }
 
     @Transactional
@@ -149,17 +134,17 @@ public class TaskService {
     }
 
     public Comment addComment(Comment comment) {
-        comment.setAuthor(userRepository.findByEmail(comment.getAuthor().getEmail()).get());
+        comment.setAuthor(userRepository.findByEmail(comment.getAuthor().getEmail()).orElseThrow());
         return commentRepository.save(comment);
     }
 
     public List<Comment> getCommentByTaskId(String taskId) {
-        return commentRepository.findByTaskId(Integer.parseInt(taskId)).get();
+        return commentRepository.findByTaskId(Integer.parseInt(taskId)).orElseThrow();
     }
 
     @Transactional
     public UserDto getAuthorByCommentId(String commentId) {
-        User user = commentRepository.findById(Integer.parseInt(commentId)).get().getAuthor();
+        User user = commentRepository.findById(Integer.parseInt(commentId)).orElseThrow().getAuthor();
         return new UserDto(user.getUserId(), user.getName(), user.getLastName());
     }
 

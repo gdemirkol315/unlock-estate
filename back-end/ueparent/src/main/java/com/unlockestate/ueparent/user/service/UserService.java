@@ -12,7 +12,6 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
@@ -33,18 +32,18 @@ public class UserService {
     }
 
     public List<User> getAllServiceStaff() {
-        List<User> users = userRepository.findActiveUsersByRole(Role.USER.name()).get();
+        List<User> users = userRepository.findActiveUsersByRole(Role.USER.name()).orElseThrow();
         return isolatePassword(users);
     }
 
     public User getTaskAssignee(String taskId) {
-        User user = userRepository.findAssigneeByTaskId(Integer.parseInt(taskId)).get();
+        User user = userRepository.findAssigneeByTaskId(Integer.parseInt(taskId)).orElseThrow();
         user.setPassword(null);
         return user;
     }
 
     public User getTaskCreator(String taskId) {
-        User user = userRepository.findCreatorByTaskId(Integer.parseInt(taskId)).get();
+        User user = userRepository.findCreatorByTaskId(Integer.parseInt(taskId)).orElseThrow();
         user.setPassword(null);
         return user;
     }
@@ -137,7 +136,7 @@ public class UserService {
     }
 
     public Integer getPrincipalUserId(){
-        return userRepository.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).get().getUserId();
+        return userRepository.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).orElseThrow().getUserId();
     }
 
     public List<User> isolatePassword(List<User> users){

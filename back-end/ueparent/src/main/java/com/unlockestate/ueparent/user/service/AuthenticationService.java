@@ -71,11 +71,11 @@ public class AuthenticationService {
         user.setActive(request.isActive());
 
         Salt salt = new Salt();
-        salt.setSalt(createSalt());
+        salt.setSaltString(createSalt());
         salt.setEmail(request.getEmail());
 
         if (user.getEmail().equals(initialUser)) {
-            user.setPassword(passwordEncoder.encode(request.getPassword() + salt.getSalt()));
+            user.setPassword(passwordEncoder.encode(request.getPassword() + salt.getSaltString()));
         } else {
             String tmpPassword = createSalt();
             emailService.sendSimpleMessage(new Email(user.getEmail(),
@@ -86,7 +86,7 @@ public class AuthenticationService {
                             allowedOrigin + "\\login",
                     "CheckoutNow Account Activation"));
             //TODO bounce-back mail check if user mail does not exists
-            user.setPassword(passwordEncoder.encode(tmpPassword + salt.getSalt()));
+            user.setPassword(passwordEncoder.encode(tmpPassword + salt.getSaltString()));
         }
 
         saltRepository.save(salt);
@@ -173,7 +173,7 @@ public class AuthenticationService {
         } catch (NoSuchElementException e) {
             logger.error("Salt not found for user {}", email);
         }
-        return salt.getSalt();
+        return salt.getSaltString();
     }
 
 }

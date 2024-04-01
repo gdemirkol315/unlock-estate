@@ -61,7 +61,7 @@ class AuthenticationServiceTest {
         request.setEmail("test@test.com");
         request.setPassword("password");
         Salt salt = new Salt();
-        salt.setSalt("salt");
+        salt.setSaltString("salt");
         salt.setEmail(request.getEmail());
 
         when(passwordEncoder.encode(anyString())).thenReturn("password");

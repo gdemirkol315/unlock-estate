@@ -1,6 +1,8 @@
 package com.unlockestate.ueparent.file.controller;
 
 
+import com.unlockestate.ueparent.file.exception.FileUploadException;
+import com.unlockestate.ueparent.file.exception.ImageNotFoundException;
 import com.unlockestate.ueparent.file.repository.ImageRepository;
 import com.unlockestate.ueparent.file.service.FileUploadService;
 
@@ -17,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
 
 @RestController
 @RequestMapping("/file")
@@ -38,8 +41,9 @@ public class FileController {
         try {
             fileUploadService.uploadCommentImage(file, savePath, imageId);
             return ResponseEntity.ok("Ok");
-        } catch (IOException e) {
-            return ResponseEntity.status(HttpStatusCode.valueOf(500)).body("An error occurred while saving image!");
+        } catch (IOException | FileUploadException e) {
+            return ResponseEntity.status(HttpStatusCode.valueOf(500))
+                    .body("An error occurred while saving image!");
         }
     }
 
@@ -56,12 +60,12 @@ public class FileController {
                         .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
                         .body(resource);
             } else {
-                // Handle file not found, possibly throw an exception or return a 404
+                throw new ImageNotFoundException("Image not found");
             }
-        } catch (Exception e) {
-            // Handle exceptions, possibly throw a custom exception or return an error response
+        } catch (ImageNotFoundException | MalformedURLException e) {
+            logger.error("Could not retrieve image with id {}", imageId);
         }
-        return ResponseEntity.badRequest().build(); // Fallback response, adjust as necessary
+        return ResponseEntity.badRequest().build();
     }
 
 }

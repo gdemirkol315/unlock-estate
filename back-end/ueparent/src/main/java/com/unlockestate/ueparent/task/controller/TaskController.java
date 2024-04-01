@@ -21,7 +21,7 @@ import java.util.List;
 public class TaskController {
 
     private static final Logger logger = LoggerFactory.getLogger(TaskController.class);
-    private TaskService taskService;
+    private final TaskService taskService;
 
     @Autowired
     public TaskController(TaskService taskService) {

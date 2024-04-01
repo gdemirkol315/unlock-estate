@@ -11,14 +11,14 @@ public class Salt {
 
     @Column(unique = true)
     private String email;
-    private String salt;
+    private String saltString;
 
     public Salt() {
     }
 
     public Salt(String email, String salt) {
         this.email = email;
-        this.salt = salt;
+        this.saltString = salt;
     }
 
     public String getEmail() {
@@ -29,11 +29,11 @@ public class Salt {
         this.email = email;
     }
 
-    public String getSalt() {
-        return salt;
+    public String getSaltString() {
+        return saltString;
     }
 
-    public void setSalt(String salt) {
-        this.salt = salt;
+    public void setSaltString(String saltString) {
+        this.saltString = saltString;
     }
 }

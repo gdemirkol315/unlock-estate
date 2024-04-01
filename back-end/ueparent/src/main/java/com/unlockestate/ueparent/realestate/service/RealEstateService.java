@@ -18,11 +18,11 @@ public class RealEstateService {
         this.realEstateRepository = realEstateRepository;
     }
 
-    public RealEstate saveRealEstate(RealEstate realEstate){
+    public RealEstate saveRealEstate(RealEstate realEstate) {
         return this.realEstateRepository.save(realEstate);
     }
 
-    public RealEstate updateRealEstate(RealEstate realEstate){
+    public RealEstate updateRealEstate(RealEstate realEstate) {
 
 
         return realEstateRepository.save(realEstate);
@@ -34,13 +34,13 @@ public class RealEstateService {
     }
 
     public List<RealEstate> getAllActiveRealEstates() {
-        return realEstateRepository.findAllActiveRealEstates().get();
+        return realEstateRepository.findAllActiveRealEstates().orElseThrow();
     }
     public RealEstate getRealEstate(String reId) {
         return realEstateRepository.findById(Integer.parseInt(reId)).orElseThrow();
     }
 
     public RealEstate getRealEstateFromTask(String taskId){
-        return realEstateRepository.findByTaskId(Integer.parseInt(taskId)).get();
+        return realEstateRepository.findByTaskId(Integer.parseInt(taskId)).orElseThrow();
     }
 }

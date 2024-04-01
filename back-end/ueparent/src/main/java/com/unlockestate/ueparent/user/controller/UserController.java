@@ -1,6 +1,5 @@
 package com.unlockestate.ueparent.user.controller;
 
-import com.unlockestate.ueparent.realestate.dto.RealEstate;
 import com.unlockestate.ueparent.user.dto.User;
 import com.unlockestate.ueparent.user.service.UserService;
 import com.unlockestate.ueparent.exception.InternalServerRuntimeException;
