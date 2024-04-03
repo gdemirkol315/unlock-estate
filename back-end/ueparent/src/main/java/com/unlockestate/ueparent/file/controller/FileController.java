@@ -6,6 +6,7 @@ import com.unlockestate.ueparent.file.exception.ImageNotFoundException;
 import com.unlockestate.ueparent.file.repository.ImageRepository;
 import com.unlockestate.ueparent.file.service.FileUploadService;
 
+import com.unlockestate.ueparent.file.service.MultipartFileWrapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,7 +40,8 @@ public class FileController {
                                              @RequestParam String savePath,
                                              @RequestParam String imageId) {
         try {
-            fileUploadService.uploadCommentImage(file, savePath, imageId);
+            MultipartFileWrapper multipartFileWrapper = new MultipartFileWrapper(file);
+            fileUploadService.uploadCommentImage(multipartFileWrapper, savePath, imageId);
             return ResponseEntity.ok("Ok");
         } catch (IOException | FileUploadException e) {
             return ResponseEntity.status(HttpStatusCode.valueOf(500))

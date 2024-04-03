@@ -1,18 +1,14 @@
 package com.unlockestate.ueparent.file.service;
 
-import com.unlockestate.ueparent.file.dto.Image;
 import com.unlockestate.ueparent.file.exception.FileUploadException;
-import com.unlockestate.ueparent.file.exception.ImageNotFoundException;
 import com.unlockestate.ueparent.file.repository.ImageRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Paths;
-import java.util.Optional;
 
 @Service
 public class FileUploadService {
@@ -24,12 +20,12 @@ public class FileUploadService {
         this.imageRepository = imageRepository;
     }
 
-    public void uploadCommentImage(MultipartFile file, String savePath, String imageId) throws IOException, FileUploadException {
+    public void uploadCommentImage(MultipartFileWrapper file, String savePath, String imageId) throws IOException, FileUploadException {
         uploadFile(file, savePath, imageId);
     }
 
     @Transactional
-    private void uploadFile(MultipartFile file, String path, String imageId) throws IOException, FileUploadException {
+    private void uploadFile(MultipartFileWrapper file, String path, String imageId) throws IOException, FileUploadException {
 
         String absolutePathPrefix = new File(".").getAbsolutePath() + File.separator;
 
@@ -40,10 +36,10 @@ public class FileUploadService {
         }
 
         // Save the file
-        File dest = Paths.get(absolutePathPrefix + path, file.getOriginalFilename()).toFile();
+        File dest = Paths.get(absolutePathPrefix + path, file.getMultipartFile().getOriginalFilename()).toFile();
         file.transferTo(dest);
 
-        imageRepository.setLink(absolutePathPrefix + path + File.separator + file.getOriginalFilename(), Integer.valueOf(imageId) );
+        imageRepository.setLink(absolutePathPrefix + path + File.separator + file.getMultipartFile().getOriginalFilename(), Integer.valueOf(imageId) );
     }
 
     public String getImagePath(String imageId) {
