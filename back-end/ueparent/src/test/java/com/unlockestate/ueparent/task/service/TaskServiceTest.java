@@ -90,6 +90,10 @@ class TaskServiceTest {
     @Test
     void shouldAddCommentSuccessfully() {
         Comment comment = new Comment();
+        comment.setContent("Content");
+        comment.setAuthor(new User());
+        comment.getAuthor().setEmail("email");
+        when(userRepository.findByEmail(anyString())).thenReturn(Optional.of(initialUser));
         when(commentRepository.save(any(Comment.class))).thenReturn(comment);
 
         taskService.addComment(comment);
