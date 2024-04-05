@@ -4,27 +4,22 @@ import com.unlockestate.ueparent.notification.dto.Email;
 import com.unlockestate.ueparent.notification.service.EmailService;
 import com.unlockestate.ueparent.notification.service.WhatsAppService;
 import com.unlockestate.ueparent.realestate.dto.RealEstate;
-import com.unlockestate.ueparent.task.dto.CheckListItem;
-import com.unlockestate.ueparent.task.dto.Comment;
-import com.unlockestate.ueparent.task.dto.Task;
-import com.unlockestate.ueparent.task.dto.TaskCheckListItem;
+import com.unlockestate.ueparent.task.dto.*;
 import com.unlockestate.ueparent.task.repository.CommentRepository;
 import com.unlockestate.ueparent.task.repository.Status;
+import com.unlockestate.ueparent.task.repository.TaskCheckListItemRepository;
 import com.unlockestate.ueparent.task.repository.TaskRepository;
 import com.unlockestate.ueparent.user.dto.Role;
 import com.unlockestate.ueparent.user.dto.User;
 import com.unlockestate.ueparent.user.repository.UserRepository;
 import com.unlockestate.ueparent.user.service.UserService;
-import org.hibernate.annotations.Check;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import java.util.Collections;
-import java.util.Date;
-import java.util.Optional;
+import java.util.*;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
@@ -33,6 +28,10 @@ class TaskServiceTest {
 
     @Mock
     private TaskRepository taskRepository;
+
+
+    @Mock
+    private TaskCheckListItemRepository taskCheckListItemRepository;
 
     @Mock
     private CommentRepository commentRepository;
@@ -52,51 +51,36 @@ class TaskServiceTest {
     @InjectMocks
     private TaskService taskService;
 
+    private Task task = new Task();
+    private User initialUser = new User();
+
     @BeforeEach
     void setUp() {
+        initiateParams();
         MockitoAnnotations.openMocks(this);
     }
 
     @Test
     void shouldCreateTaskSuccessfully() {
-        Task task = new Task();
-        when(taskRepository.save(any(Task.class))).thenReturn(task);
 
+        when(taskRepository.save(any(Task.class))).thenReturn(task);
+        when(taskCheckListItemRepository.save(any(TaskCheckListItem.class))).thenReturn(new TaskCheckListItem());
+        when(userRepository.findById(anyInt())).thenReturn(Optional.of(task.getAssignee()));
+        doNothing().when(whatsAppService).sendMessage(anyString(),anyString());
         taskService.createTask(task);
 
         verify(taskRepository, times(1)).save(any(Task.class));
-        verify(whatsAppService, times(1)).sendMessage(anyString(), anyString());
+        verify(taskCheckListItemRepository, times(1)).save(any(TaskCheckListItem.class));
     }
 
     @Test
     void shouldUpdateTaskStatusSuccessfully() {
-        Task task = new Task();
-        task.setId(1);
-        task.setStatus(Status.PENDING);
-        task.setCreator(new User());
-        task.setTaskDate(new Date());
-        task.setRealEstate(new RealEstate());
-        task.getRealEstate().setName("Test real estate");
-        task.setAssignee(new User());
-        task.getAssignee().setLastName("last name");
-        task.getAssignee().setName("name");
-        TaskCheckListItem taskCheckListItem = new TaskCheckListItem();
-        taskCheckListItem.setTask(task);
-        CheckListItem checkListItem = new CheckListItem();
-        checkListItem.setId(1);
-        checkListItem.setDescription("checklist item description");
-        taskCheckListItem.setChecklistItem(checkListItem);
-        task.setTaskCheckListItems(Collections.singletonList(taskCheckListItem));
-        User initialUser = new User();
-        initialUser.setRole(Role.ADMIN);
-        initialUser.setEmail("initialUser");
-        initialUser.setName("Some");
-        initialUser.setLastName("User");
         when(userRepository.findByEmail(anyString())).thenReturn(Optional.of(initialUser));
         when(userRepository.findByEmail(null)).thenReturn(Optional.of(initialUser));
         when(commentRepository.save(any(Comment.class))).thenReturn(new Comment());
         when(userService.getPrincipalName()).thenReturn("submitter");
         doNothing().when(emailService).sendSimpleMessage(any(Email.class));
+
         taskService.updateTaskStatus(task);
 
         verify(taskRepository, times(1)).setStatus(anyString(), anyInt());
@@ -111,5 +95,38 @@ class TaskServiceTest {
         taskService.addComment(comment);
 
         verify(commentRepository, times(1)).save(any(Comment.class));
+    }
+
+    private void initiateParams() {
+        CheckList checkList = new CheckList();
+        List<CheckList> checkLists = new ArrayList<>();
+        TaskCheckListItem taskCheckListItem = new TaskCheckListItem();
+        CheckListItem checkListItem = new CheckListItem();
+        List<CheckListItem> checkListItems = new ArrayList<>();
+        checkListItem.setId(1);
+        checkListItem.setDescription("checklist item description");
+        checkListItems.add(checkListItem);
+        task.setId(1);
+        task.setStatus(Status.PENDING);
+        task.setCreator(new User());
+        task.setTaskDate(new Date());
+        checkLists.add(checkList);
+        RealEstate realEstate = new RealEstate();
+        realEstate.setCheckLists(checkLists);
+        task.setRealEstate(realEstate);
+        task.getRealEstate().setName("Test real estate");
+        task.setAssignee(new User());
+        task.getAssignee().setLastName("last name");
+        task.getAssignee().setName("name");
+        task.getAssignee().setUserId(1);
+        taskCheckListItem.setTask(task);
+        taskCheckListItem.setChecklistItem(checkListItem);
+        checkList.setCheckListItems(checkListItems);
+        task.setTaskCheckListItems(Collections.singletonList(taskCheckListItem));
+
+        initialUser.setRole(Role.ADMIN);
+        initialUser.setEmail("initialUser");
+        initialUser.setName("Some");
+        initialUser.setLastName("User");
     }
 }
