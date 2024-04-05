@@ -83,12 +83,11 @@ public class TaskService {
     public void updateTaskStatus(Task task) {
         taskRepository.setStatus(task.getStatus().name(), task.getId());
         commentRepository.save(getStatusUpdatedComment(task));
-        if (task.getStatus().equals(Status.SUBMITTED) || task.getStatus().equals(Status.DONE)) {
-            Email email = new Email(task.getCreator().getEmail(),
-                    getTaskSubmittedMessage(task),
-                    "Task " + task.getStatus().name() + " (" + task.getRealEstate().getName() + ")" );
-            emailService.sendSimpleMessage(email);
-        }
+        Email email = new Email(task.getCreator().getEmail(),
+                getTaskStatusChangeMessage(task),
+                "Task " + task.getStatus().name() + " (" + task.getRealEstate().getName() + ")");
+        emailService.sendSimpleMessage(email);
+
     }
 
     private Comment getStatusUpdatedComment(Task task) {
@@ -101,15 +100,17 @@ public class TaskService {
         return comment;
     }
 
-    private String getTaskSubmittedMessage(Task task) {
+    private String getTaskStatusChangeMessage(Task task) {
         String checkoutDateTime = formatDate(new Date(task.getTaskDate().getTime()));
         String taskCompleteDateTime = formatDate(new Date());
-        StringBuilder message = new StringBuilder("This is an automated message." +
-                "\n\n\nFollowing task is completed:\n" +
+        User statusChanger = userRepository.findByEmail(userService.getPrincipalName()).orElseThrow();
+        StringBuilder message = new StringBuilder("This is an automated message. Please do not reply." +
+                "\n\n\nFollowing task status changed to " + task.getStatus()
+                + " by " + statusChanger.getName() + " " + statusChanger.getLastName() +
+                "\nTask Status Change Date: " + taskCompleteDateTime +
                 "\nProperty: " + task.getRealEstate().getName() +
                 "\nAssignee: " + task.getAssignee().getName() + " " + task.getAssignee().getLastName() +
                 "\nCheckout Date: " + checkoutDateTime +
-                "\nTask Complete Date: " + taskCompleteDateTime +
                 " \n\nChecklist Items:\n");
 
         for (TaskCheckListItem taskCheckListItem : task.getTaskCheckListItems()) {
