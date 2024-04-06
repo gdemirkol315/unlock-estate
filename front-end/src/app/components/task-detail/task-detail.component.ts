@@ -22,6 +22,7 @@ import {EmailService} from "../../services/email/email.service";
 import {Email} from "../../models/email.model";
 import {LastWarningComponent} from "../last-warning/last-warning.component";
 import {JwtToken} from "../../models/jwt-token.model";
+import {TaskStatus} from "../../models/enum/task-status";
 
 @Component({
   selector: 'app-task-detail',
@@ -137,6 +138,18 @@ export class TaskDetailComponent implements OnInit {
     }
   }
 
+  async reopenTask() {
+    let dialogRefLastWarn: MatDialogRef<LastWarningComponent> = this.matDialog.open(LastWarningComponent, {
+      data: {
+        message: "Are you sure to reopen this task?"
+      }
+    });
+    let answer = await firstValueFrom(dialogRefLastWarn.afterClosed());
+    if (answer){
+      this.task.status = TaskStatus.PENDING;
+      this.taskService.updateTask(this.task,"Task reopened successfully.");
+    }
+  }
 
   reportProblem(item?: TaskCheckListItem) {
     let dialogRefLastWarn: MatDialogRef<LastWarningComponent> = this.matDialog.open(LastWarningComponent, {
@@ -323,4 +336,6 @@ export class TaskDetailComponent implements OnInit {
     });
     return isAllCheckListItemsMarked;
   }
+
+  protected readonly TaskStatus = TaskStatus;
 }
