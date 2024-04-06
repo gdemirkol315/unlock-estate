@@ -163,7 +163,7 @@
       Close Task
     </button>
     <button *ngIf="jwtToken.getRole().includes('ADMIN')" mat-raised-button aria-label="Close Task" (click)="reopenTask()"
-            matTooltip="Reopen Task" [disabled]="task.status == TaskStatus.SUBMITTED || task.status==TaskStatus.PENDING">
+            matTooltip="Reopen Task" [disabled]="task.status==TaskStatus.PENDING">
       Reopen Task
     </button>
     <mat-card-footer *ngIf="!isAllCheckListItemsMarked()">*All checklist items must be marked to be able to submit the task.</mat-card-footer>
