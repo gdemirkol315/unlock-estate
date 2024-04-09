@@ -120,6 +120,8 @@ public class TaskService {
                     .append(taskCheckListItem.getStatus());
         }
 
+        message.append("\n\nTask link: \n" + allowedOrigin + "/task-detail/" + task.getId());
+
         return message.toString();
     }
 
