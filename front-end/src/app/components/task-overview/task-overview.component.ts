@@ -19,7 +19,7 @@ export class TaskOverviewComponent implements OnInit, AfterViewInit {
   searchKey: string;
   currentTasks: MatTableDataSource<Task> = new MatTableDataSource<Task>();
   closedTasks: MatTableDataSource<Task> = new MatTableDataSource<Task>();
-  displayedColumns:string[] =  ['id', 'taskDate', 'realEstateName','realEstateCountry','realEstateCity', 'realEstateZip', 'assignee', 'creator', 'status','actions'];
+  displayedColumns:string[] =  ['taskDate', 'realEstateName','realEstateCountry','realEstateCity', 'realEstateZip', 'assignee', 'creator', 'status','actions'];
 
   @ViewChild(MatSort) sort: MatSort;
 

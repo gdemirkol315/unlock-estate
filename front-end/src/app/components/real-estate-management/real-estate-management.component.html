@@ -5,7 +5,7 @@
   </mat-card-header>
   <mat-card-content>
     <button mat-raised-button class="slightly-spaced" routerLink="/admin/real-estate-create"
-            >
+    >
       Add Real Estate
     </button>
     <mat-form-field class="search-form-field slightly-spaced">
@@ -26,52 +26,54 @@
         Active Real Estates
       </mat-panel-title>
     </mat-expansion-panel-header>
-    <table mat-table [dataSource]="activeRealEstate" class="mat-elevation-z8 full-width slightly-spaced" matSort>
-      <ng-container matColumnDef="id">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header="id">Id</th>
-        <td mat-cell *matCellDef="let element">{{ element.id }}</td>
-      </ng-container>
+    <div class="enable-x-scrolling">
+      <table mat-table [dataSource]="activeRealEstate" class="mat-elevation-z8 full-width slightly-spaced" matSort>
+        <ng-container matColumnDef="id">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header="id">Id</th>
+          <td mat-cell *matCellDef="let element">{{ element.id }}</td>
+        </ng-container>
 
-      <ng-container matColumnDef="name">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header="name">Name</th>
-        <td mat-cell *matCellDef="let element">{{ element.name }}</td>
-      </ng-container>
+        <ng-container matColumnDef="name">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header="name">Name</th>
+          <td mat-cell *matCellDef="let element">{{ element.name }}</td>
+        </ng-container>
 
-      <ng-container matColumnDef="country">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header="country">Country</th>
-        <td mat-cell *matCellDef="let element">{{ element.country }}</td>
-      </ng-container>
+        <ng-container matColumnDef="country">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header="country">Country</th>
+          <td mat-cell *matCellDef="let element">{{ element.country }}</td>
+        </ng-container>
 
-      <ng-container matColumnDef="city">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header="city">City</th>
-        <td mat-cell *matCellDef="let element">{{ element.city }}</td>
-      </ng-container>
-      <ng-container matColumnDef="zipCode">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header="zipCode">Zip Code</th>
-        <td mat-cell *matCellDef="let element">{{ element.zipCode }}</td>
-      </ng-container>
-      <ng-container matColumnDef="type">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header="type">Type</th>
-        <td mat-cell *matCellDef="let element">{{ element.type }}</td>
-      </ng-container>
-      <ng-container matColumnDef="actions">
-        <th mat-header-cell *matHeaderCellDef></th>
-        <td mat-cell *matCellDef="let element">
-          <button mat-icon-button matTooltip="Real Estate Details"
-                  [routerLink]="['/admin/real-estate-detail',element.id]" routerLinkActive="active-link"
-                  >
-            <mat-icon>launch</mat-icon>
-          </button>
-          <button mat-icon-button color="warn" matTooltip="Deactivate Real Estate"
-                  (click)="onChangeRealEstateStatus(element,false)">
-            <mat-icon>power_settings_new</mat-icon>
-          </button>
-        </td>
-      </ng-container>
+        <ng-container matColumnDef="city">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header="city">City</th>
+          <td mat-cell *matCellDef="let element">{{ element.city }}</td>
+        </ng-container>
+        <ng-container matColumnDef="zipCode">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header="zipCode">Zip Code</th>
+          <td mat-cell *matCellDef="let element">{{ element.zipCode }}</td>
+        </ng-container>
+        <ng-container matColumnDef="type">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header="type">Type</th>
+          <td mat-cell *matCellDef="let element">{{ element.type }}</td>
+        </ng-container>
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef></th>
+          <td mat-cell *matCellDef="let element">
+            <button mat-icon-button matTooltip="Real Estate Details"
+                    [routerLink]="['/admin/real-estate-detail',element.id]" routerLinkActive="active-link"
+            >
+              <mat-icon>launch</mat-icon>
+            </button>
+            <button mat-icon-button color="warn" matTooltip="Deactivate Real Estate"
+                    (click)="onChangeRealEstateStatus(element,false)">
+              <mat-icon>power_settings_new</mat-icon>
+            </button>
+          </td>
+        </ng-container>
 
-      <tr mat-header-row *matHeaderRowDef="displayedColumns">Info</tr>
-      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-    </table>
+        <tr mat-header-row *matHeaderRowDef="displayedColumns">Info</tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+    </div>
   </mat-expansion-panel>
 </mat-accordion>
 <mat-accordion>
@@ -81,52 +83,55 @@
         Deactivated Real Estate
       </mat-panel-title>
     </mat-expansion-panel-header>
-    <table mat-table [dataSource]="deActivatedRealEstate" class="mat-elevation-z8 full-width slightly-spaced" matSort>
-      <ng-container matColumnDef="id">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header="id">Id</th>
-        <td mat-cell *matCellDef="let element">{{ element.id }}</td>
-      </ng-container>
+    <div class="enable-x-scrolling">
+      <table mat-table [dataSource]="deActivatedRealEstate" class="mat-elevation-z8 full-width slightly-spaced" matSort>
+        <ng-container matColumnDef="id">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header="id">Id</th>
+          <td mat-cell *matCellDef="let element">{{ element.id }}</td>
+        </ng-container>
 
-      <ng-container matColumnDef="name">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header="name">Name</th>
-        <td mat-cell *matCellDef="let element">{{ element.name }}</td>
-      </ng-container>
+        <ng-container matColumnDef="name">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header="name">Name</th>
+          <td mat-cell *matCellDef="let element">{{ element.name }}</td>
+        </ng-container>
 
-      <ng-container matColumnDef="country">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header="country">Country</th>
-        <td mat-cell *matCellDef="let element">{{ element.country }}</td>
-      </ng-container>
+        <ng-container matColumnDef="country">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header="country">Country</th>
+          <td mat-cell *matCellDef="let element">{{ element.country }}</td>
+        </ng-container>
 
-      <ng-container matColumnDef="city">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header="city">City</th>
-        <td mat-cell *matCellDef="let element">{{ element.city }}</td>
-      </ng-container>
-      <ng-container matColumnDef="zipCode">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header="zipCode">Zip Code</th>
-        <td mat-cell *matCellDef="let element">{{ element.zipCode }}</td>
-      </ng-container>
+        <ng-container matColumnDef="city">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header="city">City</th>
+          <td mat-cell *matCellDef="let element">{{ element.city }}</td>
+        </ng-container>
+        <ng-container matColumnDef="zipCode">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header="zipCode">Zip Code</th>
+          <td mat-cell *matCellDef="let element">{{ element.zipCode }}</td>
+        </ng-container>
 
-      <ng-container matColumnDef="type">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header="type">Type</th>
-        <td mat-cell *matCellDef="let element">{{ element.type }}</td>
-      </ng-container>
+        <ng-container matColumnDef="type">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header="type">Type</th>
+          <td mat-cell *matCellDef="let element">{{ element.type }}</td>
+        </ng-container>
 
-      <ng-container matColumnDef="actions">
-        <th mat-header-cell *matHeaderCellDef></th>
-        <td mat-cell *matCellDef="let element">
-          <button mat-icon-button [routerLink]="['/admin/real-estate-detail',element.id]" routerLinkActive="active-link"
-                  matTooltip="User Details">
-            <mat-icon>launch</mat-icon>
-          </button>
-          <button mat-icon-button color="warn" (click)="onChangeRealEstateStatus(element,true)"
-                  matTooltip="Activate Real Estate">
-            <mat-icon style="color: green;">power_settings_new</mat-icon>
-          </button>
-        </td>
-      </ng-container>
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef></th>
+          <td mat-cell *matCellDef="let element">
+            <button mat-icon-button [routerLink]="['/admin/real-estate-detail',element.id]"
+                    routerLinkActive="active-link"
+                    matTooltip="User Details">
+              <mat-icon>launch</mat-icon>
+            </button>
+            <button mat-icon-button color="warn" (click)="onChangeRealEstateStatus(element,true)"
+                    matTooltip="Activate Real Estate">
+              <mat-icon style="color: green;">power_settings_new</mat-icon>
+            </button>
+          </td>
+        </ng-container>
 
-      <tr mat-header-row *matHeaderRowDef="displayedColumns">Info</tr>
-      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-    </table>
+        <tr mat-header-row *matHeaderRowDef="displayedColumns">Info</tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+    </div>
   </mat-expansion-panel>
 </mat-accordion>

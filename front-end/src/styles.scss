@@ -28,12 +28,14 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 .checklist-item {
   width: 80%;
 }
+@media(max-width: 925px) {
+  .enable-x-scrolling {
+    overflow-x: auto;
+  }
+  .mat-card-content img, .mat-card-content .image-card, .comment-content img, .comment-content .image-card {
+    max-width: 100%; /* Ensures content does not overflow */
+    height: auto; /* Maintain aspect ratio */
+  }
 
-.enable-x-scrolling{
-  overflow-x: scroll;
-}
-
-.mat-table {
-  min-width: 800px; /* Or whatever minimum width you need */
 }
 

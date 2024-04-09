@@ -4,7 +4,8 @@
     <mat-icon>rowing</mat-icon>
   </mat-card-header>
   <mat-card-content>
-    <button mat-raised-button class="slightly-spaced" [routerLink]="['/admin/create-task']" *ngIf="jwtToken.getRole().includes('ADMIN')">
+    <button mat-raised-button class="slightly-spaced" [routerLink]="['/admin/create-task']"
+            *ngIf="jwtToken.getRole().includes('ADMIN')">
       Add Task
     </button>
     <mat-form-field class="search-form-field slightly-spaced">
@@ -18,65 +19,62 @@
     </button>
   </mat-card-content>
 </mat-card>
-<mat-accordion class="enable-x-scrolling">
-  <mat-expansion-panel [expanded]="true" class="enable-x-scrolling">
+<mat-accordion>
+  <mat-expansion-panel [expanded]="true">
     <mat-expansion-panel-header>
       <mat-panel-title>
         Current Tasks
       </mat-panel-title>
     </mat-expansion-panel-header>
-    <table mat-table [dataSource]="currentTasks" class="mat-elevation-z8 full-width slightly-spaced" matSort>
-      <ng-container matColumnDef="id">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header="id">Task Id</th>
-        <td mat-cell *matCellDef="let element">{{ element.id }}</td>
-      </ng-container>
-      <ng-container matColumnDef="taskDate">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header="taskDate">Task Date</th>
-        <td mat-cell *matCellDef="let element">{{ element.taskDate | date: 'dd.MM.yyyy HH:mm' }}
-        </td>
-      </ng-container>
-      <ng-container matColumnDef="realEstateName">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header="realEstateName">Real Estate Name</th>
-        <td mat-cell *matCellDef="let element">{{ element.realEstate.name }}</td>
-      </ng-container>
-      <ng-container matColumnDef="realEstateCountry">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header="realEstateCountry">Country</th>
-        <td mat-cell *matCellDef="let element">{{ element.realEstate.country  }}</td>
-      </ng-container>
-      <ng-container matColumnDef="realEstateCity">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header="realEstateCity">City</th>
-        <td mat-cell *matCellDef="let element">{{  element.realEstate.city }}</td>
-      </ng-container>
-      <ng-container matColumnDef="realEstateZip">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header="realEstateZip">Zip Code</th>
-        <td mat-cell *matCellDef="let element">{{  element.realEstate.zipCode }}</td>
-      </ng-container>
-      <ng-container matColumnDef="assignee">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header="assignee">Assignee</th>
-        <td mat-cell *matCellDef="let element">{{  element.assignee.name }}</td>
-      </ng-container>
-      <ng-container matColumnDef="creator">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header="creator">Creator</th>
-        <td mat-cell *matCellDef="let element">{{  element.creator.name }}</td>
-      </ng-container>
-      <ng-container matColumnDef="status">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header="status">Status</th>
-        <td mat-cell *matCellDef="let element">{{  element.status }}</td>
-      </ng-container>
+    <div class="enable-x-scrolling">
+      <table mat-table [dataSource]="currentTasks" class="mat-elevation-z8 full-width slightly-spaced" matSort>
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef>Actions</th>
+          <td mat-cell *matCellDef="let element">
+            <button mat-icon-button [routerLink]="['/task-detail',element.id]" routerLinkActive="active-link"
+                    matTooltip="Task Details">
+              <mat-icon>launch</mat-icon>
+            </button>
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="taskDate">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header="taskDate">Task Date</th>
+          <td mat-cell *matCellDef="let element">{{ element.taskDate | date: 'dd.MM.yyyy HH:mm' }}
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="realEstateName">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header="realEstateName">Real Estate Name</th>
+          <td mat-cell *matCellDef="let element">{{ element.realEstate.name }}</td>
+        </ng-container>
+        <ng-container matColumnDef="realEstateCountry">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header="realEstateCountry">Country</th>
+          <td mat-cell *matCellDef="let element">{{ element.realEstate.country }}</td>
+        </ng-container>
+        <ng-container matColumnDef="realEstateCity">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header="realEstateCity">City</th>
+          <td mat-cell *matCellDef="let element">{{ element.realEstate.city }}</td>
+        </ng-container>
+        <ng-container matColumnDef="realEstateZip">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header="realEstateZip">Zip Code</th>
+          <td mat-cell *matCellDef="let element">{{ element.realEstate.zipCode }}</td>
+        </ng-container>
+        <ng-container matColumnDef="assignee">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header="assignee">Assignee</th>
+          <td mat-cell *matCellDef="let element">{{ element.assignee.name }}</td>
+        </ng-container>
+        <ng-container matColumnDef="creator">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header="creator">Creator</th>
+          <td mat-cell *matCellDef="let element">{{ element.creator.name }}</td>
+        </ng-container>
+        <ng-container matColumnDef="status">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header="status">Status</th>
+          <td mat-cell *matCellDef="let element">{{ element.status }}</td>
+        </ng-container>
 
-      <ng-container matColumnDef="actions">
-        <th mat-header-cell *matHeaderCellDef>Actions</th>
-        <td mat-cell *matCellDef="let element">
-          <button mat-icon-button [routerLink]="['/task-detail',element.id]" routerLinkActive="active-link"
-                  matTooltip="Task Details">
-            <mat-icon>launch</mat-icon>
-          </button>
-        </td>
-      </ng-container>
-
-      <tr mat-header-row *matHeaderRowDef="displayedColumns">Info</tr>
-      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-    </table>
+        <tr mat-header-row *matHeaderRowDef="displayedColumns">Info</tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+    </div>
   </mat-expansion-panel>
 </mat-accordion>
 <mat-accordion>
@@ -86,57 +84,53 @@
         Closed Tasks
       </mat-panel-title>
     </mat-expansion-panel-header>
-    <table mat-table [dataSource]="closedTasks" class="mat-elevation-z8 full-width slightly-spaced" matSort>
-      <ng-container matColumnDef="id">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header="id">Task Id</th>
-        <td mat-cell *matCellDef="let element">{{ element.id }}</td>
-      </ng-container>
-      <ng-container matColumnDef="taskDate">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header="taskDate">Task Date</th>
-        <td mat-cell *matCellDef="let element">{{  element.taskDate  | date: 'dd.MM.yyyy HH:mm' }}</td>
-      </ng-container>
-      <ng-container matColumnDef="realEstateName">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header="realEstateName">Real Estate Name</th>
-        <td mat-cell *matCellDef="let element">{{ element.realEstate.name }}</td>
-      </ng-container>
-      <ng-container matColumnDef="realEstateCountry">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header="realEstateCountry">Country</th>
-        <td mat-cell *matCellDef="let element">{{ element.realEstate.country  }}</td>
-      </ng-container>
-      <ng-container matColumnDef="realEstateCity">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header="realEstateCity">City</th>
-        <td mat-cell *matCellDef="let element">{{  element.realEstate.city }}</td>
-      </ng-container>
-      <ng-container matColumnDef="realEstateZip">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header="realEstateZip">Zip Code</th>
-        <td mat-cell *matCellDef="let element">{{  element.realEstate.zipCode }}</td>
-      </ng-container>
-      <ng-container matColumnDef="assignee">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header="assignee">Assignee</th>
-        <td mat-cell *matCellDef="let element">{{  element.assignee.name }}</td>
-      </ng-container>
-      <ng-container matColumnDef="creator">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header="creator">Creator</th>
-        <td mat-cell *matCellDef="let element">{{  element.creator.name }}</td>
-      </ng-container>
-      <ng-container matColumnDef="status">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header="status">Status</th>
-        <td mat-cell *matCellDef="let element">{{  element.status }}</td>
-      </ng-container>
-      <ng-container matColumnDef="actions">
-        <th mat-header-cell *matHeaderCellDef>Actions</th>
-        <td mat-cell *matCellDef="let element">
-          <button mat-icon-button [routerLink]="['/task-detail',element.id]" routerLinkActive="active-link"
-                  matTooltip="Task Details">
-            <mat-icon>launch</mat-icon>
-          </button>
-        </td>
-      </ng-container>
+    <div class="enable-x-scrolling">
+      <table mat-table [dataSource]="closedTasks" class="mat-elevation-z8 full-width slightly-spaced" matSort>
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef>Actions</th>
+          <td mat-cell *matCellDef="let element">
+            <button mat-icon-button [routerLink]="['/task-detail',element.id]" routerLinkActive="active-link"
+                    matTooltip="Task Details">
+              <mat-icon>launch</mat-icon>
+            </button>
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="taskDate">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header="taskDate">Task Date</th>
+          <td mat-cell *matCellDef="let element">{{ element.taskDate  | date: 'dd.MM.yyyy HH:mm' }}</td>
+        </ng-container>
+        <ng-container matColumnDef="realEstateName">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header="realEstateName">Real Estate Name</th>
+          <td mat-cell *matCellDef="let element">{{ element.realEstate.name }}</td>
+        </ng-container>
+        <ng-container matColumnDef="realEstateCountry">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header="realEstateCountry">Country</th>
+          <td mat-cell *matCellDef="let element">{{ element.realEstate.country }}</td>
+        </ng-container>
+        <ng-container matColumnDef="realEstateCity">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header="realEstateCity">City</th>
+          <td mat-cell *matCellDef="let element">{{ element.realEstate.city }}</td>
+        </ng-container>
+        <ng-container matColumnDef="realEstateZip">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header="realEstateZip">Zip Code</th>
+          <td mat-cell *matCellDef="let element">{{ element.realEstate.zipCode }}</td>
+        </ng-container>
+        <ng-container matColumnDef="assignee">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header="assignee">Assignee</th>
+          <td mat-cell *matCellDef="let element">{{ element.assignee.name }}</td>
+        </ng-container>
+        <ng-container matColumnDef="creator">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header="creator">Creator</th>
+          <td mat-cell *matCellDef="let element">{{ element.creator.name }}</td>
+        </ng-container>
+        <ng-container matColumnDef="status">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header="status">Status</th>
+          <td mat-cell *matCellDef="let element">{{ element.status }}</td>
+        </ng-container>
 
-
-      <tr mat-header-row *matHeaderRowDef="displayedColumns">Info</tr>
-      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-    </table>
-
+        <tr mat-header-row *matHeaderRowDef="displayedColumns">Info</tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+    </div>
   </mat-expansion-panel>
 </mat-accordion>
