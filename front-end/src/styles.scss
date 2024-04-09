@@ -28,3 +28,12 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 .checklist-item {
   width: 80%;
 }
+
+.enable-x-scrolling{
+  overflow-x: scroll;
+}
+
+.mat-table {
+  min-width: 800px; /* Or whatever minimum width you need */
+}
+
