@@ -275,7 +275,7 @@ export class TaskDetailComponent implements OnInit {
     let commentObjs = await firstValueFrom(this.taskService.getComments(this.task.id));
     for (const commentObj of commentObjs) {
       let comment: Comment = Utils.jsonObjToInstance(new Comment(), commentObj);
-      this.loadImages(comment);
+      await this.loadImages(comment);
       comment.author = await firstValueFrom(this.taskService.getCommentAuthorDetails(comment.id)).catch(error => {
         this.errorToastr(error);
         return new User();
@@ -285,13 +285,13 @@ export class TaskDetailComponent implements OnInit {
     this.commentsLoading = false;
   }
 
-  loadImages(comment: Comment) {
+  async loadImages(comment: Comment) {
     // Convert each image path to an Observable<Blob>, then fetch all images concurrently
     const imageFetchObservables: Observable<Blob>[] = comment.images.map(image =>
       this.fileService.fetchImage(image.id + '')
     );
 
-    comment.imageUrls$ = forkJoin(imageFetchObservables).pipe(
+    comment.imageUrls$ = await forkJoin(imageFetchObservables).pipe(
       map(blobs => blobs.map(blob => this.sanitizer.bypassSecurityTrustUrl(URL.createObjectURL(blob))))
     );
   }
