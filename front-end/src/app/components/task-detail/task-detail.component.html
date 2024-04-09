@@ -149,7 +149,7 @@
         </mat-card-actions>
       </mat-card>
     </div>
-
+    <mat-spinner *ngIf="isInProgress"></mat-spinner>
     <button mat-button (click)="onAddComment()" [disabled]="!currentComment.content || currentComment.content == ''">Post
       Comment
     </button>

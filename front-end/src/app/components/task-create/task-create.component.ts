@@ -5,6 +5,9 @@ import {AuthService} from "../../services/auth/auth.service";
 import {RealEstate} from "../../models/real-estate.model";
 import {RealEstateService} from "../../services/real-estate/real-estate.service";
 import {TaskService} from "../../services/task/task.service";
+import {first} from "rxjs";
+import {MatDialog} from "@angular/material/dialog";
+import {SpinnerDialogComponent} from "../spinner-dialog/spinner-dialog.component";
 
 @Component({
   selector: 'app-task-create',
@@ -27,13 +30,15 @@ export class TaskCreateComponent implements OnInit {
 
   constructor(private userService: AuthService,
               private taskService: TaskService,
-              private realEstateService: RealEstateService) {
+              private realEstateService: RealEstateService,
+              private matDialog: MatDialog) {
   }
 
   onCreateTask() {
     this.task.createdDate = new Date();
     this.setTime();
-    this.taskService.saveTask(this.task)
+    this.matDialog.open(SpinnerDialogComponent);
+    this.taskService.saveTask(this.task).pipe(first())
       .subscribe({
         next: (task: Task) =>{
           this.taskService.toastr.success("Task created successfully! Task id: " + task.id);
@@ -41,6 +46,8 @@ export class TaskCreateComponent implements OnInit {
         }, error: err => {
           console.log(err);
           this.taskService.toastr.error("There was an unexpected error while creating task!");
+        }, complete: () =>{
+          this.matDialog.closeAll();
         }
       });
   }

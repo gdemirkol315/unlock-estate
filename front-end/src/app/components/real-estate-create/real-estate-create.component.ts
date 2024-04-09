@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
 import {RealEstate} from "../../models/real-estate.model";
 import {RealEstateService} from "../../services/real-estate/real-estate.service";
-import {FormGroup} from "@angular/forms";
-import transformJavaScript from "@angular-devkit/build-angular/src/tools/esbuild/javascript-transformer-worker";
+import {first} from "rxjs";
+import {SpinnerDialogComponent} from "../spinner-dialog/spinner-dialog.component";
+import {MatDialog} from "@angular/material/dialog";
 
 @Component({
   selector: 'real-estate-create',
@@ -14,7 +15,8 @@ export class RealEstateCreateComponent {
   realEstate: RealEstate = new RealEstate();
   newCheckListName: string;
 
-  constructor(private realEstateService:RealEstateService) {
+  constructor(private realEstateService:RealEstateService,
+              private matDialog:MatDialog) {
   }
 
   updateCheckListName() {
@@ -23,7 +25,8 @@ export class RealEstateCreateComponent {
 
   onSaveRealEstate() {
     if (this.isFormValid()) {
-      this.realEstateService.save(this.realEstate)
+      this.matDialog.open(SpinnerDialogComponent)
+      this.realEstateService.save(this.realEstate).pipe(first())
         .subscribe({
           next: (realEstate:RealEstate) => {
             this.realEstateService.toastr.success("Real estate " + realEstate.name + " successfully saved!");
@@ -32,6 +35,8 @@ export class RealEstateCreateComponent {
           error: (err) => {
             this.realEstateService.toastr.error("An unexpected error occurred while saving real estate!");
             console.log(err);
+          }, complete: ()=>{
+            this.matDialog.closeAll();
           }
         });
     } else {

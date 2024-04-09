@@ -5,6 +5,7 @@ import {Task} from "../../models/task.model";
 import {User} from "../../models/user.model";
 import {TaskCheckListItem} from "../../models/task-check-list-item.model";
 import {Comment} from "../../models/comment.model"
+import {first, Subject} from "rxjs";
 
 @Injectable({
   providedIn: 'root'
@@ -12,6 +13,7 @@ import {Comment} from "../../models/comment.model"
 export class TaskService extends DataService {
 
   private serviceUrlSuffix: string = "task"
+  public isProcessFinished: Subject<boolean> = new Subject<boolean>();
 
   getTask(taskId: number) {
     let queryParams = new HttpParams();
@@ -24,13 +26,15 @@ export class TaskService extends DataService {
   }
 
   updateTask(task: Task, toastrSuccessMessage:string) {
-    this.http.post(this.hostname + this.serviceUrlSuffix + "/updateTask", task) .subscribe({
+    this.http.post(this.hostname + this.serviceUrlSuffix + "/updateTask", task).pipe(first()).subscribe({
       next: () =>{
         this.toastr.success(toastrSuccessMessage);
         this.router.navigate(['/success'])
       }, error: err => {
         console.log(err);
         this.toastr.error("There was an unexpected error while saving task!");
+      }, complete:()=>{
+        this.isProcessFinished.next(true)
       }
     });
   }

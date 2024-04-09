@@ -39,6 +39,7 @@ export class TaskDetailComponent implements OnInit {
   currentComment: Comment = new Comment();
   comments: Comment[] = new Array();
   commentsLoading: boolean = true;
+  isInProgress: boolean = false;
 
   constructor(private route: ActivatedRoute,
               private taskService: TaskService,
@@ -108,6 +109,7 @@ export class TaskDetailComponent implements OnInit {
     });
     let answer = await firstValueFrom(dialogRefLastWarn.afterClosed());
     if (answer) {
+      this.subscribeToTaskProgressFinish();
       let issueExist = false;
       this.task.taskCheckListItems.forEach((taskChecklistItem: TaskCheckListItem) => {
         if (taskChecklistItem.status == 'ISSUE') {
@@ -119,12 +121,16 @@ export class TaskDetailComponent implements OnInit {
       } else {
         this.task.status = "DONE"
       }
-
       this.taskService.updateTask(this.task,"Task submitted successfully.")
     }
   }
 
-
+  private subscribeToTaskProgressFinish(){
+    this.isInProgress = true;
+    this.taskService.isProcessFinished.pipe(first()).subscribe(()=>{
+      this.isInProgress = false;
+    });
+  }
   async closeTask() {
     let dialogRefLastWarn: MatDialogRef<LastWarningComponent> = this.matDialog.open(LastWarningComponent, {
       data: {
@@ -134,6 +140,7 @@ export class TaskDetailComponent implements OnInit {
     let answer = await firstValueFrom(dialogRefLastWarn.afterClosed());
     if (answer){
       this.task.status = "DONE";
+      this.subscribeToTaskProgressFinish();
       this.taskService.updateTask(this.task,"Task closed successfully.");
     }
   }
@@ -147,6 +154,7 @@ export class TaskDetailComponent implements OnInit {
     let answer = await firstValueFrom(dialogRefLastWarn.afterClosed());
     if (answer){
       this.task.status = TaskStatus.PENDING;
+      this.subscribeToTaskProgressFinish();
       this.taskService.updateTask(this.task,"Task reopened successfully.");
     }
   }
@@ -246,10 +254,11 @@ export class TaskDetailComponent implements OnInit {
   }
 
   postComment(comment: Comment) {
+    this.isInProgress = true
     comment.date = new Date();
     comment.task.id = this.task.id;
     this.taskService.addComment(comment)
-      .subscribe({
+      .pipe(first()).subscribe({
         next: async (commentResponse: Comment) => {
           let i: number = 0;
           for (let image of commentResponse.images) {
@@ -259,7 +268,7 @@ export class TaskDetailComponent implements OnInit {
             i++;
           }
           if (commentResponse.images.length > 0) {
-            this.loadImages(commentResponse);
+            await this.loadImages(commentResponse);
           }
           let commentResponseInstance: Comment = Utils.jsonObjToInstance(new Comment(), commentResponse);
           commentResponseInstance.author = comment.author;
@@ -267,6 +276,8 @@ export class TaskDetailComponent implements OnInit {
         }, error: (err) => {
           console.log(err)
           this.taskService.toastr.error("There was an error posting the comment");
+        }, complete : () =>{
+          this.isInProgress = false;
         }
       });
   }
