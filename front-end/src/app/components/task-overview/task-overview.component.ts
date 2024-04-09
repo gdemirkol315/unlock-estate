@@ -22,6 +22,7 @@ export class TaskOverviewComponent implements OnInit, AfterViewInit {
   displayedColumns:string[] =  ['taskDate', 'realEstateName','realEstateCountry','realEstateCity', 'realEstateZip', 'assignee', 'creator', 'status','actions'];
 
   @ViewChild(MatSort) sort: MatSort;
+  isLoading: boolean = true;
 
   constructor(protected jwtToken: JwtToken,
               private taskService: TaskService,
@@ -64,7 +65,7 @@ export class TaskOverviewComponent implements OnInit, AfterViewInit {
 
     let currentTasks: Task[] = [];
     let closedTasks: Task[] = [];
-
+    this.isLoading = true;
 
 
     if (this.jwtToken.getRole().includes('ADMIN')) {
@@ -98,6 +99,7 @@ export class TaskOverviewComponent implements OnInit, AfterViewInit {
 
     this.currentTasks.data = currentTasks;
     this.closedTasks.data = closedTasks;
+    this.isLoading = false;
   }
 
 }

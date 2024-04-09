@@ -22,6 +22,7 @@ export class UserManagementComponent implements OnInit {
   private dialogRefUserDetails: MatDialogRef<UserDetailComponent>;
   private roles: string [];
   searchKey: string;
+  isLoading: boolean = true;
 
   ngOnInit(): void {
     this.getRoles();
@@ -46,7 +47,8 @@ export class UserManagementComponent implements OnInit {
   }
 
   getUsers() {
-    this.authService.getUsers().subscribe({
+    this.isLoading = true;
+    this.authService.getUsers().pipe(first()).subscribe({
       next: (users: User[]) => {
         let activeUsers: User[] = [];
         let deActivatedUsers: User[] = [];
@@ -63,6 +65,8 @@ export class UserManagementComponent implements OnInit {
       },
       error: (err) => {
         console.log(err)
+      },complete: ()=>{
+        this.isLoading = false;
       }
     });
   }

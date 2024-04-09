@@ -5,6 +5,7 @@ import {RealEstateService} from "../../services/real-estate/real-estate.service"
 import {MatDialog, MatDialogRef} from "@angular/material/dialog";
 import {LastWarningComponent} from "../last-warning/last-warning.component";
 import {MatSort} from "@angular/material/sort";
+import {first} from "rxjs";
 
 @Component({
   selector: 'real-estate-management',
@@ -19,6 +20,7 @@ export class RealEstateManagementComponent implements OnInit, AfterViewInit {
   displayedColumns: string[] = ['id', 'name', 'country', 'city', 'zipCode', 'type', 'actions'];
 
   @ViewChild(MatSort) sort: MatSort;
+  isLoading: boolean = true;
 
   ngAfterViewInit() {
     this.activeRealEstate.sort = this.sort;
@@ -59,9 +61,10 @@ export class RealEstateManagementComponent implements OnInit, AfterViewInit {
   }
 
   getRealEstates() {
+    this.isLoading = true;
     let realEstatesActive: RealEstate[] = new Array();
     let realEstatesDeactivated: RealEstate[] = new Array();
-    this.realEstateService.getAllRealEstates()
+    this.realEstateService.getAllRealEstates().pipe(first())
       .subscribe({
         next: (realEstates: RealEstate[]) => {
           realEstates.forEach((realEstate: RealEstate) => {
@@ -73,6 +76,8 @@ export class RealEstateManagementComponent implements OnInit, AfterViewInit {
             this.activeRealEstate.data = realEstatesActive
             this.deActivatedRealEstate.data = realEstatesDeactivated
           });
+        }, complete: () => {
+          this.isLoading = false
         }
       });
   }
@@ -101,17 +106,17 @@ export class RealEstateManagementComponent implements OnInit, AfterViewInit {
     });
   }
 
-  changeRealEstateStatus(realEstate: RealEstate, status: boolean){
+  changeRealEstateStatus(realEstate: RealEstate, status: boolean) {
     realEstate.active = status;
     this.realEstateService.save(realEstate).subscribe({
       next: (updatedRealEstate: RealEstate) => {
         //this approach implemented to avoid unnecessary get server request
-        let deactivatedRealEstate:RealEstate[] = new Array();
-        let activatedRealEstate:RealEstate[] = new Array();
+        let deactivatedRealEstate: RealEstate[] = new Array();
+        let activatedRealEstate: RealEstate[] = new Array();
 
         if (updatedRealEstate.active) {
           this.deActivatedRealEstate.data.forEach((deactivedRealEstate: RealEstate) => {
-            if (deactivedRealEstate.id != updatedRealEstate.id){
+            if (deactivedRealEstate.id != updatedRealEstate.id) {
               deactivatedRealEstate.push(deactivedRealEstate);
             }
           })
@@ -120,7 +125,7 @@ export class RealEstateManagementComponent implements OnInit, AfterViewInit {
 
         } else {
           this.activeRealEstate.data.forEach((realEstateActivated: RealEstate) => {
-            if (realEstateActivated.id != updatedRealEstate.id){
+            if (realEstateActivated.id != updatedRealEstate.id) {
               activatedRealEstate.push(realEstateActivated);
             }
           })
