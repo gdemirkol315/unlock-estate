@@ -7,13 +7,15 @@
     <mat-toolbar>Menu</mat-toolbar>
     <mat-nav-list *ngIf="jwtToken.token">
       <a *ngIf="jwtToken.getRole().includes('ADMIN')" mat-list-item routerLink="admin/user-management"
-         routerLinkActive="active-link">User Management
+         routerLinkActive="active-link" (click)="drawer.toggle()">User Management
         <mat-icon>supervisor_account</mat-icon>
       </a>
-      <a *ngIf="jwtToken.getRole().includes('ADMIN')" mat-list-item routerLink="admin/real-estate-management" routerLinkActive="active-link">Real Estates
+      <a *ngIf="jwtToken.getRole().includes('ADMIN')" mat-list-item routerLink="admin/real-estate-management" routerLinkActive="active-link"
+         (click)="drawer.toggle()">Real Estates
         <mat-icon>business</mat-icon>
       </a>
-      <a mat-list-item routerLink="task-overview" routerLinkActive="active-link">Task Overview
+      <a mat-list-item routerLink="task-overview" routerLinkActive="active-link"
+         (click)="drawer.toggle()">Task Overview
         <mat-icon>rowing</mat-icon>
       </a>
     </mat-nav-list>
@@ -31,7 +33,7 @@
       </div>
       <span>CheckOutNow</span>
       <div class="container right-align" *ngIf="authService.isLoggedIn">
-        <button mat-icon-button matTooltip="Notifications" style="color: white;">
+        <button mat-icon-button matTooltip="Notifications" style="color: white;" >
           <!--matBadge="15"-->
           <mat-icon>notifications</mat-icon>
         </button>
