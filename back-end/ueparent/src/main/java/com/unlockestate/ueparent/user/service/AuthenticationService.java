@@ -74,6 +74,10 @@ public class AuthenticationService {
         salt.setSaltString(createSalt());
         salt.setEmail(request.getEmail());
 
+        saltRepository.save(salt);
+        user = userRepository.save(user);
+        String token = jwtService.generateToken(user);
+
         if (user.getEmail().equals(initialUser)) {
             user.setPassword(passwordEncoder.encode(request.getPassword() + salt.getSaltString()));
         } else {
@@ -89,9 +93,6 @@ public class AuthenticationService {
             user.setPassword(passwordEncoder.encode(tmpPassword + salt.getSaltString()));
         }
 
-        saltRepository.save(salt);
-        user = userRepository.save(user);
-        String token = jwtService.generateToken(user);
         return new AuthenticationResponse(token);
     }
 
