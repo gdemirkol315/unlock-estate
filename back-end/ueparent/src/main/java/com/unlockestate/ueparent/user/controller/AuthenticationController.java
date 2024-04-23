@@ -32,7 +32,7 @@ public class AuthenticationController {
             request.setActive(true);
             return ResponseEntity.ok(authenticationService.register(request));
         } catch (DataIntegrityViolationException e) {
-            return ResponseEntity.badRequest().body(new MessageEntity("User with same email address already exists!"));
+            return ResponseEntity.badRequest().body(new MessageEntity(e.getMessage()));
         } catch (MailSendException e) {
             return ResponseEntity.badRequest().body(new MessageEntity("There was an error sending activation email!"));
         }

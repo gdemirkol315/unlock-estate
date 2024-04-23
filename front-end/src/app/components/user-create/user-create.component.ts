@@ -44,7 +44,7 @@ export class UserCreateComponent {
   onCreateUser() {
 
     if (this.validateForm()) {
-      this.matDialog.open(SpinnerDialogComponent);
+      let spinner = this.matDialog.open(SpinnerDialogComponent);
       this.user.email = this.createUserForm.get('email')?.value;
       this.user.name = this.createUserForm.get('name')?.value;
       this.user.lastName = this.createUserForm.get('lastName')?.value;
@@ -56,8 +56,8 @@ export class UserCreateComponent {
           this.authService.toastr.success("User for " + this.user.email + " has been successfully created.")
         },
         error: (err) => {
-          let messageEntity: MessageEntity = Utils.jsonObjToInstance(new MessageEntity(),err);
-          this.authService.toastr.error(messageEntity.message);
+          this.authService.toastr.error(err['error'].message);
+          spinner.close();
         }, complete: ()=>{
           this.matDialog.closeAll();
         }
@@ -66,14 +66,19 @@ export class UserCreateComponent {
   }
 
   private validateForm(): boolean {
-    this.user.phoneNumber = this.user.phoneNumber = '+' + this.phoneNumberCountry.dialCode + this.createUserForm.get('phoneNumber')?.value;
+
     if (!this.validateEmail(this.createUserForm.get('email')?.value)) {
       this.authService.toastr.error("Wrong e-mail format!");
       return false;
-    } else if (!isValidPhoneNumber(this.user.phoneNumber, this.phoneNumberCountry)) {
-      this.authService.toastr.error("Phone number format is not correct!");
-      return false;
-    } else if (this.createUserForm.invalid) {
+    }
+    if (this.phoneNumberCountry && this.createUserForm.get('phoneNumber')?.value) {
+      this.user.phoneNumber = this.user.phoneNumber = '+' + this.phoneNumberCountry.dialCode + this.createUserForm.get('phoneNumber')?.value;
+      if (!isValidPhoneNumber(this.user.phoneNumber, this.phoneNumberCountry)) {
+        this.authService.toastr.error("Phone number format is not correct!");
+        return false;
+      }
+    }
+    if (this.createUserForm.invalid) {
       this.authService.toastr.error("Necessary entries should be done!");
       return false;
     }

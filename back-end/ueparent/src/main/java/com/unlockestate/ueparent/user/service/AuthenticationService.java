@@ -11,6 +11,7 @@ import com.unlockestate.ueparent.user.repository.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.mail.MailSendException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -20,6 +21,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.NoSuchElementException;
+import java.util.Optional;
 import java.util.Random;
 
 
@@ -59,40 +61,44 @@ public class AuthenticationService {
 
     public AuthenticationResponse register(User request) throws MailSendException {
         User user = new User();
+        Optional<User> userExists = userRepository.findByEmail(request.getEmail());
+        if (userExists.isEmpty()) {
+            user.setName(request.getName());
+            user.setLastName(request.getLastName());
+            user.setEmail(request.getEmail());
+            user.setRole(request.getRole());
+            if (request.getPhoneNumber() != null) {
+                user.setPhoneNumber(request.getPhoneNumber().replaceAll("\\s+", ""));
+            }
+            user.setPreferredArea(request.getPreferredArea());
+            user.setActive(request.isActive());
 
-        user.setName(request.getName());
-        user.setLastName(request.getLastName());
-        user.setEmail(request.getEmail());
-        user.setRole(request.getRole());
-        if (request.getPhoneNumber()!= null) {
-            user.setPhoneNumber(request.getPhoneNumber().replaceAll("\\s+", ""));
-        }
-        user.setPreferredArea(request.getPreferredArea());
-        user.setActive(request.isActive());
+            Salt salt = new Salt();
+            salt.setSaltString(createSalt());
+            salt.setEmail(request.getEmail());
 
-        Salt salt = new Salt();
-        salt.setSaltString(createSalt());
-        salt.setEmail(request.getEmail());
+            if (user.getEmail().equals(initialUser)) {
+                user.setPassword(passwordEncoder.encode(request.getPassword() + salt.getSaltString()));
+            } else {
+                String tmpPassword = createSalt();
+                emailService.sendSimpleMessage(new Email(user.getEmail(),
+                        "Your CheckoutNow account has been created.\n\nYour user name:\n" + user.getEmail() +
+                                "\nYour temporary password:\n" + tmpPassword +
+                                "\n\nPlease change your password immediately after login!\n" +
+                                "Login via:\n" +
+                                allowedOrigin + "\\login",
+                        "CheckoutNow Account Activation"));
+                //TODO bounce-back mail check if user mail does not exists
+                user.setPassword(passwordEncoder.encode(tmpPassword + salt.getSaltString()));
+            }
 
-        if (user.getEmail().equals(initialUser)) {
-            user.setPassword(passwordEncoder.encode(request.getPassword() + salt.getSaltString()));
+            saltRepository.save(salt);
+            user = userRepository.save(user);
+            String token = jwtService.generateToken(user);
+            return new AuthenticationResponse(token);
         } else {
-            String tmpPassword = createSalt();
-            emailService.sendSimpleMessage(new Email(user.getEmail(),
-                    "Your CheckoutNow account has been created.\n\nYour user name:\n" + user.getEmail() +
-                            "\nYour temporary password:\n" + tmpPassword +
-                            "\n\nPlease change your password immediately after login!\n" +
-                            "Login via:\n" +
-                            allowedOrigin + "\\login",
-                    "CheckoutNow Account Activation"));
-            //TODO bounce-back mail check if user mail does not exists
-            user.setPassword(passwordEncoder.encode(tmpPassword + salt.getSaltString()));
+            throw new DataIntegrityViolationException("User with same email already exists!");
         }
-
-        saltRepository.save(salt);
-        user = userRepository.save(user);
-        String token = jwtService.generateToken(user);
-        return new AuthenticationResponse(token);
     }
 
     public void authenticate(User request) throws BadCredentialsException, NoSuchElementException {
