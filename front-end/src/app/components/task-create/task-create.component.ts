@@ -36,7 +36,6 @@ export class TaskCreateComponent implements OnInit {
 
   onCreateTask() {
     this.task.createdDate = new Date();
-    this.setTime();
     this.matDialog.open(SpinnerDialogComponent);
     this.taskService.saveTask(this.task).pipe(first())
       .subscribe({
@@ -77,14 +76,6 @@ export class TaskCreateComponent implements OnInit {
 
   private resetForm() {
     this.task = new Task();
-  }
-
-  private setTime() {
-    const timeParts = this.fullTime.split(":");
-    const hours = +timeParts[0];
-    const minutes = +timeParts[1];
-
-    this.task.taskDate.setHours(hours, minutes, 0, 0);
   }
 
 }
