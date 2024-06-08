@@ -6,6 +6,7 @@ import {User} from "../../models/user.model";
 import {TaskCheckListItem} from "../../models/task-check-list-item.model";
 import {Comment} from "../../models/comment.model"
 import {first, Subject} from "rxjs";
+import {Expense} from "../../models/expense.model";
 
 @Injectable({
   providedIn: 'root'
@@ -86,6 +87,14 @@ export class TaskService extends DataService {
     let task = new Task();
     task.startTime = startTime;
     task.id = taskId;
-    return this.http.post<Task>(this.hostname + this.serviceUrlSuffix + "/setStartTime", task);
+    return this.http.post(this.hostname + this.serviceUrlSuffix + "/setStartTime", task);
+  }
+
+  addExpense(expense: Expense) {
+    return this.http.post(this.hostname + this.serviceUrlSuffix + "/addExpense", expense);
+  }
+
+  deleteExpense(expense: Expense) {
+    return this.http.post(this.hostname + this.serviceUrlSuffix + "/deleteExpense", expense);
   }
 }

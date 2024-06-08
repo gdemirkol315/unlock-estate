@@ -175,8 +175,10 @@ public class TaskService {
         taskRepository.save(task);
     }
 
-    public void addExpense(Expense expense) {
-        expenseRepository.save(expense);
+    public Expense addExpense(Expense expense) {
+        expense.setAuthor(userRepository.findByEmail(expense.getAuthor().getEmail()).orElseThrow());
+        expense.setTask(taskRepository.findById(expense.getTask().getId()).orElseThrow());
+        return expenseRepository.save(expense);
     }
 
     public void deleteExpense(Expense expense) {

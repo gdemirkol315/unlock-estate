@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
 import {ActivatedRoute} from "@angular/router";
 import {TaskService} from "../../services/task/task.service";
 import {Task} from "../../models/task.model";
@@ -45,7 +45,7 @@ export class TaskDetailComponent implements OnInit {
   isInProgress: boolean = false;
   protected readonly TaskStatus = TaskStatus;
   expenses: MatTableDataSource<Expense> = new MatTableDataSource<Expense>();
-  displayedColumns: string[] =["Description","Amount"];
+  displayedColumns: string[] =["Description","Amount","Actions"];
 
   constructor(private route: ActivatedRoute,
               private taskService: TaskService,
@@ -55,16 +55,12 @@ export class TaskDetailComponent implements OnInit {
               private sanitizer: DomSanitizer,
               private matDialog: MatDialog,
               private emailService: EmailService,
-              protected jwtToken: JwtToken) {
+              protected jwtToken: JwtToken,
+              private cdr: ChangeDetectorRef) {
 
   }
 
   ngOnInit(): void {
-    //TODO dummy delete
-    let expense: Expense = new Expense();
-    expense.description="Coffee Capsules"
-    expense.amount=25.3
-    this.expenses.data.push(expense);
     let taskId: string | null = this.route.snapshot.paramMap.get('id');
     if (taskId == null) {
       this.taskService.toastr.error("An unexpected error occured while routing!");
@@ -72,6 +68,7 @@ export class TaskDetailComponent implements OnInit {
       this.taskService.getTask(+taskId).pipe(first()).subscribe({
         next: async (task: Task) => {
           this.task = Utils.jsonObjToInstance(new Task(), task);
+          this.expenses.data = task.expenses;
           await this.getComments();
         }, error: (err) => {
           this.errorToastr(err);
@@ -360,7 +357,17 @@ export class TaskDetailComponent implements OnInit {
   }
 
   attachExpense() {
-    this.matDialog.open(AddExpenseComponent);
+    let matDialogRef:MatDialogRef<AddExpenseComponent> = this.matDialog.open(AddExpenseComponent, {data:{
+        taskId: this.task.id,
+        email: this.jwtToken.getUserEmail(),
+      }});
+    matDialogRef.afterClosed().subscribe({
+      next: expense => {
+        if (expense){
+          this.expenses.data = [...this.expenses.data, expense];
+        }
+      }
+    })
   }
 
   startTask() {
@@ -380,4 +387,15 @@ export class TaskDetailComponent implements OnInit {
     //TODO: set task finish time
   }
 
+  deleteExpense(deleteExpense: Expense) {
+    this.taskService.deleteExpense(deleteExpense).subscribe({
+      next: () => {
+        const index = this.expenses.data.findIndex(element => element.id === deleteExpense.id);
+        if (index !== -1) {
+          this.expenses.data.splice(index, 1);
+          this.expenses.data = [...this.expenses.data];
+        }
+      }
+    })
+  }
 }

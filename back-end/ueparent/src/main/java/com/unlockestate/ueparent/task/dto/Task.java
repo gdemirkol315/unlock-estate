@@ -26,6 +26,10 @@ public class Task {
     @OneToMany(mappedBy = "task", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Comment> comments;
 
+    @JsonManagedReference("task-expense")
+    @OneToMany(mappedBy = "task", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Expense> expenses;
+
     @JsonBackReference("assignee-task")
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "assignee_user_id")

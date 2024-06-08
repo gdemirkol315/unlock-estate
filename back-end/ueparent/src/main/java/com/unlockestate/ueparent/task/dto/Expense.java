@@ -15,8 +15,8 @@ public class Expense {
     private Double amount;
 
     @JsonBackReference("author-expense")
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "user_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_email")
     private User author;
 
     @JsonBackReference("task-expense")

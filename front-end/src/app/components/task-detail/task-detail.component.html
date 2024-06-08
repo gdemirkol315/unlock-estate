@@ -94,7 +94,7 @@
       </mat-expansion-panel>
     </mat-accordion>
     <br>
-    <mat-card>
+    <mat-card *ngIf="this.expenses.data.length>0">
       <mat-card-header>
         <mat-card-title>Expenses</mat-card-title>
       </mat-card-header>
@@ -112,12 +112,26 @@
           <td mat-cell *matCellDef="let element"> {{element.amount}} € </td>
         </ng-container>
 
+        <ng-container matColumnDef="Actions">
+          <th mat-header-cell *matHeaderCellDef>Actions</th>
+          <td mat-cell *matCellDef="let element">
+            <button mat-icon-button matTooltip="Delete Expense" (click)="deleteExpense(element)">
+              <mat-icon>delete</mat-icon>
+            </button>
+          </td>
+        </ng-container>
+
         <!-- Header and Row Declarations -->
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
       </table>
     </mat-card>
-
+    <button mat-button aria-label="Add" (click)="attachExpense()"
+            matTooltip="Attach Expense"
+            [disabled]="task.status =='DONE' || task.status =='SUBMITTED'">
+      <mat-icon matSuffix>attach_money</mat-icon>
+      Add Expense
+    </button>
     <br>
 
     <br>
@@ -174,11 +188,6 @@
               matTooltip="Report Problem Immediately" class="slightly-spaced"
               [disabled]="task.status =='DONE' || task.status =='SUBMITTED'">
         <mat-icon matSuffix>mood_bad</mat-icon>
-      </button>
-      <button mat-icon-button aria-label="Add" (click)="attachExpense()"
-              matTooltip="Attach Expense" class="slightly-spaced"
-              [disabled]="task.status =='DONE' || task.status =='SUBMITTED'">
-        <mat-icon matSuffix>attach_money</mat-icon>
       </button>
     </div>
     <div *ngFor="let image of currentComment.images; let i = index" class="image-card">

@@ -130,7 +130,6 @@ public class TaskController {
             if (task.getStartTime() != null) {
                 taskService.setStartTime(task);
             }
-            logger.info("Task " + task.getId() + " Started Successfully");
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (InternalServerRuntimeException e) {
             logger.error("Could not set task starting time!");
@@ -144,10 +143,9 @@ public class TaskController {
 
         try {
             if (expense != null && expense.getAmount() != null) {
-                taskService.addExpense(expense);
+                expense = taskService.addExpense(expense);
             }
-            logger.info("Expense added successfully");
-            return new ResponseEntity<>(HttpStatus.OK);
+            return ResponseEntity.ok(expense.getId() + "");
         } catch (InternalServerRuntimeException e) {
             logger.error("Could not enter the expense!");
             return ResponseEntity.internalServerError().build();
@@ -162,7 +160,6 @@ public class TaskController {
             if (expense != null) {
                 taskService.deleteExpense(expense);
             }
-            logger.info("Expense added successfully");
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (InternalServerRuntimeException e) {
             logger.error("Could not enter the expense!");
