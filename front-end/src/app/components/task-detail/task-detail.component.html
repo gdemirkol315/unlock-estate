@@ -6,19 +6,27 @@
       <mat-card-title>Task Details</mat-card-title>
     </mat-card-header>
 
-    <mat-form-field class="slightly-spaced">
+    <!--<mat-form-field class="slightly-spaced">
       <mat-label>Id</mat-label>
       <input matInput type="text" [ngModel]="task.id" readonly>
-    </mat-form-field>
+    </mat-form-field>-->
     <mat-form-field class="slightly-spaced">
       <mat-label>Check-Out Date</mat-label>
-      <input matInput type="text" [ngModel]="task.taskDate |  date: 'dd.MM.yyyy HH:mm'" readonly>
+      <input matInput type="text" [ngModel]="task.taskDate |  date: 'dd.MM.yyyy'" readonly>
+    </mat-form-field>
+    <mat-form-field class="slightly-spaced" *ngIf="this.task.startTime">
+      <mat-label>Start Time</mat-label>
+      <input matInput type="text" [ngModel]="task.startTime |  date: 'HH:mm'" readonly>
+    </mat-form-field>
+    <mat-form-field class="slightly-spaced" *ngIf="this.task.startTime">
+      <mat-label>Finish Time</mat-label>
+      <input matInput type="text" [ngModel]="task.finishTime |  date: 'HH:mm'" readonly>
     </mat-form-field>
     <mat-form-field class="slightly-spaced">
       <mat-label>Assignee</mat-label>
       <input matInput type="text" [ngModel]="task.assignee.name + ' ' + task.assignee.lastName" readonly>
     </mat-form-field>
-    <mat-form-field class="slightly-spaced">
+    <mat-form-field class="slightly-spaced" *ngIf="jwtToken.getRole().includes('ADMIN')">
       <mat-label>Creator</mat-label>
       <input matInput type="text" [ngModel]="task.creator.name + ' ' + task.creator.lastName" readonly>
     </mat-form-field>
@@ -58,7 +66,7 @@
     </mat-form-field>
   </mat-card>
   <br>
-  <mat-card class="centered-container">
+  <mat-card class="centered-container" *ngIf="this.task.startTime">
     <mat-card-header>
       <mat-card-title>Checklists</mat-card-title>
     </mat-card-header>
@@ -85,6 +93,33 @@
         </div>
       </mat-expansion-panel>
     </mat-accordion>
+    <br>
+    <mat-card>
+      <mat-card-header>
+        <mat-card-title>Expenses</mat-card-title>
+      </mat-card-header>
+      <table mat-table [dataSource]="expenses">
+
+        <!-- Description Column -->
+        <ng-container matColumnDef="Description">
+          <th mat-header-cell *matHeaderCellDef> Description </th>
+          <td mat-cell *matCellDef="let element"> {{element.description}} </td>
+        </ng-container>
+
+        <!-- Amount Column -->
+        <ng-container matColumnDef="Amount">
+          <th mat-header-cell *matHeaderCellDef> Amount </th>
+          <td mat-cell *matCellDef="let element"> {{element.amount}} € </td>
+        </ng-container>
+
+        <!-- Header and Row Declarations -->
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+    </mat-card>
+
+    <br>
+
     <br>
     <mat-card-header>
       <mat-card-title>Comments</mat-card-title>
@@ -119,6 +154,10 @@
       <mat-label>Add a comment</mat-label>
       <textarea matInput [(ngModel)]="currentComment.content"></textarea>
     </mat-form-field>
+    <button mat-button (click)="onAddComment()" [disabled]="!currentComment.content || currentComment.content == ''">Post
+      Comment
+    </button>
+    <br>
     <div id="action-buttons" class="form-row">
       <input
         hidden
@@ -136,6 +175,11 @@
               [disabled]="task.status =='DONE' || task.status =='SUBMITTED'">
         <mat-icon matSuffix>mood_bad</mat-icon>
       </button>
+      <button mat-icon-button aria-label="Add" (click)="attachExpense()"
+              matTooltip="Attach Expense" class="slightly-spaced"
+              [disabled]="task.status =='DONE' || task.status =='SUBMITTED'">
+        <mat-icon matSuffix>attach_money</mat-icon>
+      </button>
     </div>
     <div *ngFor="let image of currentComment.images; let i = index" class="image-card">
       <mat-card (click)="openImageInFullSize(image.encodedImg)">
@@ -150,10 +194,6 @@
       </mat-card>
     </div>
     <mat-spinner *ngIf="isInProgress"></mat-spinner>
-    <button mat-button (click)="onAddComment()" [disabled]="!currentComment.content || currentComment.content == ''">Post
-      Comment
-    </button>
-    <br>
     <button mat-raised-button color="primary" aria-label="Submit Task" (click)="submitTask()"
             matTooltip="Submit Task" [disabled]="disableSubmitButton()">
       Submit Task
@@ -167,5 +207,8 @@
       Reopen Task
     </button>
     <mat-card-footer *ngIf="!isAllCheckListItemsMarked()">*All checklist items must be marked to be able to submit the task.</mat-card-footer>
+  </mat-card>
+  <mat-card class="centered-container">
+    <button mat-raised-button color="accent" class="start-task-button" (click)="startTask()" *ngIf="!task.startTime">Start Task</button>
   </mat-card>
 </div>

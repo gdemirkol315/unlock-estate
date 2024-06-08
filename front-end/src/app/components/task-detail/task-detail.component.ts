@@ -14,7 +14,7 @@ import {MatCheckboxChange} from "@angular/material/checkbox";
 import {Comment} from "../../models/comment.model"
 import {Image} from "../../models/image.model";
 import {FileUploadService} from "../../services/file-upload/file-upload.service";
-import {DomSanitizer, SafeUrl} from "@angular/platform-browser";
+import {DomSanitizer} from "@angular/platform-browser";
 import {map} from "rxjs/operators";
 import {MatDialog, MatDialogRef} from "@angular/material/dialog";
 import {FullSizeImageDialogComponent} from "../full-size-image-dialog/full-size-image-dialog.component";
@@ -23,6 +23,9 @@ import {Email} from "../../models/email.model";
 import {LastWarningComponent} from "../last-warning/last-warning.component";
 import {JwtToken} from "../../models/jwt-token.model";
 import {TaskStatus} from "../../models/enum/task-status";
+import {AddExpenseComponent} from "../add-expense/add-expense.component";
+import {Expense} from "../../models/expense.model";
+import {MatTableDataSource} from "@angular/material/table";
 
 @Component({
   selector: 'app-task-detail',
@@ -40,6 +43,9 @@ export class TaskDetailComponent implements OnInit {
   comments: Comment[] = new Array();
   commentsLoading: boolean = true;
   isInProgress: boolean = false;
+  protected readonly TaskStatus = TaskStatus;
+  expenses: MatTableDataSource<Expense> = new MatTableDataSource<Expense>();
+  displayedColumns: string[] =["Description","Amount"];
 
   constructor(private route: ActivatedRoute,
               private taskService: TaskService,
@@ -54,6 +60,11 @@ export class TaskDetailComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    //TODO dummy delete
+    let expense: Expense = new Expense();
+    expense.description="Coffee Capsules"
+    expense.amount=25.3
+    this.expenses.data.push(expense);
     let taskId: string | null = this.route.snapshot.paramMap.get('id');
     if (taskId == null) {
       this.taskService.toastr.error("An unexpected error occured while routing!");
@@ -348,5 +359,25 @@ export class TaskDetailComponent implements OnInit {
     return isAllCheckListItemsMarked;
   }
 
-  protected readonly TaskStatus = TaskStatus;
+  attachExpense() {
+    this.matDialog.open(AddExpenseComponent);
+  }
+
+  startTask() {
+    let startTime:Date = new Date();
+    this.taskService.setTaskStart(startTime, this.task.id).subscribe({
+      next: () => {
+        this.taskService.toastr.success("Task started successfully");
+        this.task.startTime = startTime;
+      },
+      error: (err) => {
+        this.taskService.toastr.error("Task could not be started! Server Failure!");
+        console.log(err);
+      }});
+  }
+
+  finishTask(){
+    //TODO: set task finish time
+  }
+
 }

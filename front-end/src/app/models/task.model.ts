@@ -11,6 +11,8 @@ export class Task {
   comments: Comment[] = new Array();
   taskCheckListItems: TaskCheckListItem[] = new Array();
   taskDate: Date = new Date();
+  startTime: Date;
+  finishTime: Date;
   createdDate: Date = new Date();
   status: string;
 

@@ -4,9 +4,13 @@
     <mat-icon>rowing</mat-icon>
   </mat-card-header>
   <mat-card-content>
+    <button mat-raised-button class="slightly-spaced" [routerLink]="['/admin/add-task-bulk']"
+            *ngIf="jwtToken.getRole().includes('ADMIN')">
+      Create Tasks
+    </button>
     <button mat-raised-button class="slightly-spaced" [routerLink]="['/admin/create-task']"
             *ngIf="jwtToken.getRole().includes('ADMIN')">
-      Add Task
+      Create Task
     </button>
     <mat-form-field class="search-form-field slightly-spaced">
       <input matInput [(ngModel)]="searchKey" placeholder="Search" autocomplete="off" (keyup)="applyFilter()">

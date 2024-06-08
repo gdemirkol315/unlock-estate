@@ -81,4 +81,11 @@ export class TaskService extends DataService {
     queryParams = queryParams.append("commentId", commentId);
     return this.http.get<User>(this.hostname + this.serviceUrlSuffix + "/getAuthor",{params: queryParams})
   }
+
+  setTaskStart(startTime: Date, taskId: number) {
+    let task = new Task();
+    task.startTime = startTime;
+    task.id = taskId;
+    return this.http.post<Task>(this.hostname + this.serviceUrlSuffix + "/setStartTime", task);
+  }
 }

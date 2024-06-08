@@ -21,14 +21,14 @@
       <mat-datepicker #picker></mat-datepicker>
     </mat-form-field>
     <br>
-    <mat-form-field>
+    <!--<mat-form-field>
       <input matInput [ngxTimepicker]="timePicker"
              [(ngModel)]="fullTime"
              [format]="24"
              readonly
              placeholder="Click here to choose task time">
       <ngx-material-timepicker #timePicker></ngx-material-timepicker>
-    </mat-form-field>
+    </mat-form-field>-->
     <mat-form-field>
       <mat-label>Assignee</mat-label>
       <mat-select [(ngModel)]="task.assignee.userId">

@@ -2,6 +2,7 @@ package com.unlockestate.ueparent.task.controller;
 
 import com.unlockestate.ueparent.task.dto.Comment;
 import com.unlockestate.ueparent.exception.InternalServerRuntimeException;
+import com.unlockestate.ueparent.task.dto.Expense;
 import com.unlockestate.ueparent.task.dto.Task;
 import com.unlockestate.ueparent.task.dto.TaskCheckListItem;
 import com.unlockestate.ueparent.task.service.TaskService;
@@ -10,6 +11,7 @@ import com.unlockestate.ueparent.utils.dto.UserDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -119,5 +121,54 @@ public class TaskController {
             return ResponseEntity.internalServerError().build();
         }
     }
+
+    @PostMapping("/setStartTime")
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('USER')")
+    public ResponseEntity<String> startTask(@RequestBody Task task) {
+
+        try {
+            if (task.getStartTime() != null) {
+                taskService.setStartTime(task);
+            }
+            logger.info("Task " + task.getId() + " Started Successfully");
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (InternalServerRuntimeException e) {
+            logger.error("Could not set task starting time!");
+            return ResponseEntity.internalServerError().build();
+        }
+    }
+
+    @PostMapping("/addExpense")
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('USER')")
+    public ResponseEntity<String> addExpense(@RequestBody Expense expense) {
+
+        try {
+            if (expense != null && expense.getAmount() != null) {
+                taskService.addExpense(expense);
+            }
+            logger.info("Expense added successfully");
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (InternalServerRuntimeException e) {
+            logger.error("Could not enter the expense!");
+            return ResponseEntity.internalServerError().build();
+        }
+    }
+
+    @PostMapping("/deleteExpense")
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('USER')")
+    public ResponseEntity<String> deleteExpense(@RequestBody Expense expense) {
+
+        try {
+            if (expense != null) {
+                taskService.deleteExpense(expense);
+            }
+            logger.info("Expense added successfully");
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (InternalServerRuntimeException e) {
+            logger.error("Could not enter the expense!");
+            return ResponseEntity.internalServerError().build();
+        }
+    }
+
 
 }

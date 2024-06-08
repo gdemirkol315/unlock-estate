@@ -3,11 +3,7 @@ package com.unlockestate.ueparent.task.service;
 import com.unlockestate.ueparent.notification.dto.Email;
 import com.unlockestate.ueparent.notification.service.EmailService;
 import com.unlockestate.ueparent.notification.service.WhatsAppService;
-import com.unlockestate.ueparent.task.dto.Comment;
-import com.unlockestate.ueparent.task.dto.CheckList;
-import com.unlockestate.ueparent.task.dto.CheckListItem;
-import com.unlockestate.ueparent.task.dto.Task;
-import com.unlockestate.ueparent.task.dto.TaskCheckListItem;
+import com.unlockestate.ueparent.task.dto.*;
 import com.unlockestate.ueparent.task.repository.*;
 import com.unlockestate.ueparent.user.dto.User;
 import com.unlockestate.ueparent.user.repository.UserRepository;
@@ -16,6 +12,7 @@ import com.unlockestate.ueparent.utils.dto.UserDto;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.text.SimpleDateFormat;
@@ -36,6 +33,7 @@ public class TaskService {
     private final TaskCheckListItemRepository taskCheckListItemRepository;
     private final CommentRepository commentRepository;
     private final UserRepository userRepository;
+    private final ExpenseRepository expenseRepository;
 
     private final WhatsAppService whatsAppService;
     private final EmailService emailService;
@@ -45,13 +43,14 @@ public class TaskService {
                        TaskRepository taskRepository,
                        TaskCheckListItemRepository taskCheckListItemRepository,
                        CommentRepository commentRepository,
-                       UserRepository userRepository,
+                       UserRepository userRepository, ExpenseRepository expenseRepository,
                        WhatsAppService whatsAppService, EmailService emailService) {
         this.userService = userService;
         this.taskRepository = taskRepository;
         this.taskCheckListItemRepository = taskCheckListItemRepository;
         this.commentRepository = commentRepository;
         this.userRepository = userRepository;
+        this.expenseRepository = expenseRepository;
         this.whatsAppService = whatsAppService;
         this.emailService = emailService;
     }
@@ -82,6 +81,11 @@ public class TaskService {
     @Transactional
     public void updateTaskStatus(Task task) {
         taskRepository.setStatus(task.getStatus().name(), task.getId());
+        if (task.getStatus().equals(Status.SUBMITTED)
+                || (task.getStatus().equals(Status.DONE)
+                && task.getAssignee().getEmail().equals(SecurityContextHolder.getContext().getAuthentication().getName()))){
+            taskRepository.setFinishTime(new Date(), task.getId());
+        }
         commentRepository.save(getStatusUpdatedComment(task));
         Email email = new Email(task.getCreator().getEmail(),
                 getTaskStatusChangeMessage(task),
@@ -162,5 +166,20 @@ public class TaskService {
     private String formatDate(Date date){
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm");
         return simpleDateFormat.format(date);
+    }
+
+    public void setStartTime(Task dummyTask) {
+        Date startTime = dummyTask.getStartTime();
+        Task task = taskRepository.getReferenceById(dummyTask.getId());
+        task.setStartTime(startTime);
+        taskRepository.save(task);
+    }
+
+    public void addExpense(Expense expense) {
+        expenseRepository.save(expense);
+    }
+
+    public void deleteExpense(Expense expense) {
+        expenseRepository.delete(expense);
     }
 }

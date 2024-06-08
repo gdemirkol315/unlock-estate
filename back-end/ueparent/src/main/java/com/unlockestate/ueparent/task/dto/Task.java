@@ -40,6 +40,8 @@ public class Task {
     private List<TaskCheckListItem> taskCheckListItems;
 
     private Date taskDate;
+    private Date startTime;
+    private Date finishTime;
     private Date createdDate;
 
     @Enumerated(EnumType.STRING)
@@ -116,5 +118,21 @@ public class Task {
 
     public void setStatus(Status status) {
         this.status = status;
+    }
+
+    public Date getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(Date startTime) {
+        this.startTime = startTime;
+    }
+
+    public Date getFinishTime() {
+        return finishTime;
+    }
+
+    public void setFinishTime(Date finishTime) {
+        this.finishTime = finishTime;
     }
 }
