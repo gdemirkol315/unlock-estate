@@ -1,0 +1,16 @@
+<mat-card class="centered-container-dialog">
+  <mat-card-header>
+    <mat-card-title>Expense Details</mat-card-title>
+  </mat-card-header>
+  <mat-form-field class="slightly-spaced">
+    <mat-label>Description</mat-label>
+    <input matInput type="text" [(ngModel)]="expense.description">
+  </mat-form-field>
+  <mat-form-field class="slightly-spaced">
+    <mat-label>Amount</mat-label>
+    <input matInput type="number" [(ngModel)]="expense.amount">
+  </mat-form-field>
+  <button mat-raised-button color=primary (click)="addExpense()" [disabled]="!expense.description || !expense.amount">
+    Add Expense
+  </button>
+</mat-card>

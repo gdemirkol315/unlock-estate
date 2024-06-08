@@ -11,6 +11,7 @@ import {RealEstateDetailComponent} from "./components/real-estate-detail/real-es
 import {TaskDetailComponent} from "./components/task-detail/task-detail.component";
 import {TaskCreateComponent} from "./components/task-create/task-create.component";
 import {SuccessComponent} from "./components/success/success.component";
+import {BulkCreateTaskComponent} from "./components/bulk-create-task/bulk-create-task.component";
 
 const routes: Routes = [
   {
@@ -18,9 +19,9 @@ const routes: Routes = [
     component: LoginComponent
   },
   {
-    path:'user-profile',
-    component:UserProfileComponent,
-    canMatch:[authGuardGuard]
+    path: 'user-profile',
+    component: UserProfileComponent,
+    canMatch: [authGuardGuard]
   },
   {
     path: 'admin/user-management',
@@ -45,6 +46,11 @@ const routes: Routes = [
   {
     path: 'admin/create-task',
     component: TaskCreateComponent,
+    canMatch: [authGuardGuard]
+  },
+  {
+    path: 'admin/add-task-bulk',
+    component: BulkCreateTaskComponent,
     canMatch: [authGuardGuard]
   },
   {

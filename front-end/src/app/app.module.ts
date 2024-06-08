@@ -56,6 +56,8 @@ import { FullSizeImageDialogComponent } from './components/full-size-image-dialo
 import { SuccessComponent } from './components/success/success.component';
 import { SpinnerDialogComponent } from './components/spinner-dialog/spinner-dialog.component';
 import { PhoneCountryDropdownComponent } from './components/phone-input/phone-country-dropdown.component';
+import { BulkCreateTaskComponent } from './components/bulk-create-task/bulk-create-task.component';
+import { AddExpenseComponent } from './components/add-expense/add-expense.component';
 
 
 @NgModule({
@@ -81,7 +83,9 @@ import { PhoneCountryDropdownComponent } from './components/phone-input/phone-co
     FullSizeImageDialogComponent,
     SuccessComponent,
     SpinnerDialogComponent,
-    PhoneCountryDropdownComponent
+    PhoneCountryDropdownComponent,
+    BulkCreateTaskComponent,
+    AddExpenseComponent,
   ],
     imports: [
         NgxMaterialTimepickerModule,
