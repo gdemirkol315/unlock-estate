@@ -8,6 +8,7 @@ import com.unlockestate.ueparent.user.dto.Salt;
 import com.unlockestate.ueparent.user.dto.User;
 import com.unlockestate.ueparent.user.repository.SaltRepository;
 import com.unlockestate.ueparent.user.repository.UserRepository;
+import jakarta.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -59,6 +60,7 @@ public class AuthenticationService {
         this.emailService = emailService;
     }
 
+    @Transactional
     public AuthenticationResponse register(User request) throws MailSendException {
         User user = new User();
         Optional<User> userExists = userRepository.findByEmail(request.getEmail());
@@ -88,7 +90,6 @@ public class AuthenticationService {
                                 "Login via:\n" +
                                 allowedOrigin + "\\login",
                         "CheckoutNow Account Activation"));
-                //TODO bounce-back mail check if user mail does not exists
                 user.setPassword(passwordEncoder.encode(tmpPassword + salt.getSaltString()));
             }
 

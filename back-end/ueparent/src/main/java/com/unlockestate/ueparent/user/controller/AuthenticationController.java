@@ -8,7 +8,6 @@ import com.unlockestate.ueparent.utils.dto.MessageEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
-import org.springframework.mail.MailSendException;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -33,7 +32,7 @@ public class AuthenticationController {
             return ResponseEntity.ok(authenticationService.register(request));
         } catch (DataIntegrityViolationException e) {
             return ResponseEntity.badRequest().body(new MessageEntity(e.getMessage()));
-        } catch (MailSendException e) {
+        } catch (RuntimeException e) {
             return ResponseEntity.badRequest().body(new MessageEntity("There was an error sending activation email!"));
         }
     }
