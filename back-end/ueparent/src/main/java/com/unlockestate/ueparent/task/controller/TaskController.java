@@ -56,6 +56,21 @@ public class TaskController {
 
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
+    @PostMapping("/createTasks")
+    public ResponseEntity<String> bulkCreateTask(
+            @RequestBody List<Task> tasks
+    ) {
+        try {
+            taskService.createTasks(tasks);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (InternalServerRuntimeException e) {
+            logger.error("Could not save tasks!");
+            return ResponseEntity.internalServerError().build();
+        }
+
+    }
+
     @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('USER')")
     @PostMapping("/updateTask")
     public ResponseEntity<MessageEntity> updateTask(

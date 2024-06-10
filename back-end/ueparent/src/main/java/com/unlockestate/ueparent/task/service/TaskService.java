@@ -184,4 +184,10 @@ public class TaskService {
     public void deleteExpense(Expense expense) {
         expenseRepository.delete(expense);
     }
+
+    public void createTasks(List<Task> tasks) {
+        for (Task task: tasks){
+            createTask(task);
+        }
+    }
 }

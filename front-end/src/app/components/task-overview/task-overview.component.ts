@@ -21,6 +21,8 @@ export class TaskOverviewComponent implements OnInit, AfterViewInit {
   closedTasks: MatTableDataSource<Task> = new MatTableDataSource<Task>();
   displayedColumns:string[] =  ['taskDate', 'realEstateName','realEstateCountry','realEstateCity', 'realEstateZip', 'assignee', 'creator', 'status','actions'];
 
+  //TODO getRole() called multiple times move it here in init 1.
+
   @ViewChild(MatSort) sort: MatSort;
   isLoading: boolean = true;
 

@@ -85,7 +85,12 @@
 			<artifactId>twilio</artifactId>
 			<version>10.1.2</version>
 		</dependency>
-
+		<!-- https://mvnrepository.com/artifact/org.mnode.ical4j/ical4j -->
+		<dependency>
+			<groupId>org.mnode.ical4j</groupId>
+			<artifactId>ical4j</artifactId>
+			<version>3.2.18</version>
+		</dependency>
 	</dependencies>
 
 	<build>

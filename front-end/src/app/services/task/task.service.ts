@@ -26,6 +26,20 @@ export class TaskService extends DataService {
     return this.http.post<Task>(this.hostname + this.serviceUrlSuffix + "/createTask", task)
   }
 
+  bulkCreateTask(taskArray: Task[]) {
+    return this.http.post(this.hostname + this.serviceUrlSuffix + "/createTasks", taskArray)
+      .subscribe({
+        next: () => {
+          this.toastr.success("Tasks successfully created!");
+          this.router.navigate(['task-overview']);
+        },
+        error: (err) => {
+          this.toastr.error("There was an unexpected error during bulkCreateTask!");
+          console.log(err);
+        }
+      });
+  }
+
   updateTask(task: Task, toastrSuccessMessage:string) {
     this.http.post(this.hostname + this.serviceUrlSuffix + "/updateTask", task).pipe(first()).subscribe({
       next: () =>{

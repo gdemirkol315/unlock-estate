@@ -1,45 +1,33 @@
-<br>
-<mat-form-field class="slightly-spaced">
-  <mat-label>Check Out Date</mat-label>
-  <input matInput [matDatepicker]="picker" [(ngModel)]="checkOutDate"
-         placeholder="Click to calendar icon for choosing checkout date">
-  <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
-  <mat-datepicker #picker></mat-datepicker>
-</mat-form-field>
-<br>
-<mat-form-field class="slightly-spaced">
-  <mat-label>Property Name</mat-label>
-  <input matInput type="text" [ngModel]="realEstate1" readonly>
-</mat-form-field>
-<mat-form-field>
-  <mat-label>Assignee</mat-label>
-  <mat-select [(ngModel)]="assignee">
-    <mat-option *ngFor="let user of users" [value]="user.userId">{{ user.name + " " + user.lastName }}</mat-option>
-  </mat-select>
-</mat-form-field>
-<br>
-<mat-form-field class="slightly-spaced">
-  <mat-label>Property Name</mat-label>
-  <input matInput type="text" [ngModel]="realEstate2" readonly>
-</mat-form-field>
-<mat-form-field>
-  <mat-label>Assignee</mat-label>
-  <mat-select [(ngModel)]="assignee2">
-    <mat-option *ngFor="let user of users" [value]="user.userId">{{ user.name + " " + user.lastName }}</mat-option>
-  </mat-select>
-</mat-form-field>
-<br>
-<mat-form-field class="slightly-spaced">
-  <mat-label>Property Name</mat-label>
-  <input matInput type="text" [ngModel]="realEstate3" readonly>
-</mat-form-field>
-<mat-form-field>
-  <mat-label>Assignee</mat-label>
-  <mat-select [(ngModel)]="assignee3">
-    <mat-option *ngFor="let user of users" [value]="user.userId">{{ user.name + " " + user.lastName }}</mat-option>
-  </mat-select>
-</mat-form-field>
-<br>
-<button mat-raised-button color="primary" class="slightly-spaced" type="submit"
->Create Tasks
-</button>
+<mat-card class="centered-container">
+  <mat-form-field>
+    <input matInput [matDatepicker]="picker" placeholder="Choose a checkout date"
+           (dateChange)="updateFields($event.value)" [(ngModel)]="checkOutDate">
+    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+    <mat-datepicker #picker></mat-datepicker>
+  </mat-form-field>
+  <mat-spinner *ngIf="isLoading"></mat-spinner>
+  <div *ngIf="realEstates.length == 0 && !isLoading">
+    <p class="mat-text">There are no check-outs at this date</p>
+  </div>
+  <form [formGroup]="realEstateForm" (ngSubmit)="submit()" *ngIf="realEstates.length>0 && !isLoading">
+    <div formArrayName="realEstates" *ngFor="let task of tasksFormArray.controls; let i = index;">
+      <div [formGroupName]="i" class="task-form-group">
+        <mat-form-field class="slightly-spaced">
+          <mat-label>Property Name</mat-label>
+          <input matInput type="text" formControlName="propertyName" readonly>
+        </mat-form-field>
+
+        <mat-form-field>
+          <mat-label>Assignee</mat-label>
+          <mat-select formControlName="assignee">
+            <mat-option *ngFor="let user of users" [value]="user.userId">
+              {{ user.name + ' ' + user.lastName }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+    </div>
+
+    <button mat-raised-button color="primary" type="submit">Submit</button>
+  </form>
+</mat-card>
