@@ -4,6 +4,8 @@ import com.twilio.Twilio;
 import com.twilio.exception.ApiException;
 import com.twilio.rest.api.v2010.account.Message;
 import com.unlockestate.ueparent.notification.config.TwilioConfig;
+import com.unlockestate.ueparent.notification.dto.Email;
+import com.unlockestate.ueparent.user.service.UserService;
 import jakarta.annotation.PostConstruct;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,9 +17,15 @@ public class WhatsAppService {
 
     private static final Logger logger = LoggerFactory.getLogger(WhatsAppService.class);
     private TwilioConfig twilioConfig;
+    private EmailService emailService;
+    private UserService userService;
 
     @Autowired
-    public WhatsAppService(TwilioConfig twilioConfig) {
+    public WhatsAppService(EmailService emailService,
+                           UserService userService,
+                           TwilioConfig twilioConfig) {
+        this.emailService = emailService;
+        this.userService = userService;
         this.twilioConfig = twilioConfig;
     }
 
@@ -33,6 +41,7 @@ public class WhatsAppService {
             logger.info("Whatsapp Message Status: {}", message.getStatus());
         } catch (ApiException e) {
             logger.error("Error sending WhatsApp message: {}", e.getMessage());
+            sendFailureEmail(messageContent, toNumber);
         }
     }
 
@@ -42,5 +51,13 @@ public class WhatsAppService {
                         new com.twilio.type.PhoneNumber("whatsapp:" + twilioConfig.getWhatsappNumber()),
                         messageContent)
                 .create();
+    }
+
+    private void sendFailureEmail(String messageContent, String toNumber) {
+        Email email = new Email(userService.getPrincipalName(),
+                "There was an error sending Whatsapp message with following content to "
+                        + toNumber + ":" + "\n\n" + messageContent,
+                "Whatsapp Message Failure");
+        emailService.sendSimpleMessage(email);
     }
 }
